@@ -119,7 +119,7 @@ But instead of XOR-ing the ECB blocks, it seems to be adding them. Weird, did th
 
 Let's first convert all the ciphertext blocks back to ecb blocks.
 
-Let's create an `aes_abc_decrypt(ct):
+Let's create an aes_abc_decrypt(ct):
 ```python
 def aes_abc_decrypt(c_img):
     blocks = [c_img[i * BLOCK_SIZE:(i+1) * BLOCK_SIZE] for i in range(len(c_img) / BLOCK_SIZE)]
@@ -150,4 +150,4 @@ Looks like garbage maybe it's not the correct size... perhaps brute force necess
 
 ## Flag
 
-``
+`UNSOLVED`
