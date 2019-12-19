@@ -1,0 +1,201 @@
+<!doctype html><html lang=en class="sidebar-visible no-js ayu"><meta charset=utf-8><title>PicoCTF19 RSA Pop Quiz - Capture The Flag</title><meta charset=utf-8><meta name=description content><meta name=viewport content="width=device-width,initial-scale=1"><meta name=theme-color content="#ffffff"><link rel="shortcut icon" href=../../favicon.png><link rel=stylesheet href=../../css/variables.css><link rel=stylesheet href=../../css/general.css><link rel=stylesheet href=../../css/chrome.css><link rel=stylesheet href=../../css/print.css media=print><link rel=stylesheet href=../../FontAwesome/css/font-awesome.css><link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel=stylesheet><link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel=stylesheet><link rel=stylesheet href=../../highlight.css><link rel=stylesheet href=../../tomorrow-night.css><link rel=stylesheet href=../../ayu-highlight.css><link rel=stylesheet href=../../theme/mermaid.css><script>var path_to_root="../../";var default_theme=window.matchMedia("(prefers-color-scheme: dark)").matches?"ayu":"ayu";</script><script>try{var theme=localStorage.getItem('mdbook-theme');var sidebar=localStorage.getItem('mdbook-sidebar');if(theme.startsWith('"')&&theme.endsWith('"')){localStorage.setItem('mdbook-theme',theme.slice(1,theme.length-1));}
+if(sidebar.startsWith('"')&&sidebar.endsWith('"')){localStorage.setItem('mdbook-sidebar',sidebar.slice(1,sidebar.length-1));}}catch(e){}</script><script>var theme;try{theme=localStorage.getItem('mdbook-theme');}catch(e){}
+if(theme===null||theme===undefined){theme=default_theme;}
+var html=document.querySelector('html');html.classList.remove('no-js')
+html.classList.remove('ayu')
+html.classList.add(theme);html.classList.add('js');</script><script>var html=document.querySelector('html');var sidebar='hidden';if(document.body.clientWidth>=1080){try{sidebar=localStorage.getItem('mdbook-sidebar');}catch(e){}
+sidebar=sidebar||'visible';}
+html.classList.remove('sidebar-visible');html.classList.add("sidebar-"+sidebar);</script><nav id=sidebar class=sidebar aria-label="Table of contents"><div id=sidebar-scrollbox class=sidebar-scrollbox><ol class=chapter><li class=expanded><a href=../../index.html><strong aria-hidden=true>1.</strong> Introduction</a><li class=expanded><a href=../../ctf/index.html><strong aria-hidden=true>2.</strong> Capture The Flag</a><li><ol class=section><li class=expanded><a href=../../ctf/crypto/index.html><strong aria-hidden=true>2.1.</strong> Crypto</a><li><ol class=section><li class=expanded><a href=../../ctf/crypto/hackcon18-caesar.html><strong aria-hidden=true>2.1.1.</strong> Hackcon2018 Caesar Salad</a><li class=expanded><a href=../../ctf/crypto/hackcon18-salad.html><strong aria-hidden=true>2.1.2.</strong> Hackcon2018 Salad Up.</a><li class=expanded><a href=../../ctf/crypto/icectf18q-garfield.html><strong aria-hidden=true>2.1.3.</strong> IceCTF18Q Garfield</a><li class=expanded><a href=../../ctf/crypto/tjctf18-classic.html><strong aria-hidden=true>2.1.4.</strong> TJCTF18 Classic</a><li class=expanded><a href=../../ctf/crypto/picoctf19-numbers.html><strong aria-hidden=true>2.1.5.</strong> PicoCTF19 The Numbers</a><li class=expanded><a href=../../ctf/crypto/picoctf19-caesar.html><strong aria-hidden=true>2.1.6.</strong> PicoCTF19 Caesar</a><li class=expanded><a href=../../ctf/crypto/picoctf19-wavesoverlambda.html><strong aria-hidden=true>2.1.7.</strong> PicoCTF19 Waves Lambda</a><li class=expanded><a href=../../ctf/crypto/picoctf19-lacifrede.html><strong aria-hidden=true>2.1.8.</strong> PicoCTF19 La Cifra De</a><li class=expanded><a href=../../ctf/crypto/picoctf19-rsapopquiz.html class=active><strong aria-hidden=true>2.1.9.</strong> PicoCTF19 RSA Pop Quiz</a><li class=expanded><a href=../../ctf/crypto/picoctf19-minirsa.html><strong aria-hidden=true>2.1.10.</strong> PicoCTF19 miniRSA</a><li class=expanded><a href=../../ctf/crypto/picoctf19-b00tl3gRSA2.html><strong aria-hidden=true>2.1.11.</strong> PicoCTF19 b00tl3gRSA2</a><li class=expanded><a href=../../ctf/crypto/picoctf19-b00tl3gRSA3.html><strong aria-hidden=true>2.1.12.</strong> PicoCTF19 b00tl3gRSA3</a><li class=expanded><a href=../../ctf/crypto/picoctf19-john_pollard.html><strong aria-hidden=true>2.1.13.</strong> PicoCTF19 john_pollard</a><li class=expanded><a href=../../ctf/crypto/picoctf19-aesabc.html><strong aria-hidden=true>2.1.14.</strong> PicoCTF19 AES-ABC</a></ol><li class=expanded><a href=../../ctf/forensics/index.html><strong aria-hidden=true>2.2.</strong> Forensics</a><li><ol class=section><li class=expanded><a href=../../ctf/forensics/picoctf19-garden.html><strong aria-hidden=true>2.2.1.</strong> PicoCTF19 Garden</a><li class=expanded><a href=../../ctf/forensics/picoctf19-unzip.html><strong aria-hidden=true>2.2.2.</strong> PicoCTF19 Unzip</a><li class=expanded><a href=../../ctf/forensics/picoctf19-so-meta.html><strong aria-hidden=true>2.2.3.</strong> PicoCTF19 So Meta</a><li class=expanded><a href=../../ctf/forensics/picoctf19-what-lies-within.html><strong aria-hidden=true>2.2.4.</strong> PicoCTF19 Lies Within</a><li class=expanded><a href=../../ctf/forensics/picoctf19-extensions.html><strong aria-hidden=true>2.2.5.</strong> PicoCTF19 Extensions</a><li class=expanded><a href=../../ctf/forensics/picoctf19-shark-on-wire-1.html><strong aria-hidden=true>2.2.6.</strong> PicoCTF19 Shark Wire</a><li class=expanded><a href=../../ctf/forensics/picoctf19-whitepages.html><strong aria-hidden=true>2.2.7.</strong> PicoCTF19 WhitePages</a><li class=expanded><a href=../../ctf/forensics/picoctf19-like1000.html><strong aria-hidden=true>2.2.8.</strong> PicoCTF19 like1000</a></ol><li class=expanded><a href=../../ctf/web/index.html><strong aria-hidden=true>2.3.</strong> Web</a><li><ol class=section><li class=expanded><a href=../../ctf/web/seccon19-web_search.html><strong aria-hidden=true>2.3.1.</strong> SECCON19 Web Search</a><li class=expanded><a href=../../ctf/web/tmctf19-finals-containers.html><strong aria-hidden=true>2.3.2.</strong> TMCTF19F Container</a></ol></ol></ol></div><div id=sidebar-resize-handle class=sidebar-resize-handle></div></nav><div id=page-wrapper class=page-wrapper><div class=page><div id=menu-bar class=menu-bar><div id=menu-bar-sticky-container><div class=left-buttons><button id=sidebar-toggle class=icon-button type=button title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls=sidebar>
+<i class="fa fa-bars"></i></button>
+<button id=theme-toggle class=icon-button type=button title="Change theme" aria-label="Change theme" aria-haspopup=true aria-expanded=false aria-controls=theme-list>
+<i class="fa fa-paint-brush"></i></button><ul id=theme-list class=theme-popup aria-label=Themes role=menu><li role=none><button role=menuitem class=theme id=light>Light</button><li role=none><button role=menuitem class=theme id=rust>Rust</button><li role=none><button role=menuitem class=theme id=coal>Coal</button><li role=none><button role=menuitem class=theme id=navy>Navy</button><li role=none><button role=menuitem class=theme id=ayu>Ayu (default)</button></ul><button id=search-toggle class=icon-button type=button title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded=false aria-keyshortcuts=S aria-controls=searchbar>
+<i class="fa fa-search"></i></button></div><h1 class=menu-title>Capture The Flag</h1><div class=right-buttons><a href=../../print.html title="Print this book" aria-label="Print this book"><i id=print-button class="fa fa-print"></i></a><a href=https://github.com/sgama/ctf.samsongama.com/tree/develop title="Git repository" aria-label="Git repository"><i id=git-repository-button class="fa fa-github"></i></a></div></div></div><div id=search-wrapper class=hidden><form id=searchbar-outer class=searchbar-outer><input type=search name=search id=searchbar name=searchbar placeholder="Search this book ..." aria-controls=searchresults-outer aria-describedby=searchresults-header></form><div id=searchresults-outer class="searchresults-outer hidden"><div id=searchresults-header class=searchresults-header></div><ul id=searchresults></ul></div></div><script>document.getElementById('sidebar-toggle').setAttribute('aria-expanded',sidebar==='visible');document.getElementById('sidebar').setAttribute('aria-hidden',sidebar!=='visible');Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link){link.setAttribute('tabIndex',sidebar==='visible'?0:-1);});</script><div id=content class=content><main><h1><a class=header href=#picoctf19-rsa-pop-quiz id=picoctf19-rsa-pop-quiz>PicoCTF19 RSA Pop Quiz</a></h1><h2><a class=header href=#challenge id=challenge>Challenge</a></h2><p>Class, take your seats! It's PRIME-time for a quiz... <code>nc 2019shell1.picoctf.com 2611</code><h3><a class=header href=#hints id=hints>Hints</a></h3><p><a href=https://simple.wikipedia.org/wiki/RSA_algorithm>RSA info</a><h2><a class=header href=#solution id=solution>Solution</a></h2><pre><code>$ nc 2019shell1.picoctf.com 2611
+Good morning class! It's me Ms. Adleman-Shamir-Rivest
+Today we will be taking a pop quiz, so I hope you studied. Cramming just will not do!
+You will need to tell me if each example is possible, given your extensive crypto knowledge.
+Inputs and outputs are in decimal. No hex here!
+#### NEW PROBLEM ####
+q : 60413
+p : 76753
+##### PRODUCE THE FOLLOWING ####
+n
+</code></pre><p>We know <code>n=p*q</code><pre><code>#### TIME TO SHOW ME WHAT YOU GOT! ###
+n: 4636878989
+Outstanding move!!!
+
+
+#### NEW PROBLEM ####
+p : 54269
+n : 5051846941
+##### PRODUCE THE FOLLOWING ####
+q
+</code></pre><p>We know <code>n = q/n</code><pre><code>#### TIME TO SHOW ME WHAT YOU GOT! ###
+q: 93089
+Outstanding move!!!
+
+
+#### NEW PROBLEM ####
+e : 3
+n : 12738162802910546503821920886905393316386362759567480839428456525224226445173031635306683726182522494910808518920409019414034814409330094245825749680913204566832337704700165993198897029795786969124232138869784626202501366135975223827287812326250577148625360887698930625504334325804587329905617936581116392784684334664204309771430814449606147221349888320403451637882447709796221706470239625292297988766493746209684880843111138170600039888112404411310974758532603998608057008811836384597579147244737606088756299939654265086899096359070667266167754944587948695842171915048619846282873769413489072243477764350071787327913
+##### PRODUCE THE FOLLOWING ####
+q
+p
+</code></pre><p>We know <code>toitent(n)=(p-1)(q-1)</code> but we don't have the toitent.<pre><code>IS THIS POSSIBLE and FEASIBLE? (Y/N):N
+Outstanding move!!!
+
+
+#### NEW PROBLEM ####
+q : 66347
+p : 12611
+##### PRODUCE THE FOLLOWING ####
+totient(n)
+</code></pre><p>We know: <code>toitent(n)=(p-1)(q-1)</code><pre><code>IS THIS POSSIBLE and FEASIBLE? (Y/N):Y
+#### TIME TO SHOW ME WHAT YOU GOT! ###
+totient(n): ^V836623060
+Outstanding move!!!
+
+
+#### NEW PROBLEM ####
+plaintext : 6357294171489311547190987615544575133581967886499484091352661406414044440475205342882841236357665973431462491355089413710392273380203038793241564304774271529108729717
+e : 3
+n : 29129463609326322559521123136222078780585451208149138547799121083622333250646678767769126248182207478527881025116332742616201890576280859777513414460842754045651093593251726785499360828237897586278068419875517543013545369871704159718105354690802726645710699029936754265654381929650494383622583174075805797766685192325859982797796060391271817578087472948205626257717479858369754502615173773514087437504532994142632207906501079835037052797306690891600559321673928943158514646572885986881016569647357891598545880304236145548059520898133142087545369179876065657214225826997676844000054327141666320553082128424707948750331
+##### PRODUCE THE FOLLOWING ####
+ciphertext
+</code></pre><p>We know: <code>c = plaintext^e mod n</code><pre><code>
+
+#### NEW PROBLEM ####
+ciphertext : 107524013451079348539944510756143604203925717262185033799328445011792760545528944993719783392542163428637172323512252624567111110666168664743115203791510985709942366609626436995887781674651272233566303814979677507101168587739375699009734588985482369702634499544891509228440194615376339573685285125730286623323
+e : 3
+n : 27566996291508213932419371385141522859343226560050921196294761870500846140132385080994630946107675330189606021165260590147068785820203600882092467797813519434652632126061353583124063944373336654246386074125394368479677295167494332556053947231141336142392086767742035970752738056297057898704112912616565299451359791548536846025854378347423520104947907334451056339439706623069503088916316369813499705073573777577169392401411708920615574908593784282546154486446779246790294398198854547069593987224578333683144886242572837465834139561122101527973799583927411936200068176539747586449939559180772690007261562703222558103359
+##### PRODUCE THE FOLLOWING ####
+plaintext
+</code></pre><p>We don't know <code>p</code> and <code>q</code><pre><code>IS THIS POSSIBLE and FEASIBLE? (Y/N):N
+Outstanding move!!!
+
+
+#### NEW PROBLEM ####
+q : 92092076805892533739724722602668675840671093008520241548191914215399824020372076186460768206814914423802230398410980218741906960527104568970225804374404612617736579286959865287226538692911376507934256844456333236362669879347073756238894784951597211105734179388300051579994253565459304743059533646753003894559
+p : 97846775312392801037224396977012615848433199640105786119757047098757998273009741128821931277074555731813289423891389911801250326299324018557072727051765547115514791337578758859803890173153277252326496062476389498019821358465433398338364421624871010292162533041884897182597065662521825095949253625730631876637
+e : 65537
+##### PRODUCE THE FOLLOWING ####
+d
+</code></pre><p>We know: <code>d=e^-1 mod ((p-1)(q-1))</code><pre><code class=language-python>from Crypto.Util.number import *
+
+q = ''
+p = ''
+e = ''
+print(inverse(e,((p-1)(q-1))))
+</code></pre><p>Easy.<pre><code>IS THIS POSSIBLE and FEASIBLE? (Y/N):Y
+#### TIME TO SHOW ME WHAT YOU GOT! ###
+d: 1405046269503207469140791548403639533127416416214210694972085079171787580463776820425965898174272870486015739516125786182821637006600742140682552321645503743280670839819078749092730110549881891271317396450158021688253989767145578723458252769465545504142139663476747479225923933192421405464414574786272963741656223941750084051228611576708609346787101088759062724389874160693008783334605903142528824559223515203978707969795087506678894006628296743079886244349469131831225757926844843554897638786146036869572653204735650843186722732736888918789379054050122205253165705085538743651258400390580971043144644984654914856729
+Outstanding move!!!
+
+
+#### NEW PROBLEM ####
+p : 153143042272527868798412612417204434156935146874282990942386694020462861918068684561281763577034706600608387699148071015194725533394126069826857182428660427818277378724977554365910231524827258160904493774748749088477328204812171935987088715261127321911849092207070653272176072509933245978935455542420691737433
+ciphertext : 4699954403535877728943212516495239996093493409461427795061606820019520385578403561120385764629211115765041521697969103538878070126128059106090044437598460283768854171495071441758538307495380993096127617485853022154997313813963653770523746165616397996160676397490439829116013032980784837094738356175991364395455204835324455810814055944764109234129010492269581408600009386595427991513236458464354768157315483091898970879300954540175247825718514107084608264564889098214264863604883438961600216645976532706988513244819161793096143681897379315082134265617697635800727770233591268184387676917842275673893483582432877323662
+e : 65537
+n : 23952937352643527451379227516428377705004894508566304313177880191662177061878993798938496818120987817049538365206671401938265663712351239785237507341311858383628932183083145614696585411921662992078376103990806989257289472590902167457302888198293135333083734504191910953238278860923153746261500759411620299864395158783509535039259714359526738924736952759753503357614939203434092075676169179112452620687731670534906069845965633455748606649062394293289967059348143206600765820021392608270528856238306849191113241355842396325210132358046616312901337987464473799040762271876389031455051640937681745409057246190498795697239
+##### PRODUCE THE FOLLOWING ####
+plaintext
+</code></pre><p>We know: <code>d=e^-1 mod toitent(n)</code><p>We need to find <code>q</code>. Then calculate <code>toitent(n)</code> to find <code>d</code>.<p>We know <code>m = ciphertext^d mod n</code> so we have <code>pow(ciphertext,d,n)</code><pre><code>IS THIS POSSIBLE and FEASIBLE? (Y/N):y
+#### TIME TO SHOW ME WHAT YOU GOT! ###
+plaintext: 14311663942709674867122208214901970650496788151239520971623411712977119645236321549653782653
+Outstanding move!!!
+
+
+If you convert the last plaintext to a hex number, then ascii, you'll find what you need! ;)
+</code></pre><p>Plaintext is in decimal.<h3><a class=header href=#flag id=flag>Flag</a></h3><p><code>picoCTF{wA8_th4t$_ill3aGal..o1c355060}</code><h3><a class=header href=#solver id=solver>Solver</a></h3><pre><code class=language-python>import binascii
+from pwn import *
+
+# Not my initial code, my function wasn't this clean
+MMI = lambda A, n,s=1,t=0,N=0: (n &lt; 2 and t%N or MMI(n, A%n, t, s-A//n*t, N or n),-1)[n&lt;1]
+
+r = remote('2019shell1.picoctf.com', 2611)
+
+# Q1
+lines = r.recvuntil('IS THIS POSSIBLE and FEASIBLE? (Y/N):')
+print lines
+q = int([l for l in lines.split('\n') if 'q :' in l][0].split(':')[1].strip(), 10)
+p = int([l for l in lines.split('\n') if 'p :' in l][0].split(':')[1].strip(), 10)
+r.sendline('Y')
+print r.recvuntil('n:')
+ans = q * p
+print 'Sending: {}'.format(ans)
+r.sendline('{}'.format(ans))
+
+# Q2
+lines = r.recvuntil('IS THIS POSSIBLE and FEASIBLE? (Y/N):')
+print lines
+p = int([l for l in lines.split('\n') if 'p :' in l][0].split(':')[1].strip(), 10)
+n = int([l for l in lines.split('\n') if 'n :' in l][0].split(':')[1].strip(), 10)
+r.sendline('Y')
+print r.recvuntil('q:')
+ans = n / p
+print 'Sending: {}'.format(ans)
+r.sendline('{}'.format(ans))
+
+# Q3
+lines = r.recvuntil('IS THIS POSSIBLE and FEASIBLE? (Y/N):')
+print lines
+r.sendline('N')
+
+# Q4
+lines = r.recvuntil('IS THIS POSSIBLE and FEASIBLE? (Y/N):')
+print lines
+q = int([l for l in lines.split('\n') if 'q :' in l][0].split(':')[1].strip(), 10)
+p = int([l for l in lines.split('\n') if 'p :' in l][0].split(':')[1].strip(), 10)
+r.sendline('Y')
+print r.recvuntil('totient(n):')
+ans = (q - 1) * (p - 1)
+print 'Sending: {}'.format(ans)
+r.sendline('{}'.format(ans))
+
+# Q5
+lines = r.recvuntil('IS THIS POSSIBLE and FEASIBLE? (Y/N):')
+print lines
+plain = int([l for l in lines.split('\n') if 'plaintext :' in l][0].split(':')[1].strip(), 10)
+e = int([l for l in lines.split('\n') if 'e :' in l][0].split(':')[1].strip(), 10)
+n = int([l for l in lines.split('\n') if 'n :' in l][0].split(':')[1].strip(), 10)
+r.sendline('Y')
+print r.recvuntil('ciphertext:')
+ans = pow(plain, e, n)
+print 'Sending: {}'.format(ans)
+r.sendline('{}'.format(ans))
+
+# Q6
+lines = r.recvuntil('IS THIS POSSIBLE and FEASIBLE? (Y/N):')
+print lines
+r.sendline('N')
+
+# Q7
+lines = r.recvuntil('IS THIS POSSIBLE and FEASIBLE? (Y/N):')
+print lines
+q = int([l for l in lines.split('\n') if 'q :' in l][0].split(':')[1].strip(), 10)
+p = int([l for l in lines.split('\n') if 'p :' in l][0].split(':')[1].strip(), 10)
+e = int([l for l in lines.split('\n') if 'e :' in l][0].split(':')[1].strip(), 10)
+r.sendline('Y')
+print r.recvuntil('d:')
+ans = MMI(e, (q - 1) * (p - 1))
+print 'Sending: {}'.format(ans)
+r.sendline('{}'.format(ans))
+
+# Q8
+lines = r.recvuntil('IS THIS POSSIBLE and FEASIBLE? (Y/N):')
+print lines
+p = int([l for l in lines.split('\n') if 'p :' in l][0].split(':')[1].strip(), 10)
+cipher = int([l for l in lines.split('\n') if 'ciphertext :' in l][0].split(':')[1].strip(), 10)
+e = int([l for l in lines.split('\n') if 'e :' in l][0].split(':')[1].strip(), 10)
+n = int([l for l in lines.split('\n') if 'n :' in l][0].split(':')[1].strip(), 10)
+r.sendline('Y')
+print r.recvuntil('plaintext:')
+q = n / p
+d = MMI(e, (q - 1) * (p - 1))
+ans = pow(cipher, d, n)
+print 'Sending: {}'.format(ans)
+r.sendline('{}'.format(ans))
+lines = r.recvall()
+print lines
+print 'In hex: {}'.format(hex(ans))
+print binascii.unhexlify(hex(ans)[2:])
+</code></pre></main><nav class=nav-wrapper aria-label="Page navigation"><a rel=prev href=../../ctf/crypto/picoctf19-lacifrede.html class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><a rel=next href=../../ctf/crypto/picoctf19-minirsa.html class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts=Right><i class="fa fa-angle-right"></i></a><div style=clear:both></div></nav></div></div><nav class=nav-wide-wrapper aria-label="Page navigation"><a href=../../ctf/crypto/picoctf19-lacifrede.html class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><a href=../../ctf/crypto/picoctf19-minirsa.html class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts=Right><i class="fa fa-angle-right"></i></a></nav></div><script>window.playpen_copyable=true;</script><script src=../../elasticlunr.min.js></script><script src=../../mark.min.js></script><script src=../../searcher.js></script><script src=../../clipboard.min.js></script><script src=../../highlight.js></script><script src=../../book.js></script><script src=../../theme/mermaid.js></script>

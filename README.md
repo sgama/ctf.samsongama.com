@@ -1,1 +1,0 @@
-# ctf.samsongama.com
