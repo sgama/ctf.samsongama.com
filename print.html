@@ -9,7 +9,7 @@ html.classList.remove('sidebar-visible');html.classList.add("sidebar-"+sidebar);
 <i class="fa fa-bars"></i></button>
 <button id=theme-toggle class=icon-button type=button title="Change theme" aria-label="Change theme" aria-haspopup=true aria-expanded=false aria-controls=theme-list>
 <i class="fa fa-paint-brush"></i></button><ul id=theme-list class=theme-popup aria-label=Themes role=menu><li role=none><button role=menuitem class=theme id=light>Light</button><li role=none><button role=menuitem class=theme id=rust>Rust</button><li role=none><button role=menuitem class=theme id=coal>Coal</button><li role=none><button role=menuitem class=theme id=navy>Navy</button><li role=none><button role=menuitem class=theme id=ayu>Ayu (default)</button></ul><button id=search-toggle class=icon-button type=button title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded=false aria-keyshortcuts=S aria-controls=searchbar>
-<i class="fa fa-search"></i></button></div><h1 class=menu-title>Capture The Flag</h1><div class=right-buttons><a href=print.html title="Print this book" aria-label="Print this book"><i id=print-button class="fa fa-print"></i></a><a href=https://github.com/sgama/ctf.samsongama.com/tree/develop title="Git repository" aria-label="Git repository"><i id=git-repository-button class="fa fa-github"></i></a></div></div></div><div id=search-wrapper class=hidden><form id=searchbar-outer class=searchbar-outer><input type=search name=search id=searchbar name=searchbar placeholder="Search this book ..." aria-controls=searchresults-outer aria-describedby=searchresults-header></form><div id=searchresults-outer class="searchresults-outer hidden"><div id=searchresults-header class=searchresults-header></div><ul id=searchresults></ul></div></div><script>document.getElementById('sidebar-toggle').setAttribute('aria-expanded',sidebar==='visible');document.getElementById('sidebar').setAttribute('aria-hidden',sidebar!=='visible');Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link){link.setAttribute('tabIndex',sidebar==='visible'?0:-1);});</script><div id=content class=content><main><h1><a class=header href=#introduction id=introduction>Introduction</a></h1><p>Placeholder for future data.<p>Dumping possible syntax here<pre><code class=language-javascript>var s = &quot;JavaScript syntax highlighting&quot;;
+<i class="fa fa-search"></i></button></div><h1 class=menu-title>Capture The Flag</h1><div class=right-buttons><a href=print.html title="Print this book" aria-label="Print this book"><i id=print-button class="fa fa-print"></i></a><a href=https://github.com/sgama/ctf.samsongama.com title="Git repository" aria-label="Git repository"><i id=git-repository-button class="fa fa-github"></i></a></div></div></div><div id=search-wrapper class=hidden><form id=searchbar-outer class=searchbar-outer><input type=search name=search id=searchbar name=searchbar placeholder="Search this book ..." aria-controls=searchresults-outer aria-describedby=searchresults-header></form><div id=searchresults-outer class="searchresults-outer hidden"><div id=searchresults-header class=searchresults-header></div><ul id=searchresults></ul></div></div><script>document.getElementById('sidebar-toggle').setAttribute('aria-expanded',sidebar==='visible');document.getElementById('sidebar').setAttribute('aria-hidden',sidebar!=='visible');Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link){link.setAttribute('tabIndex',sidebar==='visible'?0:-1);});</script><div id=content class=content><main><h1><a class=header href=#introduction id=introduction>Introduction</a></h1><p>Placeholder for future data.<p>Dumping possible syntax here<pre><code class=language-javascript>var s = &quot;JavaScript syntax highlighting&quot;;
 alert(s);
 </code></pre><pre><code class=language-python>s = &quot;Python syntax highlighting&quot;
 print s
@@ -20,7 +20,7 @@ But let's throw in a &lt;b&gt;tag&lt;/b&gt;.
     A-->C;
     B-->D;
     C-->D;
-</pre><h1><a class=header href=#capture-the-flag id=capture-the-flag>Capture The Flag</a></h1><p><img src=ctf/ctf.jpg alt="alt text" title="Logo Title Text 1"><p>Find the flag<h1><a class=header href=#crypto id=crypto>Crypto</a></h1><h1><a class=header href=#hackcon2018-caesar-salad id=hackcon2018-caesar-salad>Hackcon2018 Caesar Salad</a></h1><pre><code>Can you toss Caesar's salad?
+</pre><h1><a class=header href=#capture-the-flag id=capture-the-flag>Capture The Flag</a></h1><p><img src=ctf/ctf.jpg alt="alt text" title="Logo Title Text 1"><p>Find the flag<h1><a class=header href=#crypto id=crypto>Crypto</a></h1><p>Placeholder for crypto resources<h1><a class=header href=#hackcon2018-caesar-salad id=hackcon2018-caesar-salad>Hackcon2018 Caesar Salad</a></h1><pre><code>Can you toss Caesar's salad?
 
 q4ex{tlg_thq_p4rf4e}p0qr
 </code></pre><hr><pre><code class=language-bash>$ echo &quot;q4ex{tlg_thq_p4rf4e}p0qr&quot; | rot13
@@ -567,7 +567,7 @@ if __name__==&quot;__main__&quot;:
     ct_abc = &quot;&quot;.join(blocks)
  
     return iv, ct_abc, ct
-</code></pre><p>Uhoh, it's in ECB (Electronic Codebook) mode which encrypts data 16 bits at a time.<p>But instead of XOR-ing the ECB blocks, it seems to be adding them. Weird, did they roll their own crypto algorithm?<p>Let's first convert all the ciphertext blocks back to ecb blocks.<p>Let's create an `aes_abc_decrypt(ct):<pre><code class=language-python>def aes_abc_decrypt(c_img):
+</code></pre><p>Uhoh, it's in ECB (Electronic Codebook) mode which encrypts data 16 bits at a time.<p>But instead of XOR-ing the ECB blocks, it seems to be adding them. Weird, did they roll their own crypto algorithm?<p>Let's first convert all the ciphertext blocks back to ecb blocks.<p>Let's create an aes_abc_decrypt(ct):<pre><code class=language-python>def aes_abc_decrypt(c_img):
     blocks = [c_img[i * BLOCK_SIZE:(i+1) * BLOCK_SIZE] for i in range(len(c_img) / BLOCK_SIZE)]
 
     for i in range(len(blocks) - 2, -1, -1):
@@ -583,7 +583,7 @@ if __name__==&quot;__main__&quot;:
     return ct
 </code></pre><p>Final script is in assets<pre><code>$ file decrypt.ppm
 decrypt.ppm: Netpbm image data, size = 1895 x 820, rawbits, pixmap
-</code></pre><p>Use this <a href=https://cloudconvert.com/ppm-to-pdf>converter</a><p>Looks like garbage maybe it's not the correct size... perhaps brute force necessary.<h2><a class=header href=#flag-10 id=flag-10>Flag</a></h2><p>``<h1><a class=header href=#forensics id=forensics>Forensics</a></h1><h2><a class=header href=#unknown-file id=unknown-file>Unknown file</a></h2><pre><code class=language-bash>$ file hardshells
+</code></pre><p>Use this <a href=https://cloudconvert.com/ppm-to-pdf>converter</a><p>Looks like garbage maybe it's not the correct size... perhaps brute force necessary.<h2><a class=header href=#flag-10 id=flag-10>Flag</a></h2><p><code>UNSOLVED</code><h1><a class=header href=#forensics id=forensics>Forensics</a></h1><h2><a class=header href=#unknown-file id=unknown-file>Unknown file</a></h2><pre><code class=language-bash>$ file hardshells
 hardshells: Zip archive data, at least v1.0 to extract
 $ mv hardshells hardshells.zip
 </code></pre><h2><a class=header href=#data-file-tricks id=data-file-tricks>Data file tricks</a></h2><pre><code class=language-bash>$ file dat
@@ -634,7 +634,7 @@ done
 
 for i in range(1000,0,-1):
     tarfile.open(str(i) + '.tar').extractall()
-</code></pre><h2><a class=header href=#flag-18 id=flag-18>Flag</a></h2><p><code>picoCTF{StaT31355_636f6e6e}</code><h1><a class=header href=#web id=web>Web</a></h1><h1><a class=header href=#seccon19-web-search id=seccon19-web-search>SECCON19 Web Search</a></h1><p>Get a hidden message! Let's find a hidden message using the search system on the site.<p><a href=http://web-search.chal.seccon.jp/>http://web-search.chal.seccon.jp/</a><pre><code class=language-python>import requests
+</code></pre><h2><a class=header href=#flag-18 id=flag-18>Flag</a></h2><p><code>picoCTF{StaT31355_636f6e6e}</code><h1><a class=header href=#web id=web>Web</a></h1><p>Placeholder for web resources<h1><a class=header href=#seccon19-web-search id=seccon19-web-search>SECCON19 Web Search</a></h1><p>Get a hidden message! Let's find a hidden message using the search system on the site.<p><a href=http://web-search.chal.seccon.jp/>http://web-search.chal.seccon.jp/</a><pre><code class=language-python>import requests
 
 query = &quot;1' UNION SELECT * FROM (SELECT 10)A JOIN (SELECT @@version)B JOIN (SELECT 10)C#&quot; # 10.4.8-MariaDB-1:10.4.8+maria~bionic
 query = &quot;1' UNION SELECT * FROM (SELECT 10)A JOIN (SELECT database())B JOIN (SELECT database())C#&quot; # seccon_sqli
