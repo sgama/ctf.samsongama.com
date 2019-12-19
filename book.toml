@@ -1,0 +1,17 @@
+[book]
+authors = ["Samson Gama"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Capture The Flag"
+
+[preprocessor.mermaid]
+command = "./mdbook-mermaid"
+renderer = ["html"]
+
+[output.html]
+default-theme = "ayu"
+git-repository-url= "https://github.com/sgama/ctf.samsongama.com/tree/develop"
+git-repository-icon= "fa-github"
+additional-css = ["theme/mermaid.css"]
+additional-js = ["theme/mermaid.js"]

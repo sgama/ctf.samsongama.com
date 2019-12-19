@@ -1,0 +1,43 @@
+name: CI
+on:
+  push:
+    branches:
+      - master
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    env:
+      PUBLISH_BRANCH: gh-pages # for peaceiris/actions-gh-pages
+      PUBLISH_DIR: ./book      # for peaceiris/actions-gh-pages
+      MDBOOK_VERSION: v0.3.5
+      MINIFY_VERSION: 2.6.1
+      MERMAIDJS_VERSION: 0.2.2
+      GH_PAGES_ACTIONS_VERSION: v2.5.1
+      CNAME: ctf.samsongama.com
+    steps:
+      - uses: actions/checkout@v1
+      - name: Download Mdbook
+        run: wget -qO- https://github.com/rust-lang-nursery/mdBook/releases/download/${MDBOOK_VERSION}/mdbook-${MDBOOK_VERSION}-x86_64-unknown-linux-gnu.tar.gz | tar xzf -
+      - name: Download Minify
+        run: wget -qO- https://github.com/tdewolff/minify/releases/download/v${MINIFY_VERSION}/minify_${MINIFY_VERSION}_linux_amd64.tar.gz | tar xzf -
+      - name: Download Mermaidjs
+        run: wget -qO- https://github.com/badboy/mdbook-mermaid/releases/download/${MERMAIDJS_VERSION}/mdbook-mermaid-${MERMAIDJS_VERSION}-x86_64-unknown-linux-gnu.tar.gz | tar xzf -
+      - name: Modify Mdbook parameters for Github Actions
+        run: sed -i 's/mdbook-mermaid/.\/mdbook-mermaid/' ./book.toml
+      - name: Build Book
+        run: ./mdbook build
+      - name: Minify Book
+        run: ./minify -a -r -o book/ book
+      - name: Add CNAME Record
+        run: echo "${CNAME}" >> book/CNAME
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@${GH_PAGES_ACTIONS_VERSION}
+        env:
+          PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+      - name: Purge old content from Cloudflare CDN Cache
+        run: |
+          curl -X DELETE "https://api.cloudflare.com/client/v4/zones/${{secrets.CLOUDFLARE_ZONE}}/purge_cache" \
+          -H "X-Auth-Email: ${{secrets.CLOUDFLARE_AUTH_EMAIL}}" \
+          -H "X-Auth-Key: ${{secrets.CLOUDFLARE_AUTH_KEY}}" \
+          -H "Content-Type: application/json" \
+          --data '{"purge_everything":true}'
