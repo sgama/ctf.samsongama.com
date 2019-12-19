@@ -12,7 +12,6 @@ jobs:
       MDBOOK_VERSION: v0.3.5
       MINIFY_VERSION: 2.6.1
       MERMAIDJS_VERSION: 0.2.2
-      GH_PAGES_ACTIONS_VERSION: v2.5.1
       CNAME: ctf.samsongama.com
     steps:
       - uses: actions/checkout@v1
@@ -31,7 +30,7 @@ jobs:
       - name: Add CNAME Record
         run: echo "${CNAME}" >> book/CNAME
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@${GH_PAGES_ACTIONS_VERSION}
+        uses: peaceiris/actions-gh-pages@v2.5.1
         env:
           PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
       - name: Purge old content from Cloudflare CDN Cache
