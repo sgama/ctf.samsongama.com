@@ -1,6 +1,7 @@
 # Summary
 
 * [Introduction](README.md)
+* [Miscellaneous](MISCELLANEOUS.md)
 * [Capture The Flag](ctf/index.md)
     * [Crypto](ctf/crypto/index.md)
         * [Hackcon2018 Caesar Salad](ctf/crypto/hackcon18-caesar.md)
