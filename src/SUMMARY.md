@@ -30,3 +30,5 @@
     * [Web](ctf/web/index.md)
         * [SECCON19 Web Search](ctf/web/seccon19-web_search.md)
         * [TMCTF19F Container](ctf/web/tmctf19-finals-containers.md)
+    * [Binary Exploitation](ctf/binary/index.md)
+        * [PicoCTF19 Handy Shellcode](ctf/binary/picoctf19-handy_shellcode.md)
