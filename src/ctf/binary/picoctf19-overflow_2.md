@@ -251,4 +251,4 @@ picoCTF{arg5_and_r3turn51b106031}Segmentation fault (core dumped)
 
 ## Flag
 
-picoCTF{arg5_and_r3turn51b106031}
+`picoCTF{arg5_and_r3turn51b106031}`

