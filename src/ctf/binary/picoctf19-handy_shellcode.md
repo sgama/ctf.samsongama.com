@@ -62,7 +62,7 @@ Then we have this line here:
 ```
   ((void (*)())buf)();
 ```
-This takes `buf`, casts it to the void function pointer which returns nothing and then runs that function. So it'll execute whatever is at the address fo `buf`.
+This takes `buf`, casts it to the void function pointer which returns nothing and then runs that function. So it'll execute whatever is at the address for `buf`.
 
 Let's test our assumptions....
 
