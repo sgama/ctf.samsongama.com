@@ -191,6 +191,27 @@ End of assembler dump.
 
 We know the `call   0x8048430 <gets@plt>` is where the assembly code gets user input so lets view the important bits of the stack change as we step through it after setting a breakpoint right before it.
 
+How do we know `gets()` is the function that's vulnerable? Well try running `man gets`. Here's an excerpt:
+
+```
+GETS(3)    Linux Programmer's Manual    GETS(3)
+
+NAME
+  gets - get a string from standard input (DEPRECATED)
+
+SYNOPSIS
+  #include <stdio.h>
+
+  char *gets(char *s);
+
+DESCRIPTION
+  Never use this function.
+  gets() reads a line from stdin into the buffer pointed to by s until either a terminating newline or EOF, which replaces with a null byte ('\0'). No check for buffer overrun is performed (see BUGS below).
+
+RETURN VALUE
+  gets() returns s on success, and NULL on error or when end of file occurs while no characters have been read. However, given the lack of buffer overrun checking, there can be no guarantees that the function will even return.
+```
+
 ```bash
 (gdb) b* 0x08048678
 Breakpoint 1 at 0x8048678
