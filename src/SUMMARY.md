@@ -28,6 +28,7 @@
         * [PicoCTF19 john_pollard](ctf/crypto/picoctf19-john_pollard.md)
         * [PicoCTF19 AES-ABC](ctf/crypto/picoctf19-aesabc.md)
     * [Forensics](ctf/forensics/README.md)
+        * [AeroCTF20 Drawings](ctf/forensics/aeroctf20-drawings.md)
         * [PicoCTF19 Garden](ctf/forensics/picoctf19-garden.md)
         * [PicoCTF19 Unzip](ctf/forensics/picoctf19-unzip.md)
         * [PicoCTF19 So Meta](ctf/forensics/picoctf19-so-meta.md)
