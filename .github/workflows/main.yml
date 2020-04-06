@@ -30,7 +30,7 @@ jobs:
       - name: Add CNAME Record
         run: echo "${CNAME}" >> book/CNAME
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3.5.6
+        uses: peaceiris/actions-gh-pages@v2.5.1
         env:
           PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
       - name: Purge old content from Cloudflare CDN Cache
