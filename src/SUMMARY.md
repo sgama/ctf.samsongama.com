@@ -44,6 +44,7 @@
         * [PicoCTF19 like1000](ctf/forensics/picoctf19-like1000.md)
     * [Misc](ctf/misc/README.md)
         * [AUCTF20 Bash](ctf/misc/auctf20-bash.md)
+        * [CorelightCTF20](ctf/misc/corelightctf20.md)
     * [Reversing](ctf/reversing/README.md)
         * [AUCTF20 Mr. Game](ctf/reversing/auctf20-mrgame.md)
     * [Web](ctf/web/README.md)
