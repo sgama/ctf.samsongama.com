@@ -16,6 +16,7 @@
         * [PicoCTF19 rop32](ctf/binary/picoctf19-rop32.md)
         * [PicoCTF19 rop64](ctf/binary/picoctf19-rop64.md)
         * [PicoCTF19 leap-frog](ctf/binary/picoctf19-leap_frog.md)
+        * [PicoCTF19 CanaRy](ctf/binary/picoctf19-canary.md)
     * [Crypto](ctf/crypto/README.md)
         * [Hackcon2018 Caesar Salad](ctf/crypto/hackcon18-caesar.md)
         * [Hackcon2018 Salad Up.](ctf/crypto/hackcon18-salad.md)
