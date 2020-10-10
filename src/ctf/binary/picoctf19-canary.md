@@ -283,7 +283,7 @@ Dump of assembler code for function vuln:
 Now we can code our exploit with our known canary:
 
 ```python
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 from pwn import *
 
