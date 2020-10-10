@@ -201,7 +201,7 @@ Dump of assembler code for function vuln:
    0x00000915 &lt;+33&gt;:    mov    %eax,-0x10(%ebp)    &lt;&lt;&lt;&lt;
    0x00000918 &lt;+36&gt;:    sub    $0xc,%esp
    0x0000091b &lt;+39&gt;:    lea    -0x1414(%ebx),%eax
-</code></pre><p>Now we can code our exploit with our known canary:<pre><code class=language-python>#!/usr/bin/env python3
+</code></pre><p>Now we can code our exploit with our known canary:<pre><code class=language-python>#!/usr/bin/env python
 
 from pwn import *
 
