@@ -9,12 +9,12 @@ jobs:
     env:
       PUBLISH_BRANCH: gh-pages # for peaceiris/actions-gh-pages
       PUBLISH_DIR: ./book      # for peaceiris/actions-gh-pages
-      MDBOOK_VERSION: v0.3.7
-      MINIFY_VERSION: 2.7.3
+      MDBOOK_VERSION: v0.4.4
+      MINIFY_VERSION: 2.9.10
       MERMAIDJS_VERSION: 0.2.2
       CNAME: ctf.samsongama.com
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Download Mdbook
         run: wget -qO- https://github.com/rust-lang-nursery/mdBook/releases/download/${MDBOOK_VERSION}/mdbook-${MDBOOK_VERSION}-x86_64-unknown-linux-gnu.tar.gz | tar xzf -
       - name: Download Minify
@@ -30,7 +30,7 @@ jobs:
       - name: Add CNAME Record
         run: echo "${CNAME}" >> book/CNAME
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v2.5.1
+        uses: peaceiris/actions-gh-pages@v2
         env:
           PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
       - name: Purge old content from Cloudflare CDN Cache
